@@ -1,8 +1,8 @@
-## Implementation
+## Project plan
 
-Twitter cache: MongoDB
-
-
+- Twitter integration
+	- Twitter model - PARTIAL
+	- Scraper
 
 
 
