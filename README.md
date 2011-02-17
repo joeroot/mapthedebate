@@ -2,7 +2,7 @@
 
 - Twitter integration
 	- Twitter model - PARTIAL
-	- Scraper
+	- Scraper - PARTIAL
 
 
 
