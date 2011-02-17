@@ -1,0 +1,24 @@
+.header {
+	margin-top:5px;
+	padding-top:10px;
+	padding-bottom:8px;
+	background-color:#FFF;
+	border-bottom:1px solid #AAA;
+}
+
+h3 {
+	font-family: "museo-sans-1","museo-sans-2",sans-serif;
+	font-size:24px;
+	line-height:30px;
+	font-weight:100;
+	color:#111;
+}
+
+
+h5 {
+	font-family: "museo-sans-1","museo-sans-2",sans-serif;
+	font-size:18px;
+	line-height:30px;
+	font-weight:100;
+	color:#111;
+}
