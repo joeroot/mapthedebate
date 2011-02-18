@@ -1,8 +1,8 @@
 ## Project plan
 
 - Twitter integration
-	- Twitter model - PARTIAL
-	- Scraper - PARTIAL
+	- Twitter model			- PARTIAL
+	- Scraper						- PARTIAL
 
 
 

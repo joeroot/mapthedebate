@@ -15,7 +15,7 @@ class App
   get '/classify' do
     @statuses = ClassifiedStatus.sort(:logged_at.desc).limit(5).all(:subjective => nil)
     redirect "/classify/search" if @statuses.empty?
-    erb :"classify/index"
+    erb :"classify/list"
   end
   
   post '/classify' do
@@ -27,6 +27,13 @@ class App
       end      
     end
     redirect "/classify"
+  end
+  
+  get '/classify/trained' do
+    @statuses = ClassifiedStatus.sort(:logged_at.desc).all(:subjective => "t")
+    @statuses += ClassifiedStatus.sort(:logged_at.desc).all(:subjective => "f")
+    @statuses += ClassifiedStatus.sort(:logged_at.desc).all(:subjective => "u")
+    erb :"classify/list"
   end
   
   get '/classify/search'do
