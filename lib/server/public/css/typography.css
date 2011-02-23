@@ -1,5 +1,40 @@
 body {
-	font-family:  Helvetica Neue, sans-serif;
+	font-family: "Helvetica Neue", "Helvetica", sans-serif;
 	font-size:14px;
 }
 
+h1 {
+	font-family: "museo-sans-1","museo-sans-2",sans-serif;
+	font-size:67px;
+	line-height:70px;
+	font-weight:100;
+	color:#222;
+}
+
+h2 {
+	font-family: "museo-sans-1","museo-sans-2",sans-serif;
+	font-size:23px;
+	font-weight:100;
+	line-height:40px;
+	color:#555;
+}
+
+h3 {
+	font-family: "museo-sans-1","museo-sans-2",sans-serif;
+	font-size:34px;
+	line-height:40px;
+	font-weight:100;
+	color:#222;
+}
+
+h4 {
+	font-family: "museo-sans-1","museo-sans-2",sans-serif;
+	font-size:18px;
+	font-weight:100;
+	line-height:22px;
+	color:#555;	
+}
+
+p {
+	line-height:22px;
+}

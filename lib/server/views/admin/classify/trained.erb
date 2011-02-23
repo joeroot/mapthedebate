@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>Map The Debate</title>
+		<script type="text/javascript" src="http://use.typekit.com/ovv8leg.js"></script>
+		<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.5.min.js"></script>
+		<link rel="stylesheet" href="/css/reset.css" type="text/css" />
+		<link rel="stylesheet" href="/css/960.css" type="text/css" />
+		<link rel="stylesheet" href="/css/typography.css" type="text/css" />
+		<link rel="stylesheet" href="/css/general.css" type="text/css" />
+		<link rel="stylesheet" href="/css/classify.css" type="text/css" />	
+		<link rel="stylesheet" href="/css/button.css" type="text/css" />	
+		
+		<script type="text/javascript">
+		
+			$(document).ready(function(){
+				
+				$("form.classify").submit(function(){
+					var action = $(this).attr("action");
+					var data = $(this).serialize();
+					$.post(action, data, function(results){
+						alert(results);
+					});
+					return false;
+				});
+
+			});
+
+		</script>
+	</head>
+	
+	<body>
+		
+		<div class="container_12">
+			<div id="header">
+				<div class="grid_12">
+					<div id="logo">
+						<h3>Map the Debate</h3>
+						<h4>Visualising the web's response</h4>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+		
+		<div class="container_12">
+			
+			
+			<div class="grid_12">
+				<% if not @statuses.empty? %>
+				<%= erb :"/admin/classify/_status_table", :layout => false %>
+				<% else %>
+				<h4>No trained statuses</h4>
+				<% end %>
+				
+			</div>
+			
+			<div class="clear"></div>
+			
+		</div>
+		
+	</body>
+
+</html>

@@ -1,0 +1,21 @@
+#header {
+	margin:20px 0px 40px 0px;
+	padding-bottom:20px;
+	border-bottom:1px solid #AAA;
+}
+
+#logo {
+	padding-top:2px;
+}
+
+#nav {
+	
+}
+
+#nav ul {
+	font-size:20px;
+}
+
+#nav ul li {
+	float:left;
+}

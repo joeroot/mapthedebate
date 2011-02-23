@@ -5,12 +5,12 @@ class TwitterSearch
   TWITTER_SEARCH_URL = "http://search.twitter.com/search.json" 
   
   def self.scrape(q, params={})
-    params["rpp"] = params["rpp"] || 20
+    params["rpp"] = params["rpp"] || 40
     params["rpp"] = (params["rpp"] > 100) ? 100 : params["rpp"]
     url = "#{TWITTER_SEARCH_URL}?q=#{q.gsub(' ','+')}&result_type=mixed&lang=en"
     params.each {|k,v| url = url + "&#{k}=#{v}"}
     rs = self.retrieve(url)
-    rs["results"].reject{|r| r["text"].include? "RT"}
+    rs["results"].reject!{|r| r["text"].include? "RT"}[0..20]
     keep = ["id", "text", "created_at"]
     rs["results"].each{|r| r.reject! {|k,v| not keep.include? k}}
     return rs["results"]

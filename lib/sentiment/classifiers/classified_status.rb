@@ -8,6 +8,8 @@ class ClassifiedStatus
   key :created_at, String   # time/date the status was posted to micro-blog
   key :logged_at, String    # time/date the status was logged to mongo
   key :subjective, String   # takes values "u", "t", "f"
+  key :polarity, String     # takes values "u", "+", "-", "0"
+  key :sentiment, Array     # takes array of strings
   
   def self.fetch_from_twitter(q, params={})
     ts = TwitterSearch.scrape(q, params)  
@@ -16,6 +18,8 @@ class ClassifiedStatus
       t.delete("id")
       t["source"] = "twitter"
       t["subjective"] = nil
+      t["polarity"] = nil
+      t["sentiment"] = []
       t["created_at"] = Time.parse t["created_at"]
       t["logged_at"] = Time.now
       c = ClassifiedStatus.create t

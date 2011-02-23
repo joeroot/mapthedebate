@@ -1,9 +1,46 @@
+.search {
+	text-align:center;
+	margin-bottom:80px;
+}
+
+.search input[type=text] {
+	font-family:  Helvetica Neue, sans-serif;
+	font-size:18px;
+	width:502px;
+	padding:5px;
+	border:1px solid #BBB;
+	float:left;
+	margin-right:6px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+.search input[type=submit] {
+	font-family:  Helvetica Neue, sans-serif;
+	font-size:18px;
+	width:100px;
+	float:left;
+}
+
+table input[type=text] {
+	font-family:  Helvetica Neue, sans-serif;
+	font-size:13px;
+	width:130px;
+	padding:2px;
+	border:1px solid #BBB;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;	
+}
+
 table {
-	margin-top:40px;
+	margin-bottom:40px;
+	width:940px;
 }
 
 table tr th, table tr td {
-	padding:15px;
+	padding:12px 8px;
 }
 
 table tr th {
@@ -21,6 +58,7 @@ table tr td {
 }
 
 table h4 {
+	font-family: "Helvetica Neue", "Helvetica", sans-serif;
 	font-size:16px;
 	line-height:20px;
 	font-weight:normal;
@@ -31,89 +69,10 @@ table tr:hover h4 {
 }
 
 table h5 {
+	font-family: "Helvetica Neue", "Helvetica", sans-serif;
 	margin-top:4px;
 	font-size:12px;
 	font-weight:normal;
 	font-style:normal;
 	color:#666;
-}
-
-table li {
-	width:100px;
-	padding:3px 0px;
-}
-
-table li input {
-}
-
-table li label {
-	margin-left:5px;
-	font-size:13px;
-}
-
-.search {
-	margin-top:200px;
-	text-align:center;
-}
-
-.search input[type=text] {
-	font-family:  Helvetica Neue, sans-serif;
-	font-size:18px;
-	width:510px;
-	padding:5px;
-	border:1px solid #BBB;
-	float:left;
-	margin-right:5px;
-	border-radius: 3px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-}
-
-.search input[type=submit] {
-	font-family:  Helvetica Neue, sans-serif;
-	font-size:18px;
-	float:left;
-}
-
-.classify input[type=submit] {
-	font-family:  Helvetica Neue, sans-serif;
-	font-size:18px;
-	float:right;
-	margin-right:30px;
-	margin-top:15px;
-}
-
-/* Dark Button CSS */
-.button {
-	outline: 0;
-	padding: 4px 12px 5px 12px;
-	display: block;
-	color: #888;
-	font-weight: bold;
-	text-shadow: 1px 1px #FFF;
-	border: 1px solid #CCC;
-	border-radius: 3px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	background: #EEE; /* old browsers */
-	background: -moz-linear-gradient(top, #FFF 3%, #EEE 4%, #CCC 100%); /* firefox */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(3%,#FFF), color-stop(4%,#EEE), color-stop(100%,#CCC)); /* webkit */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFF', endColorstr='#DDD',GradientType=0 ); /* ie */
-
-}
-.button:hover {
-	color: #777;
-	background: #DDD; /* old browsers */
-	background: -moz-linear-gradient(top, #FFF 3%, #EEE 4%, #BBB 100%); /* firefox */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(3%,#FFF), color-stop(4%,#EEE), color-stop(100%,#BBB)); /* webkit */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFF', endColorstr='#CDCDCD',GradientType=0 ); /* ie */
-}
-.button:active {
-	background-position: 0 top;
-	color: #777;
-	padding: 4px 12px 5px 12px;
-	background: #CCC; /* old browsers */
-	background: -moz-linear-gradient(top, #CCC 3%, #DDD 51%, #EEE 100%); /* firefox */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(3%,#CCC), color-stop(51%,#DDD), color-stop(100%,#EEE)); /* webkit */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#20282D', endColorstr='#222A30',GradientType=0 ); /* ie */
 }

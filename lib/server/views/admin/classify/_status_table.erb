@@ -1,0 +1,60 @@
+<table>
+
+	<tr>
+		<th></th>
+		<th>subjectivity</th>
+		<th>polarity</th>
+		<th>sentiment</th>
+		<th></th>
+	</tr>	
+	
+	<% @statuses.each do |s| %>
+	
+	<tr>
+	<form action="/admin/classify/<%= s.id %>" class="classify" method="POST">
+		
+		<td>
+			<h4><%= s.text %></h4> 
+			<%
+				logged_at = Time.parse(s.logged_at)
+				since = Time.now - logged_at
+				if since < 60
+					since = "#{since.floor} secs ago"
+				elsif since < 3600
+					since = "#{(since/60).floor} mins ago"
+				elsif since < 86400
+					since = "#{(since/3600).floor} hours ago"
+				else 
+					since = "#{logged_at.strftime('%e %b')}"
+				end
+			%>
+			<h5>logged <%= since %></h5>
+		</td>
+		<td>
+			<select id="<%= s.id %>" class="subjective" name="subjective">
+				<option value="u">unsure</option>
+				<option value="t" <%= "selected" if s.subjective == "t" %>>opinion</option>
+				<option value="f" <%= "selected" if s.subjective == "f" %>>fact</option>
+			</select>
+		</td>
+		<td>
+			<select id="<%= s.id %>" class="polarity" name="polarity">
+				<option value="u">unsure</option>
+				<option value="+" <%= "selected" if s.subjective == "+" %>>positive</option>
+				<option value="0" <%= "selected" if s.subjective == "0" %>>neutral</option>
+				<option value="-" <%= "selected" if s.subjective == "-" %>>negative</option>
+			</select>
+		</td>	
+		<td>
+			<input type="text" name="sentiment" placeholder="e.g. anger" value="<%= s.sentiment.inject{|a,e| a +", " + e} %>" />
+		</td>
+		<td>
+			<input type="submit" class="button small dark_grey" value="&#10003;" />
+		</td>
+		
+	</form>
+	</tr>	
+	
+	<% end %>
+		
+</table>
