@@ -31,14 +31,14 @@
 			<h5>logged <%= since %></h5>
 		</td>
 		<td>
-			<select id="<%= s.id %>" class="subjective" name="subjective">
+			<select id="subjective_<%= s.id %>" class="subjective" name="subjective">
 				<option value="u">unsure</option>
 				<option value="t" <%= "selected" if s.subjective == "t" %>>opinion</option>
 				<option value="f" <%= "selected" if s.subjective == "f" %>>fact</option>
 			</select>
 		</td>
 		<td>
-			<select id="<%= s.id %>" class="polarity" name="polarity">
+			<select id="polarity_<%= s.id %>" class="polarity" name="polarity">
 				<option value="u">unsure</option>
 				<option value="+" <%= "selected" if s.subjective == "+" %>>positive</option>
 				<option value="0" <%= "selected" if s.subjective == "0" %>>neutral</option>
