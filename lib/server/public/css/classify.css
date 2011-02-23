@@ -37,10 +37,12 @@ table input[type=text] {
 table {
 	margin-bottom:40px;
 	width:940px;
+	word-wrap:break-word;
 }
 
 table tr th, table tr td {
 	padding:12px 8px;
+	word-wrap:break-word;
 }
 
 table tr th {
@@ -55,6 +57,7 @@ table tr td:first-child, table tr th:first-child {
 
 table tr td {
 	border-top:solid 1px #DDD;
+	word-wrap:break-word;
 }
 
 table h4 {

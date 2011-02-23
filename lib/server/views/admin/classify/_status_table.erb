@@ -14,7 +14,7 @@
 	<form action="/admin/classify/<%= s.id %>" class="classify" method="POST">
 		
 		<td>
-			<h4><%= s.text %></h4> 
+			<h4><%= wrap_text(s.text, 64) %></h4> 
 			<%
 				logged_at = Time.parse(s.logged_at)
 				since = Time.now - logged_at

@@ -1,4 +1,5 @@
 require 'mongo_mapper'
+
 MongoMapper.database = "sentiment"  
 
 # Sentiment code
