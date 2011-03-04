@@ -1,16 +1,6 @@
-## Project plan
-
-- Twitter integration
-	- Twitter model			- PARTIAL
-	- Scraper						- PARTIAL
-
-
-
 ## Features
 
 ### Subjectivity classification
-
-### Feature extraction
 
 ### Sentiment classification
 - is understanding the feature before classifying sentiment important? cane we make use of what we know about the feature, or how other features worked.
