@@ -40,9 +40,9 @@
 		<td>
 			<select id="polarity_<%= s.id %>" class="polarity" name="polarity">
 				<option value="u">unsure</option>
-				<option value="+" <%= "selected" if s.subjective == "+" %>>positive</option>
-				<option value="0" <%= "selected" if s.subjective == "0" %>>neutral</option>
-				<option value="-" <%= "selected" if s.subjective == "-" %>>negative</option>
+				<option value="+" <%= "selected" if s.polarity == "+" %>>positive</option>
+				<option value="0" <%= "selected" if s.polarity == "0" %>>neutral</option>
+				<option value="-" <%= "selected" if s.polarity == "-" %>>negative</option>
 			</select>
 		</td>	
 		<td>

@@ -11,6 +11,18 @@ class ClassifiedStatus
   key :polarity, String     # takes values "u", "+", "-", "0"
   key :sentiment, Array     # takes array of strings
   
+  def hashtags
+    self.text.scan(/\B#\w*[a-zA-Z]+\w*/)
+  end
+  
+  def urls
+    self.text.scan(/(?:http|https):\/\/[a-z0-9]+(?:[\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(?:(?::[0-9]{1,5})?\/[^\s]*)?/ix)
+  end
+  
+  def pos
+    Tagger::PartOfSpeech.parse self.text
+  end
+  
   def self.fetch_from_twitter(q, params={})
     ts = TwitterSearch.scrape(q, params)  
     ts.map! do |t|

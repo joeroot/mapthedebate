@@ -1,6 +1,6 @@
 require 'sinatra'
 require 'erb'
-require '../sentiment/sentiment.rb'
+require '../sentiment.rb'
 
 class App
 
