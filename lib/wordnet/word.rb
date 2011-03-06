@@ -12,6 +12,10 @@ module WordNet
       self.synsets.map{|s| s.category}      
     end
     
+    def category_names
+      self.categories.map{|c| c.name}.uniq
+    end
+    
   end
   
 end
