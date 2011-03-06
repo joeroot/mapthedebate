@@ -3,13 +3,14 @@ require 'mongo_mapper'
 class ClassifiedStatus
   include MongoMapper::Document
   
-  key :text, String         # textual content of status
-  key :source, String       # source of status, e.g. "twitter"
-  key :created_at, String   # time/date the status was posted to micro-blog
-  key :logged_at, String    # time/date the status was logged to mongo
-  key :subjective, String   # takes values "u", "t", "f"
-  key :polarity, String     # takes values "u", "+", "-", "0"
-  key :sentiment, Array     # takes array of strings
+  key :text, String           # textual content of status
+  key :source, String         # source of status, e.g. "twitter"
+  key :created_at, String     # time/date the status was posted to micro-blog
+  key :logged_at, String      # time/date the status was logged to mongo
+  key :subjective, String     # takes values "u", "t", "f"
+  key :polarity, String       # takes values "u", "+", "-", "0"
+  key :sentiment, Array       # takes array of strings
+  key :part_of_speech, Array  # an array of the status' part of speech tags
   
   def hashtags
     self.text.scan(/\B#\w*[a-zA-Z]+\w*/)
@@ -20,7 +21,11 @@ class ClassifiedStatus
   end
   
   def pos
-    Tagger::PartOfSpeech.parse self.text
+    if self.part_of_speech.nil? or self.part_of_speech.empty?
+      self.part_of_speech = Tagger::PartOfSpeech.tag self.text
+      self.save
+    end
+    return self.part_of_speech
   end
   
   def self.fetch_from_twitter(q, params={})
