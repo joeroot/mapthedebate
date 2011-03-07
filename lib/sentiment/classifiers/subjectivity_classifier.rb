@@ -116,10 +116,10 @@ class SubjectivityClassifier
     feature.to_s
   end
   
-  def self.repeat_test r1, n, repeats
+  def self.repeat_test ratio, repeats
     accuracy = {:true => 0, :false => 0}
     (1..repeats).each do |i|
-      r = SubjectivityClassifier.test r1, n
+      r = SubjectivityClassifier.test ratio
       accuracy[:true] += r[:true]
       accuracy[:false] += r[:false]
     end
@@ -129,50 +129,28 @@ class SubjectivityClassifier
   end
   
   
-  def self.test r1, n=10
-    ts = ClassifiedStatus.all(:subjective => "t")
-    fs = ClassifiedStatus.all(:subjective => "f")
+  def self.test ratio
+    ts = ClassifiedStatus.all(:subjective => "t").shuffle
+    fs = ClassifiedStatus.all(:subjective => "f").shuffle
     
     max = ts.length > fs.length ? fs.length : ts.length
     
     ts = ts.sample(max)
     fs = fs.sample(max)
-    
-    ts_acc = 0
-    fs_acc = 0
-    (1..n).each do |i|
         
-      ts_index = (ts.length * r1).ceil
-      fs_index = (fs.length * r1).ceil
-      
-      ts.rotate! ((ts.length.to_f/i.to_f).ceil)
-      fs.rotate! ((ts.length.to_f/i.to_f).ceil)
+    index = (max * ratio).ceil
     
-      s = SubjectivityClassifier.new (ts[0...ts_index] + fs[0..fs_index])
+    results = {}
     
-      # puts "TESTING SUBJECTIVE CASES"
-      ts_classified = ts[ts_index..-1].map{ |t| s.classify t } 
-      ts_classified.each do |t|
-        correct = t[0] == "t" ? "pass" : "fail"
-        # puts "#{correct}: #{t[1]}"
-      end
-      accuracy = ts_classified.select{|t| t[0] == "t"}.length.to_f/ts_classified.length.to_f
-      # puts "ACCURACY: #{accuracy}\n"
-      ts_acc += accuracy
+    s = SubjectivityClassifier.new (ts[0...index]+fs[0...index])
+  
+    ts = ts[index..-1].map{ |t| s.classify t } 
+    results[:true] = ts.select{|t| t[0] == "t"}.length.to_f/ts.length.to_f
     
-      # puts "TESTING OBJECTIVE CASES"
-      fs_classified = fs[fs_index..-1].map{ |t| s.classify t } 
-      fs_classified.each do |t|
-        correct = t[0] == "f" ? "pass" : "fail"
-        # puts "#{correct}: #{t[1]}"
-      end
-      accuracy = fs_classified.select{|t| t[0] == "f"}.length.to_f/fs_classified.length.to_f
-      # puts "ACCURACY: #{accuracy}\n"
-      fs_acc += accuracy
-      
-    end
+    fs = fs[index..-1].map{ |f| s.classify f } 
+    results[:false] = fs.select{|f| f[0] == "f"}.length.to_f/fs.length.to_f
     
-    return {:true => ts_acc.to_f/n.to_f, :false => fs_acc.to_f/n.to_f}
+    results
   end
   
   
