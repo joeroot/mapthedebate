@@ -140,15 +140,28 @@ class SubjectivityClassifier
         
     index = (max * ratio).ceil
     
-    results = {}
+    results = {:true => 0, :false => 0}
     
-    s = SubjectivityClassifier.new (ts[0...index]+fs[0...index])
+    n = 10
+    offset = max/n
+    
+    (0...n).each do |i|
+    
+      ts = ts.rotate offset
+      fs = fs.rotate offset
+    
+      s = SubjectivityClassifier.new (ts[0...index]+fs[0...index])
   
-    ts = ts[index..-1].map{ |t| s.classify t } 
-    results[:true] = ts.select{|t| t[0] == "t"}.length.to_f/ts.length.to_f
+      cs = ts[index..-1].map{ |t| s.classify t } 
+      results[:true] += cs.select{|t| t[0] == "t"}.length.to_f/cs.length.to_f
     
-    fs = fs[index..-1].map{ |f| s.classify f } 
-    results[:false] = fs.select{|f| f[0] == "f"}.length.to_f/fs.length.to_f
+      cs = fs[index..-1].map{ |f| s.classify f } 
+      results[:false] += cs.select{|f| f[0] == "f"}.length.to_f/cs.length.to_f
+      
+    end
+    
+    results[:true] /= n
+    results[:false] /= n
     
     results
   end
