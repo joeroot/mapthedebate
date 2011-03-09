@@ -16,7 +16,7 @@ module Tagger
 
     def self.tokenize text
       ts = text.split(/(\.|\?|\!|\:)?\ /).reject{|s| s == ""}
-      ts.map!{|s| {:original => s.strip, :word => PartOfSpeech.parse(s.strip)}}
+      ts.map!{|s| {"original" => s.strip, "word" => PartOfSpeech.parse(s.strip)}}
     end
 
     def self.parse text
@@ -29,20 +29,20 @@ module Tagger
       tokens = PartOfSpeech.tokenize text
       return tokens.each do |token|
         pos = []
-        word = token[:word].downcase
+        word = token["word"].downcase
         lemma = WordNet::Word.find_by_lemma(word)
         if not lemma.nil?
-          pos += lemma.senses.map{|s| {:pos => s.pos, :detailed => s.pos_detailed}}.uniq 
+          pos += lemma.senses.map{|s| {"pos" => s.pos, "detailed" => s.pos_detailed}}.uniq 
         elsif Tagger::NameTagger.name? word
-          pos += [{:pos => "n", :detailed => "noun.person"}]
+          pos += [{"pos" => "n", "detailed" => "noun.person"}]
         elsif PartOfSpeech.url? word
-          pos += [{:pos => "n", :detailed => "noun.url"}]
+          pos += [{"pos" => "n", "detailed" => "noun.url"}]
         elsif PartOfSpeech.grammar? word
-          pos += [{:pos => "g", :detailed => "grammar.all"}]
+          pos += [{"pos" => "g", "detailed" => "grammar.all"}]
         elsif PartOfSpeech.number? word
-          pos += [{:pos => "#", :detailed => "number.all"}]
+          pos += [{"pos" => "#", "detailed" => "number.all"}]
         end
-        token[:pos] = pos.uniq
+        token["pos"] = pos.uniq
       end
       tokens
     end
