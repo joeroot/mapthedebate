@@ -10,13 +10,13 @@ module Tagger
     end
     
     def self.load_names
-      file = File.new('../db/names.csv', 'r')
+      file = File.new("#{DB_DIR}/names.csv", 'r')
       file.each_line { |line|
         name = line.split(',')[0].downcase
         @@names[name] = true
       }
       file.close
-      file = File.new('../db/surnames.csv', 'r')
+      file = File.new("#{DB_DIR}/surnames.csv", 'r')
       file.each_line { |line|
         name = line.split(',')[0].downcase
         @@names[name] = true
