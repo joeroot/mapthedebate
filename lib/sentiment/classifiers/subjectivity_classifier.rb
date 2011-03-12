@@ -4,6 +4,9 @@ include Ai4r::Classifiers
 include Ai4r::Data
 
 class SubjectivityClassifier
+
+  # Current accuracy on 1000 runs: 
+  #  {:true=>0.7028299999999995, :false=>0.7452800000000012}
   
   # FEATURES:
   #  status_hashtags_with_sentiment: 
@@ -116,18 +119,34 @@ class SubjectivityClassifier
     feature.to_s
   end
   
+  def self.status_subjectivity_patterns
+    # 1       2         3
+    # JJ      NN/NNS
+    # RB      JJ        not NN/NNS
+    # JJ      JJ        not NN/NNS
+    # NN/NNS  JJ        not NN/NNS
+    # RB      VB        
+    
+    patterns = [
+      
+      
+    ]
+    
+  end
+  
   def self.repeat_test ratio, repeats
     accuracy = {:true => 0, :false => 0}
     (1..repeats).each do |i|
       r = SubjectivityClassifier.test ratio
       accuracy[:true] += r[:true]
       accuracy[:false] += r[:false]
+      
+      puts "#{i} #{r}"
     end
     accuracy[:true] = accuracy[:true]/repeats
     accuracy[:false] = accuracy[:false]/repeats 
     return accuracy
   end
-  
   
   def self.test ratio
     ts = ClassifiedStatus.all(:subjective => "t").shuffle
