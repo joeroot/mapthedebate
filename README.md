@@ -1,11 +1,1 @@
-## Features
-
-### Subjectivity classification
-
-### Sentiment classification
-- is understanding the feature before classifying sentiment important? cane we make use of what we know about the feature, or how other features worked.
-
-### Visualisation
-- Post-processing of features using synonyms to group together features with different names which in fact refer to the same/very similar thing
-	
-	
+This project hopes to utilise the growth of publicly available opinion on the web, using it as a source upon which new methods for analysing, measuring and visualising public opinion can be built. In particular the project will focus on understanding sentiment on micro-blogging services such as Twitter.
