@@ -14,11 +14,16 @@ class SubjectivityClassifier
   #  status_urls: 
   #  status_adjectives: 
   
-  attr_accessor :classifier
+  attr_accessor :classifier, :type
   
-  def initialize statuses
-    data = SubjectivityClassifier.build_training_set statuses
-    self.classifier = NaiveBayes.new.set_parameters({:m=>3}).build data
+  def initialize statuses, type
+    self.type = type
+    data = SubjectivityClassifier.build_training_set statuses 
+    if type == "NB"
+      self.classifier = NaiveBayes.new.set_parameters({:m=>3}).build data
+    elsif type == "SVM"
+      
+    end
   end
   
   def classify status
@@ -134,10 +139,10 @@ class SubjectivityClassifier
     
   end
   
-  def self.repeat_test ratio, repeats
+  def self.repeat_test ratio, repeats, type
     accuracy = {:true => 0, :false => 0}
     (1..repeats).each do |i|
-      r = SubjectivityClassifier.test ratio
+      r = SubjectivityClassifier.test ratio, type
       accuracy[:true] += r[:true]
       accuracy[:false] += r[:false]
       
@@ -148,7 +153,7 @@ class SubjectivityClassifier
     return accuracy
   end
   
-  def self.test ratio
+  def self.test ratio, type
     ts = ClassifiedStatus.all(:subjective => "t").shuffle
     fs = ClassifiedStatus.all(:subjective => "f").shuffle
     
@@ -169,7 +174,7 @@ class SubjectivityClassifier
       ts = ts.rotate offset
       fs = fs.rotate offset
     
-      s = SubjectivityClassifier.new (ts[0...index]+fs[0...index])
+      s = SubjectivityClassifier.new (ts[0...index]+fs[0...index]), type
   
       cs = ts[index..-1].map{ |t| s.classify t } 
       results[:true] += cs.select{|t| t[0] == "t"}.length.to_f/cs.length.to_f

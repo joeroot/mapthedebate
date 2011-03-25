@@ -1,18 +1,18 @@
 require 'active_record'
 
-LIB_DIR = File.dirname(__FILE__)
-DB_DIR = "#{LIB_DIR}/../db"
+WORDNET_LIB_DIR = "#{File.dirname(__FILE__)}/wordnet"
+WORDNET_DB_DIR = "#{File.dirname(__FILE__)}/../db"
 
 ActiveRecord::Base.establish_connection(
   :adapter => "sqlite3",
-  :database => "#{DB_DIR}/wordnet30.sqlite3",
+  :database => "#{WORDNET_DB_DIR}/wordnet30.sqlite3",
 )
 
-require "#{LIB_DIR}/wordnet/word.rb"
-require "#{LIB_DIR}/wordnet/sense.rb"
-require "#{LIB_DIR}/wordnet/synset.rb"
-require "#{LIB_DIR}/wordnet/category.rb"
-require "#{LIB_DIR}/wordnet/lexicon_link.rb"
-require "#{LIB_DIR}/wordnet/semantic_link.rb"
+require "#{WORDNET_LIB_DIR}/word.rb"
+require "#{WORDNET_LIB_DIR}/sense.rb"
+require "#{WORDNET_LIB_DIR}/synset.rb"
+require "#{WORDNET_LIB_DIR}/category.rb"
+require "#{WORDNET_LIB_DIR}/lexicon_link.rb"
+require "#{WORDNET_LIB_DIR}/semantic_link.rb"
 
 

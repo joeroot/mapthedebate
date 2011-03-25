@@ -1,24 +1,24 @@
-require "mongo_mapper"
-MongoMapper.database = "sentiment"  
+require "mongo_mapper" 
+MongoMapper.database = "sentiment"
 
-LIB_DIR = File.dirname(__FILE__)
-DB_DIR = "#{LIB_DIR}/../db"
+SENTIMENT_LIB_DIR = "#{File.dirname(__FILE__)}/sentiment"
+SENTIMENT_DB_DIR = "#{File.dirname(__FILE__)}/../db"
 
-require_relative "#{LIB_DIR}/wordnet.rb"
+require "#{File.dirname(__FILE__)}/wordnet.rb"
 
 # Sentiment code
-require_relative "#{LIB_DIR}/sentiment/classifiers/classified_status.rb"
-require_relative "#{LIB_DIR}/sentiment/classifiers/sentiment_classifier.rb"
-require_relative "#{LIB_DIR}/sentiment/classifiers/subjectivity_classifier.rb"
+require "#{SENTIMENT_LIB_DIR}/classifiers/classified_status.rb"
+require "#{SENTIMENT_LIB_DIR}/classifiers/sentiment_classifier.rb"
+require "#{SENTIMENT_LIB_DIR}/classifiers/subjectivity_classifier.rb"
 
 # Tagger code
-require_relative "#{LIB_DIR}/sentiment/taggers/part_of_speech.rb"
-require_relative "#{LIB_DIR}/sentiment/taggers/name_tagger.rb"
-Tagger::NameTagger.load_names
+require "#{SENTIMENT_LIB_DIR}/taggers/part_of_speech.rb"
+require "#{SENTIMENT_LIB_DIR}/taggers/name_tagger.rb"
 
 
 # Twitter API code
-require_relative "#{LIB_DIR}/sentiment/twitter/twitter_status.rb"
-require_relative "#{LIB_DIR}/sentiment/twitter/twitter_user.rb"
-require_relative "#{LIB_DIR}/sentiment/twitter/twitter_search.rb"
+require "#{SENTIMENT_LIB_DIR}/twitter/twitter_status.rb"
+require "#{SENTIMENT_LIB_DIR}/twitter/twitter_user.rb"
+require "#{SENTIMENT_LIB_DIR}/twitter/twitter_search.rb"
+
 
