@@ -1,6 +1,6 @@
 require 'sinatra'
 require 'erb'
-require '../sentiment.rb'
+require "#{File.dirname(__FILE__)}/../sentiment.rb"
 
 class App
 
