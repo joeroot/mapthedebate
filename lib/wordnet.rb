@@ -1,3 +1,5 @@
+require 'rubygems'
+
 require 'active_record'
 
 WORDNET_LIB_DIR = "#{File.dirname(__FILE__)}/wordnet"
