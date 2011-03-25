@@ -1,5 +1,3 @@
-require 'rubygems'
-
 require "mongo_mapper" 
 MongoMapper.database = "sentiment"
 
