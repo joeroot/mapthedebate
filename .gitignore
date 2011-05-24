@@ -28,10 +28,10 @@
 
 # Latex #
 #########
-.aux
-.log
-.synctex.gz
-.toc
+*.aux
+*.log
+*.synctex.gz
+*.toc
 
 
 # OS generated files #
