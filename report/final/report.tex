@@ -1,11 +1,33 @@
-\documentclass[13pt,a4paper]{report}
+\documentclass[a4paper,12pt]{report}
 
-\title{Sentiment analysis and micro-blogging} 
-\author[J. Root]{Joseph Root} 
-\institute{Imperial College London}
+\usepackage{fontspec}
+\setmainfont{Adobe Garamond Pro}
+\setromanfont{Adobe Garamond Pro}
+
+\author{
+	Joseph Root\\
+	Imperial College, London
+}
+\title{Map the Debate}
 
 \begin{document}
 
-\maketitle
+	\maketitle
+	
+	\include{abstract/abstract}
+	
+	\tableofcontents
+	
+	\include{introduction/introduction}
+	
+	\include{background/background}
 
+	\include{implementation/implementation}
+	
+	\include{engineering/engineering}
+	
+	\include{testing/testing}
+	
+	\include{evaluation/evaluation}
+	
 \end{document}
