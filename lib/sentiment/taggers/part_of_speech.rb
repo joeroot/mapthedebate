@@ -1,5 +1,4 @@
 module Tagger
-  
   class PartOfSpeech
     
     def self.grammar? text
@@ -47,6 +46,5 @@ module Tagger
       tokens
     end
     
-  end
-  
+  end 
 end

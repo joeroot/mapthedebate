@@ -1,4 +1,5 @@
-class SentimentClassifier
+module Classifier
+  class SentimentClassifier
   
-  
+  end
 end

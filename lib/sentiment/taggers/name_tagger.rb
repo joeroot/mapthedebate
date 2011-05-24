@@ -1,5 +1,4 @@
-module Tagger
-  
+module Tagger  
   class NameTagger
     
     @@names = {}
@@ -25,7 +24,4 @@ module Tagger
     end
     
   end
-  
-  Tagger::NameTagger.load_names
-  
 end

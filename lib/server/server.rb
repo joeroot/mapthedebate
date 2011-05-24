@@ -13,7 +13,7 @@ class App
   end
   
   get '/admin/classify' do
-    @statuses = ClassifiedStatus.all(:subjective => nil, :polarity => nil)
+    @statuses = MicroblogStatus.all("classified_status" => nil)
     erb :"admin/classify/classify"
   end
   
@@ -25,9 +25,7 @@ class App
   end
   
   get '/admin/classify/trained' do
-    @statuses = ClassifiedStatus.sort(:logged_at.desc).all(:subjective => "t")
-    @statuses += ClassifiedStatus.sort(:logged_at.desc).all(:subjective => "f")
-    @statuses += ClassifiedStatus.sort(:logged_at.desc).all(:subjective => "u")
+    @statuses = Status::Status.all("classified_status" => {"$ne" => nil})
     erb :"admin/classify/trained"
   end
   
