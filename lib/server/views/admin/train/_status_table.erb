@@ -9,15 +9,14 @@
 	</tr>	
 	
 	<% @statuses.each do |s| %>
-	
+	<% c = s.trained_status %>
 	<tr>
-	<form action="/admin/classify/<%= s.id %>" class="classify" method="POST">
+	<form action="/admin/train/<%= s.id %>" class="classify" method="POST">
 		
 		<td>
 			<h4><%= wrap_text(s.text, 64) %></h4> 
 			<%
-				logged_at = Time.parse(s.logged_at)
-				since = Time.now - logged_at
+				since = Time.now - s.created_at
 				if since < 60
 					since = "#{since.floor} secs ago"
 				elsif since < 3600
@@ -25,28 +24,30 @@
 				elsif since < 86400
 					since = "#{(since/3600).floor} hours ago"
 				else 
-					since = "#{logged_at.strftime('%e %b')}"
+					since = "#{s.created_at.strftime('%e %b')}"
 				end
 			%>
-			<h5>logged <%= since %></h5>
+			<h5>fetched <%= since %></h5>
 		</td>
 		<td>
 			<select id="subjective_<%= s.id %>" class="subjective" name="subjective">
+				<% subjective = c.nil? ? nil : c.subjective %>
 				<option value="u">unsure</option>
-				<option value="t" <%= "selected" if s.subjective == "t" %>>opinion</option>
-				<option value="f" <%= "selected" if s.subjective == "f" %>>fact</option>
+				<option value="t" <%= "selected" if subjective == "t" %>>opinion</option>
+				<option value="f" <%= "selected" if subjective == "f" %>>fact</option>
 			</select>
 		</td>
 		<td>
 			<select id="polarity_<%= s.id %>" class="polarity" name="polarity">
+				<% polarity = c.nil? ? nil : c.polarity %>
 				<option value="u">unsure</option>
-				<option value="+" <%= "selected" if s.polarity == "+" %>>positive</option>
-				<option value="0" <%= "selected" if s.polarity == "0" %>>neutral</option>
-				<option value="-" <%= "selected" if s.polarity == "-" %>>negative</option>
+				<option value="+" <%= "selected" if polarity == "+" %>>positive</option>
+				<option value="0" <%= "selected" if polarity == "0" %>>neutral</option>
+				<option value="-" <%= "selected" if polarity == "-" %>>negative</option>
 			</select>
 		</td>	
 		<td>
-			<input type="text" name="sentiment" placeholder="e.g. anger" value="<%= s.sentiment.inject{|a,e| a +", " + e} %>" />
+			<input type="text" name="sentiment" placeholder="e.g. anger" value="<%= c.sentiment.inject{|a,e| a +", " + e} if !c.nil? %>" />
 		</td>
 		<td>
 			<input type="submit" class="button small dark_grey" value="&#10003;" />
