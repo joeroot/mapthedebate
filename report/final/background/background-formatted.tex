@@ -1,0 +1,50 @@
+% The background section of the report should set the project into context by relating it to existing published work which you read at the start of the project when your approach and methods were being considered. There are usually many ways of solving a given problem, and you shouldn't just pick one at random. Describe and evaluate as many alternative approaches as possible. The published work may be in the form of research papers, articles, text books, technical manuals, or even existing software or hardware of which you have had hands-on experience. Your must acknowledge the sources of your inspiration. You are expected to have seen and thought about other people's ideas; your contribution will be putting them into practice in some other context. However, avoid plagiarism: if you take another person's work as your own and do not cite your sources of information/inspiration you are being dishonest; in other words you are cheating. When referring to other pieces of work, cite the sources where they are referred to or used, rather than just listing them at the end. Make sure you read and digest the Department's plagiarism document .
+
+% In writing the Background chapter you must demonstrate your capability of analysis, synthesis and critical judgement. Analysis is shown by explaining how the proposed solution operates in your own words as well as its benefits and consequences. Synthesis is shown through the organisation of your Related Work section and through identifying and generalising common aspects across different solutions. Critical judgement is shown by discussing the limitations of the solutions proposed both in terms of their disadvantages and limits of applicability.
+
+\chapter{Background}
+\label{background}
+
+From it's early forums through to the 'social web' of today, the Internet has served as a continually expanding platform for discussion. As a result, there has been an explosion in the amount of readily available, computer-formatted textual opinion. With this growth has come an increasing desire to computationally understand the wealth of opinion now so easily accessible. Combining elements of linguistics, natural language processing and machine learning, this field of exploration has come to be known as \emph{opinion mining} or \emph{sentiment analysis}. In the following chapter we will first briefly examine Twitter as a backdrop to our discussion on sentiment analysis. We will then go on to explore the general problems posed by sentiment analysis along with the common approaches and solutions taken in addressing them. Finally in sections \ref{background:subjectivity_classification} - \ref{background:topic_extraction} we will discuss in detail the areas and methods of sentiment analysis which will bear relevance to this project's Twitter-based setting.
+
+\section{Twitter}
+\label{background:twitter}
+
+Twitter is a social-networking web-service. It enables users to post and read 140 character messages known as \emph{tweets}. A user's \emph{timeline} serves as a publicly viewable history of their tweets. Furthermore if someone chooses to \emph{follow} another user, they will be notified of changes to that user's timeline. The simplicity of Twitter has seen it's user-base rapidly expand, with over 100 million active users today. From football transfers to revolutions Twitter has become the go to service for spreading news quickly and efficiently, largely due to it's effective notification system and viral nature.
+
+Since its launch in 2006, certain protocols have emerged from within Twitter's community. These have been embraced by Twitter, enabling it to serve not only as an efficient platform for spreading news, but also as a rich and sophisticated medium for conversation. Notable protocols include:
+
+\begin{enumerate}
+	\item \emph{Hashtags} enable users to tag their tweets with any word or combination of characters they deem appropriate. Although this may seem basic at first, through common hashtags, it enables users to take part in a community-wide discussion. For example, during the recent voting reform referendum, the hashtags '\emph{\#yes2av}' and '\emph{\#no2av}' were used to form a debate on the strengths and weaknesses of the Alternative Vote. 
+	\item \emph{Mentions} allow users to reference other users in their tweets. Furthermore if a user is mentioned in a tweet, Twitter will notify the mentioned user. Through this, Twitter users can take part in a direct conversations with one or more other users. For example, if we wanted to ask Stephen Fry a question, we could tweet '\emph{what are you eating for breakfast @stephenfry?}'.
+	\item \emph{Re-tweets} give users the ability to re-post other users' tweets in their own timeline. This simple feature has had a significant impact on Twitter's ability to facilitate the rapid spread of news. For example in 2009 when the US Airways flight 1549 crash landed in the Hudson river, rapid re-tweeting of an amateur photo meant the news broke on Twitter far earlier than it did within the media at large. This has continued to be true for many more notable events such as the recent North-African revolutions.
+	\item \emph{Links} have always been possible to tweet on Twitter, however the introduction of link-shorteners has impacted the way in which they are tweeted. In freeing up characters by shortening a URL, users now have the option to describe or comment on the link they are tweeting. This has enabled users to engage in deeper conversation on content they have viewed online, and has neatly merged Twitter's viral nature with it's community's desire for debate.
+\end{enumerate}
+
+
+This rich resource of live news and debate will, through Twitter's RESTful API \footnote{RESTful API's allow developers to retrieve, modify, create and delete data through get, post and delete HTTP requests to certain specified web addresses.}, serve as the project's main data source.
+
+\section{Sentiment analysis}
+\label{background:sentiment_analysis}
+
+Sentiment analysis as a field, is the exploration of how we can computationally understand opinions expressed within a body of text. In order to do this, we must first define the structure of an opinion. In general this is done by breaking an opinion down into four broad components. Firstly we must determine the opinion's focus of discussion, also known as it's \emph{topic} \footnote{This is more commonly referred to in literature as an opinion's \emph{feature}, however to avoid later confusion with the machine learning term, we will use the term \emph{topic}.}. This in practise can encompass anything from Government policy to phone battery life. Next it is important to determine the \emph{holder} of this opinion, be it the author or a referenced persons, along with the \emph{time} at which the opinion was expressed. Finally, we hope to \emph{classify} (or in some cases quantify) the opinion which has been passed. Research into classification has typically focussed on deciding whether an opinion is positive, negative or neutral. Some research has gone on to further examine ways of measuring the strength of this opinion, and we will explore this and other variations in section \ref{background:sentiment_classification}. A fifth \emph{object} component is sometimes introduced for larger documents, which serves as an identifier for related topics. For example, within a phone review the majority of opinions may share the same object, in this case the phone, but focus on different topics such as battery life or call quality.
+
+With a structure now in place, we can examine the computational approaches taken in gathering the necessary information. In general tweets reflect the user's opinion, thus the tweet's opinion holder is in most cases it's user. As tweets tend to break with the news, it is also generally safe to say that the time of the tweet is fairly reflective of the time at which it's opinion was cast. Thus for the purpose of this project, we are predominantly only interested in classifying an opinion and determining it's topic. The former of these two problems falls within an approach to sentiment analysis known as \emph{sentence-level sentiment classification}, whilst the latter uses techniques developed within \emph{topic extraction}. Sentence-level sentiment classification determines whether a sentence expresses and opinion along with classifying the opinion if it exists. Topic extraction determines the topic or target of an opinionated sentence. Sentence-level sentiment classification is applied to each sentence in a document in order to determine the opinions it holds. These are then collated by \emph{document-level sentiment classification} to form a more general description of a document's sentiment, however for the purpose of this project, this will not be relevant. 
+
+\section{Subjectivity Classification}
+\label{background:subjectivity_classification}
+
+Objective sentences express factual information, whilst subjective sentences express opinion or belief. Subjectivity classification algorithmically determine whether a given sentence is either subjective or objective. This is necessary within sentiment 
+
+Opinion - direct/comparative, orientation (typically + or -), explicit/implicit, subjective or objective
+
+\section{Sentiment Classification}
+\label{background:sentiment_classification}
+(Bollen and Pepe 2009)
+
+
+
+\section{Topic Extraction}
+\label{background:topic_extraction}
+
+Bollen, J, and A Pepe. 2009. “Modeling public mood and emotion: Twitter sentiment and socio-economic phenomena.” Arxiv preprint arXiv:0911.1583.

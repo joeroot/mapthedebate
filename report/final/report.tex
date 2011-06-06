@@ -1,33 +1,177 @@
 \documentclass[a4paper,12pt]{report}
 
-\usepackage{fontspec}
-\setmainfont{Adobe Garamond Pro}
-\setromanfont{Adobe Garamond Pro}
 
-\author{
-	Joseph Root\\
-	Imperial College, London
+% Maths packages
+\usepackage{verbatim, amsmath, amsfonts, amssymb, amsthm}
+
+% Allows the use of extra characters
+\usepackage{textcomp} 
+
+\usepackage[toc,page]{appendix}
+
+% Formatting for URLs
+\usepackage{url} 
+
+\usepackage{natbib}
+
+\usepackage{graphicx}
+
+\usepackage[it]{caption}
+
+% PDF referencing
+\usepackage[
+	hyperindex=true,
+	pdftitle={Map the Debate},
+	pdfauthor={Joseph Root},
+	colorlinks=false,
+	pagebackref=false,
+	citecolor=blue,
+	plainpages=false,
+	pdfpagelabels
+]{hyperref} % colourlinks=false for printing
+
+% Acknowledgements section
+% \usepackage{additional/acknowledgements}
+
+% Chapter title's font and spacing
+% \usepackage[times]{quotchap}
+% \renewcommand*\sectfont{\minionfont\scshape}
+% \renewcommand{\chapterheadstartvskip}{\vspace*{-2.5\baselineskip}}
+% \renewcommand*{\chapterheadendvskip}{\vspace{1.3\baselineskip}}
+
+% Packages for type setting
+\usepackage{fontspec}
+\usepackage[parfill]{parskip}
+\usepackage{titlesec}
+\usepackage{titling}
+\usepackage{textcase}
+\usepackage{color}
+\usepackage[british]{babel}
+\usepackage{setspace}
+
+% Basic typesetting
+\setmainfont[Mapping=text-text, Ligatures={Common}]{Adobe Caslon Pro}
+\setromanfont[Mapping=text-text, Ligatures={Common}]{Adobe Caslon Pro}
+\setmonofont[Scale=0.87]{Consolas}
+\setlength{\parindent}{9pt}
+
+% Initialise font families
+\newfontfamily\minionfont[Mapping=text-text, Ligatures={Common}]{Minion Pro}
+\newfontfamily\trajanfont[Mapping=text-text, Ligatures={Common}]{Trajan Pro}
+\newfontfamily\sabonfont[Mapping=text-text, Ligatures={Common}]{Sabon LT Std}
+\newfontfamily\caslonfont[Mapping=text-text, Ligatures={Common}]{Adobe Caslon Pro}
+\newfontfamily\minionoldfont[Mapping=text-text, Ligatures={Common}, Numbers=OldStyle]{Minion Pro}
+\newfontfamily\dinfont[Mapping=text-text, Ligatures={Common}]{DIN 30640 Std}
+\newfontfamily\museofont[Mapping=text-text, Ligatures={Common}, Scale=1.2]{Museo Sans 100}
+\newfontfamily\consolasfont[Mapping=text-text, Ligatures={Common}]{Consolas}
+
+% Section title's font and style
+\titleformat*{\section}{\Large\minionoldfont\addfontfeature{LetterSpace=2}}
+\titleformat*{\subsection}{\large\minionoldfont\addfontfeature{LetterSpace=2}}
+\titleformat*{\subsubsection}{\normalsize\itshape\minionoldfont\addfontfeature{Scale=1.05}}
+
+\titlespacing*{\chapter}{0pt}{-30pt}{30pt}
+\titleformat{\chapter}[display]
+	{\flushright\Huge\color{grey}\sabonfont\addfontfeature{Scale=4.5}\bfseries}
+	{\thechapter}
+	{10pt}
+	{\normalfont\flushright\LARGE\color{black}\minionfont\scshape\MakeUppercase}
+
+\titleformat{\part}[display]
+  {\LARGE\color{darkgrey}\minionfont\addfontfeature{LetterSpace=3}\scshape}
+  { }
+  {0em}
+	{\MakeUppercase\partname{} \thepart\MakeUppercase { } \vline { }  \color{black}\MakeUppercase}
+
+
+\definecolor{lightblue}{RGB}{144,164,174}
+\definecolor{darkgreen}{RGB}{72,146,0}
+\definecolor{lightred}{RGB}{169,53,53}
+\definecolor{grey}{gray}{0.55}
+\definecolor{darkgrey}{gray}{0.35}
+
+% Code formatting
+\usepackage{listings}
+\lstloadlanguages{Ruby}
+\lstset{
+	basicstyle=\consolasfont\color{black}\footnotesize,
+	numbers=left,
+	numberstyle=\consolasfont\color{grey}\footnotesize,
+	commentstyle=\color{darkgreen},
+	keywordstyle=\color{blue},
+	stringstyle=\color{lightred},
+	frame=lines,
+	framesep=3pt,
+	abovecaptionskip=4pt,
+	belowcaptionskip=4pt,
+	breaklines=true,
+	captionpos=t
 }
+
+\setcounter{secnumdepth}{3}
+
+% Details for cover page
+\author{Joseph Root\\
+Imperial College, London\\
+jsr08@ic.ac.uk}
+\date{June 2011}
 \title{Map the Debate}
 
-\begin{document}
+\includeonly{title/title, background/background, introduction/introduction}
 
-	\maketitle
+\begin{document}
 	
+	\include{title/title}
+
 	\include{abstract/abstract}
 	
+	\include{acknowledgements/acknowledgements}
+	
 	\tableofcontents
+	
+	\part{Analysis}
 	
 	\include{introduction/introduction}
 	
 	\include{background/background}
 
-	\include{implementation/implementation}
+	% BODY
+	% The central part of the report usually consists of three of four chapters detailing the technical work undertaken during the project. The structure of these chapters is highly project dependent. They can reflect the chronological development of the project, e.g. design, implementation, experimentation, optimisation, evaluation etc. although this is not always the best approach. However you choose to structure this part of the report, you should make it clear how you arrived at your chosen approach in preference to the other alternatives documented in the background. If you have built a new piece of software you should describe and justify the design of your program at some high level, possibly using an approved graphical formalism such as UML. It should also document any interesting problems with, or features of, your implementation. Integration and testing are also important to discuss in some cases. You need to discuss the content of these sections thoroughly with your supervisor.
+
+	\part{Implementation}
+
+	\include{structure/structure}
+
+	\include{subjectivity/subjectivity}
+	
+	\include{sentiment/sentiment}
+	
+	\include{topic/topic}
 	
 	\include{engineering/engineering}
 	
 	\include{testing/testing}
 	
+	\part{Evalutation}
+	
 	\include{evaluation/evaluation}
 	
+	\include{conclusion/conclusion}
+	
+	% BIBLIOGRAPHY
+	% This consists of a list of all the books, articles, manuals etc. used in the project and referred to in the report. You should provide enough information to allow the reader to find the source. In particular references must contain all the information regarding the publication of the paper and must be consistently formatted. Usually this means:
+	% For journals: Authors, Title, Journal, volume number, issue number, page number, publisher, month, year.
+	% For conferences: Authors, Title, Conference name, Place where held, publisher, page number, month, year.
+	% For technical reports: Authors, Title, institution, Technical report number, month, year.
+	% For web references: Authors, Title, Web-reference, date accessed.
+	% URLs are optional for published work but preferred.
+	% A weakness of many reports is inadequate citation of a source of information. It's easy to get this right so there are no excuses. Each entry in the bibliography should list the author(s) and title of the piece of work and should give full details of where it can be found. For example:
+	% 1 Bennett, A.J., Field, A.J. and Harrison, P.G., "Modelling and Validation of Shared Memory Coherency Protocols", Performance Evaluation, 1996, Vol. 27 & 28, 1996, pp. 541-562.
+	
+
+	\bibliographystyle{plain}
+	\bibliography{papers,web}	
+
 \end{document}
+
+

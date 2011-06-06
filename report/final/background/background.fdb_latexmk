@@ -1,0 +1,10 @@
+# Fdb version 2
+["latex"] 0 "background.tex" "background.dvi" "background" 
+  "background.tex" 1306620226 9431 9ce74e8cf5790874aa69cc93a7917d4e ""
+["pdflatex"] 1307283888 "background.tex" "background.pdf" "background" 
+  "background.aux" 1307283820 4833 27454c51e700989b3e738d033f837518 ""
+  "background.tex" 1307283814 44668 215927bf36233eef8f3ebb46fb87a38e ""
+  "e.g., `I\hbox'" 0 -1 0 ""
+  "e.g., `\hobx'" 0 -1 0 ""
+  "job aborted, no legal \end found" 0 -1 0 ""
+  "word_1 \textit" 0 -1 0 ""

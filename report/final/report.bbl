@@ -1,0 +1,110 @@
+\begin{thebibliography}{10}
+
+\bibitem{Barbosa:ws}
+L~Barbosa.
+\newblock {Robust Sentiment Detection on Twitter from Biased and Noisy Data}.
+\newblock {\em research.att.com}.
+
+\bibitem{Benamara:2007wz}
+F~Benamara and C~Cesarano.
+\newblock {Sentiment analysis: Adjectives and adverbs are better than
+  adjectives alone}.
+\newblock {\em Proceedings of the {\ldots}}, 2007.
+
+\bibitem{Bermingham:2010vh}
+A~Bermingham.
+\newblock {Classifying sentiment in microblogs: is brevity an advantage?}
+\newblock {\em Proceedings of the 19th ACM {\ldots}}, 2010.
+
+\bibitem{Ekman:1969ux}
+P~Ekman.
+\newblock {The repertoire of nonverbal behavior: Categories, origins, usage,
+  and coding}.
+\newblock {\em Semiotica}, 1969.
+
+\bibitem{Go:2009ut}
+A~Go and R~Bhayani.
+\newblock {Twitter sentiment classification using distant supervision}.
+\newblock {\em CS224N Project Report}, 2009.
+
+\bibitem{Liu:2010tm}
+B~Liu.
+\newblock {Sentiment analysis and subjectivity}.
+\newblock {\em Handbook of Natural Language Processing,}, 2010.
+
+\bibitem{Mihalcea:2007uh}
+R~Mihalcea and C~Banea.
+\newblock {Learning multilingual subjective language via cross-lingual
+  projections}.
+\newblock {\em {\ldots} MEETING-ASSOCIATION FOR {\ldots}}, 2007.
+
+\bibitem{norvig}
+Peter Norvig.
+\newblock On chomsky and the two cultures of statistical learning, May 2011.
+
+\bibitem{Pang:2004us}
+B~Pang.
+\newblock {A sentimental education: Sentiment analysis using subjectivity
+  summarization based on minimum cuts}.
+\newblock 2004.
+
+\bibitem{Pang:2002tu}
+B~Pang and L~Lee.
+\newblock {Thumbs up?: sentiment classification using machine learning
+  techniques}.
+\newblock {\em {\ldots} of the ACL-02 conference on {\ldots}}, 2002.
+
+\bibitem{Plutchik:2001tp}
+R~Plutchik.
+\newblock {The nature of emotions}.
+\newblock {\em American Scientist}, 2001.
+
+\bibitem{Turney:2002vv}
+P~Turney.
+\newblock {Thumbs up or thumbs down?: semantic orientation applied to
+  unsupervised classification of reviews}.
+\newblock {\em Proceedings of the 40th Annual Meeting on {\ldots}}, 2002.
+
+\bibitem{Wiebe:2000tk}
+J~Wiebe.
+\newblock {Effects of adjective orientation and gradability on sentence
+  subjectivity}.
+\newblock {\em Proceedings of the 18th conference {\ldots}}, 2000.
+
+\bibitem{Wiebe:2000ub}
+J~Wiebe.
+\newblock {Learning subjective adjectives from corpora}.
+\newblock {\em Proceedings of the National Conference on Artificial {\ldots}},
+  2000.
+
+\bibitem{Wiebe:2003wa}
+J~Wiebe.
+\newblock {Learning extraction patterns for subjective expressions}.
+\newblock In {\em Proceedings of the 2003 conference on Empirical {\ldots}},
+  2003.
+
+\bibitem{Wilson:2005tt}
+J~Wiebe.
+\newblock {Recognizing contextual polarity in phrase-level sentiment analysis}.
+\newblock {\em Proceedings of the conference on {\ldots}}, 2005.
+
+\bibitem{Wiebe:2006te}
+J~Wiebe.
+\newblock {Word sense and subjectivity}.
+\newblock {\em {\ldots} of the 21st International Conference on {\ldots}},
+  2006.
+
+\bibitem{Akkaya:2009ww}
+J~Wiebe.
+\newblock {Subjectivity word sense disambiguation}.
+\newblock {\em Proceedings of the 2009 {\ldots}}, 2009.
+
+\bibitem{Wiebe:1999cj}
+Janyce~M Wiebe, Rebecca~F Bruce, and Thomas~P O'Hara.
+\newblock {Development and Use of a Gold-Standard Data Set for Subjectivity
+  Classifications}.
+\newblock In {\em the 37th annual meeting of the Association for Computational
+  Linguistics}, pages 246--253, Morristown, NJ, USA, 1999. Association for
+  Computational Linguistics.
+
+\end{thebibliography}
