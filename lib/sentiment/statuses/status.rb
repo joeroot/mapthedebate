@@ -1,16 +1,18 @@
 require 'mongo_mapper'
 require "#{File.dirname(__FILE__)}/classified_status.rb"
 require "#{File.dirname(__FILE__)}/trained_status.rb"
+require "#{File.dirname(__FILE__)}/../core/tweet_tagger.rb"
 
 module Status
   class Status
     include MongoMapper::Document
+    @@tagger = TweetTagger.new
 
     # Keys
     key :text, String           # textual content of status
     key :source, String         # source of status, e.g. "twitter"
     key :posted_at, String      # time/date the status was posted to micro-blog
-    key :part_of_speech, Array  # an array of the status' part of speech tags
+    key :pos_data, Array  # an array of the status' part of speech tags
     timestamps!
   
     # Relationships
@@ -20,12 +22,41 @@ module Status
     # Validations
     validates_presence_of :text
 
+    # Override setup_modifications in order to initialize part of speech tags
+    def parts_of_speech 
+      if self.pos_data.nil? or self.pos_data.empty?
+         self.pos_data = @@tagger.fetch_tags self.text
+         self.save
+      end
+      return self.pos_data
+    end
+
     def hashtags
-      self.text.scan(/\B#\w*[a-zA-Z]+\w*/)
+      self.parts_of_speech.select{|pos| pos["tag"] == "hsh"}
     end
 
     def urls
-      self.text.scan(/(?:http|https):\/\/[a-z0-9]+(?:[\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(?:(?::[0-9]{1,5})?\/[^\s]*)?/ix)
+      self.parts_of_speech.select{|pos| pos["tag"] == "url"}
+    end
+    
+    def mentions
+      self.parts_of_speech.select{|pos| pos["tag"] == "mntn"}
+    end
+    
+    def adjectives
+      self.parts_of_speech.select{|pos| TweetTagger.general(pos["tag"]) == "adj"}
+    end
+    
+    def adverbs
+      self.parts_of_speech.select{|pos| TweetTagger.general(pos["tag"]) == "adverb"}
+    end
+    
+    def nouns
+      self.parts_of_speech.select{|pos| TweetTagger.general(pos["tag"]) == "noun"}
+    end
+    
+    def verbs
+      self.parts_of_speech.select{|pos| TweetTagger.general(pos["tag"]) == "verb"}
     end
   
     def is_classified?
@@ -35,14 +66,38 @@ module Status
     def is_trained?
       not self.trained_status.nil?
     end
-
-    def pos
-      if self.part_of_speech.nil? or self.part_of_speech.empty?
-        self.part_of_speech = Tagger::PartOfSpeech.tag self.text
-        self.save
-      end
-      return self.part_of_speech
+    
+    def strong_subjective_clues
+      self.parts_of_speech.select{|p| Core::ClueFinder.is_strong_clue? p["word"], p["tag"]}
     end
-
+    
+    def weak_subjective_clues
+      self.parts_of_speech.select{|p| Core::ClueFinder.is_weak_clue? p["word"], p["tag"]}
+    end
+    
+    def positive_clues
+      self.parts_of_speech.select{|p| Core::ClueFinder.is_positive_clue? p["word"], p["tag"]}
+    end
+    
+    def strong_positive_clues
+      self.positive_clues.select{|p| Core::ClueFinder.is_strong_clue? p["word"], p["tag"]}
+    end
+    
+    def weak_positive_clues
+      self.positive_clues.select{|p| Core::ClueFinder.is_weak_clue? p["word"], p["tag"]}
+    end
+    
+    def negative_clues
+      self.parts_of_speech.select{|p| Core::ClueFinder.is_negative_clue? p["word"], p["tag"]}
+    end
+    
+    def strong_negative_clues
+      self.negative_clues.select{|p| Core::ClueFinder.is_strong_clue? p["word"], p["tag"]}
+    end
+    
+    def weak_negative_clues
+      self.negative_clues.select{|p| Core::ClueFinder.is_weak_clue? p["word"], p["tag"]}
+    end
+    
   end
 end

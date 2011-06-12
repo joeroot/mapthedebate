@@ -5,9 +5,9 @@ module Status
     include MongoMapper::EmbeddedDocument
 
     # Keys
-    key :subjective, String             # takes values "u", "t", "f", "b"
-    key :polarity, String               # takes values "u", "+", "-", "0"
+    key :subjective, String             # u="unclassified", t="true", f="false", b="both", s="spam"
+    key :polarity, String               # takes values "u", "pos", "neg", "neu", "both"
     key :sentiment, Array               # takes array of strings
-    
+    key :subject, String
   end
 end
