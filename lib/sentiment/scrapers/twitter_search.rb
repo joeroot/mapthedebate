@@ -23,6 +23,7 @@ module Scraper
       url = "#{TWITTER_SEARCH_URL}?q=#{q.gsub(' ','+')}&result_type=mixed&lang=en"
       params.each {|k,v| url = url + "&#{k}=#{v}"}
       rs = self.retrieve(url)
+      puts "#{url} #{rs["results"]}"
       rs["results"].reject!{|r| r["text"].include? "RT"}[0..10]
       # keep = ["id", "text", "created_at"]
       # rs["results"].each{|r| r.reject! {|k,v| not keep.include? k}}
