@@ -14,10 +14,11 @@
 		<link rel="stylesheet" href="/css/button.css" type="text/css" />	
 		
 		<script type="text/javascript">
-		
+
 			$(document).ready(function(){
-				
+
 				$("form.classify").submit(function(){
+					showTable();
 					var action = $(this).attr("action");
 					var data = $(this).serialize();
 					$.post(action, data, function(results){
@@ -25,11 +26,28 @@
 					return false;
 				});
 
+				$("a.link_delete").click(function(){
+					showTable();
+					$(this).parent().parent().parent().hide();
+					var action = $(this).attr("href");
+					$.get(action, function(results){
+					});
+					return false;		
+				});
+
 			});
+
+			function showTable() {
+				size = $(".table table").children().size();
+				if (size > 1) {
+					$(".table").show();
+				} else {
+					$(".table").hide();
+				}
+			}
 
 		</script>
 	</head>
-	
 	<body>
 		
 		<div class="container_12">
@@ -45,7 +63,6 @@
 		</div>
 		
 		<div class="container_12">
-			
 			
 			<div class="grid_12">
 				<% if not @statuses.empty? %>

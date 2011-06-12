@@ -29,6 +29,15 @@
 					});
 					return false;
 				});
+				
+				$("a.link_delete").click(function(){
+					showTable();
+					$(this).parent().parent().parent().hide();
+					var action = $(this).attr("href");
+					$.get(action, function(results){
+					});
+					return false;		
+				});
 
 			});
 

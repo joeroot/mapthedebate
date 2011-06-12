@@ -13,7 +13,6 @@
 	background: -moz-linear-gradient(top, #FFF 3%, #EEE 4%, #CCC 100%); /* firefox */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(3%,#FFF), color-stop(4%,#EEE), color-stop(100%,#CCC)); /* webkit */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFF', endColorstr='#DDD',GradientType=0 ); /* ie */
-
 }
 
 .button:hover {

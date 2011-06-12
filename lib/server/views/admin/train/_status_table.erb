@@ -5,6 +5,7 @@
 		<th>subjectivity</th>
 		<th>polarity</th>
 		<th>sentiment</th>
+		<th>subject</th>
 		<th></th>
 	</tr>	
 	
@@ -16,7 +17,7 @@
 		<td>
 			<h4><%= wrap_text(s.text, 64) %></h4> 
 			<%
-				since = Time.now - s.created_at
+				since = Time.now - s.updated_at
 				if since < 60
 					since = "#{since.floor} secs ago"
 				elsif since < 3600
@@ -27,7 +28,7 @@
 					since = "#{s.created_at.strftime('%e %b')}"
 				end
 			%>
-			<h5>fetched <%= since %></h5>
+			<h5>fetched <%= since %> (<a class="link_delete" href="/admin/train/<%= s.id %>/delete">delete</a>)</h5>
 		</td>
 		<td>
 			<select id="subjective_<%= s.id %>" class="subjective" name="subjective">
@@ -35,20 +36,24 @@
 				<option value="u">unsure</option>
 				<option value="t" <%= "selected" if subjective == "t" %>>opinion</option>
 				<option value="f" <%= "selected" if subjective == "f" %>>fact</option>
+				<option value="s" <%= "selected" if subjective == "s" %>>spam</option>
 			</select>
 		</td>
 		<td>
 			<select id="polarity_<%= s.id %>" class="polarity" name="polarity">
 				<% polarity = c.nil? ? nil : c.polarity %>
 				<option value="u">unsure</option>
-				<option value="+" <%= "selected" if polarity == "+" %>>positive</option>
-				<option value="0" <%= "selected" if polarity == "0" %>>neutral</option>
-				<option value="-" <%= "selected" if polarity == "-" %>>negative</option>
+				<option value="pos" <%= "selected" if polarity == "pos" %>>positive</option>
+				<option value="neu" <%= "selected" if polarity == "neu" %>>neutral</option>
+				<option value="neg" <%= "selected" if polarity == "neg" %>>negative</option>
+				<option value="both" <%= "selected" if polarity == "both" %>>both</option>
 			</select>
 		</td>	
 		<td>
 			<input type="text" name="sentiment" placeholder="e.g. anger" value="<%= c.sentiment.inject{|a,e| a +", " + e} if !c.nil? %>" />
 		</td>
+		<td>
+			<input type="text" name="subject" placeholder="e.g. Obama, tax cuts" value="<%= c.subject if !c.nil? %>" />
 		<td>
 			<input type="submit" class="button small dark_grey" value="&#10003;" />
 		</td>

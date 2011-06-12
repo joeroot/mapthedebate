@@ -29,6 +29,22 @@ class App
     erb :"admin/train/trained"
   end
   
+  get '/admin/train/trained/:filter' do
+    @statuses = Status::Status.where(:trained_status.ne => nil).sort(:created_at.desc)
+    if params[:filter] == "subjective"
+      @statuses = @statuses.select{|s| s.trained_status.subjective == "t"}
+    elsif params[:filter] == "objective"
+      @statuses = @statuses.select{|s| s.trained_status.subjective == "f"}
+    elsif params[:filter] == "positive"
+      @statuses = @statuses.select{|s| s.trained_status.polarity == "pos"}  
+    elsif params[:filter] == "negative"
+      @statuses = @statuses.select{|s| s.trained_status.polarity == "neg"}
+    elsif params[:filter] == "neutral"
+      @statuses = @statuses.select{|s| s.trained_status.polarity == "neu"}
+    end
+    erb :"admin/train/trained"
+  end
+    
   post '/admin/train/:id' do
     s = Status::Status.find_by_id params[:id]
     saved = false;
@@ -43,6 +59,7 @@ class App
       if not params["sentiment"].nil?
         t.sentiment = params["sentiment"].split(",").map{|s| s.strip}
       end
+      t.subject = params["subject"] if not params["subject"].nil?
       saved = s.save and t.save
     end
     @json = {"success" => saved}
@@ -50,8 +67,8 @@ class App
   end
   
   get '/admin/train/:id/delete' do
-    s = Status::Status.find_by_id id
-    destroyed = c.destroy
+    s = Status::Status.find_by_id params[:id]
+    destroyed = s.destroy
     @json = {"success" => destroyed}
     erb :"admin/json"
   end
