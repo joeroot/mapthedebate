@@ -5,7 +5,6 @@
 		<th>subjectivity</th>
 		<th>polarity</th>
 		<th>sentiment</th>
-		<th>subject</th>
 		<th></th>
 	</tr>	
 	
@@ -38,6 +37,7 @@
 				<option value="f" <%= "selected" if subjective == "f" %>>fact</option>
 				<option value="s" <%= "selected" if subjective == "s" %>>spam</option>
 			</select>
+			<input type="text" name="subject" placeholder="subject e.g. nhs" value="<%= c.subject if !c.nil? %>" />
 		</td>
 		<td>
 			<select id="polarity_<%= s.id %>" class="polarity" name="polarity">
@@ -48,12 +48,13 @@
 				<option value="neg" <%= "selected" if polarity == "neg" %>>negative</option>
 				<option value="both" <%= "selected" if polarity == "both" %>>both</option>
 			</select>
+			<input type="text" name="positive_phrases" placeholder="+ve phrases" value="<%= c.positive_phrases.inject{|a,e| a +", " + e} if !c.nil? %>" />
+			<input type="text" name="negative_phrases" placeholder="-ve phrases" value="<%= c.negative_phrases.inject{|a,e| a +", " + e} if !c.nil? %>" />
 		</td>	
 		<td>
 			<input type="text" name="sentiment" placeholder="e.g. anger" value="<%= c.sentiment.inject{|a,e| a +", " + e} if !c.nil? %>" />
+			<input type="text" name="setiment_phrases" placeholder="sentiment phrases" value="<%= c.sentiment_phrases.inject{|a,e| a +", " + e} if !c.nil? %>" />
 		</td>
-		<td>
-			<input type="text" name="subject" placeholder="e.g. Obama, tax cuts" value="<%= c.subject if !c.nil? %>" />
 		<td>
 			<input type="submit" class="button small dark_grey" value="&#10003;" />
 		</td>

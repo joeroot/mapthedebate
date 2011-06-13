@@ -9,5 +9,8 @@ module Status
     key :polarity, String               # takes values "u", "pos", "neg", "neu", "both"
     key :sentiment, Array               # takes array of strings
     key :subject, String
+    key :positive_phrases, Array
+    key :negative_phrases, Array
+    key :sentiment_phrases, Array
   end
 end

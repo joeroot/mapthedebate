@@ -59,6 +59,15 @@ class App
       if not params["sentiment"].nil?
         t.sentiment = params["sentiment"].split(",").map{|s| s.strip}
       end
+      if not params["positive_phrases"].nil?
+        t.positive_phrases = params["positive_phrases"].split(",").map{|s| s.strip}
+      end
+      if not params["negative_phrases"].nil?
+        t.negative_phrases = params["negative_phrases"].split(",").map{|s| s.strip}
+      end
+      if not params["sentiment_phrases"].nil?
+        t.sentiment_phrases = params["sentiment_phrases"].split(",").map{|s| s.strip}
+      end
       t.subject = params["subject"] if not params["subject"].nil?
       saved = s.save and t.save
     end
