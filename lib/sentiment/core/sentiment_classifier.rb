@@ -9,27 +9,32 @@ include Ai4r::Data
 module Classifier
   class Polarity
   
-    OUTPUT = :polarity
-    FEATURES = [
+    DEFAULT_OUTPUT = :polarity
+    DEFAULT_FEATURES = [
       :positive_phrase_count,
-      :positive_phrase_count
+      :negative_phrase_count,
+      :unigrams
     ]
     
     extend Classifier
-    def self.output; return OUTPUT end
   
-    attr_accessor :classifier, :phrase_subjectivity_classifier, :phrase_polarity_classifier, :statuses, :training_set
+    attr_accessor :classifier, :statuses, :unigrams, :output, :features
     
     def classify status
+      # data = self.parse_unigrams status
+      # return self.unigram_classifier.eval(data)
       data = self.parse_status status
       return self.classifier.eval(data)
     end
     
     def initialize params = {}   
+      self.output = params[:output] || DEFAULT_OUTPUT
+      self.features = params[:features] || DEFAULT_FEATURES
+      
       ss = params[:statuses] || Status::Status.where(:trained_status.ne => nil)
       statuses = {}
       ss.each{|s|
-        l = s.trained_status.send(OUTPUT.to_sym)
+        l = s.trained_status.send(self.output.to_sym)
         statuses[l] = (statuses[l] || []) + [s]
       }
       
@@ -37,7 +42,17 @@ module Classifier
       statuses.values.map!{|v| v.shuffle.sample(max)}
       
       self.statuses = statuses.values.sum
+      self.unigrams = self.build_unigrams(self.statuses) if self.features.include?(:unigrams)
       self.classifier = self.build_classifier self.statuses
+    end
+    
+    def build_unigrams statuses
+      statuses.map{|s| s.parts_of_speech}.sum.map{|p| p["word"].downcase}.uniq
+    end
+    
+    def parse_unigrams status
+      words = status.parts_of_speech.map{|p| p["word"].downcase}
+      self.unigrams.map{|u| words.include?(u).to_s[0]}
     end
 
     def build_classifier statuses
@@ -46,7 +61,11 @@ module Classifier
     end
 
     def build_training_set statuses
-      labels = (FEATURES + [OUTPUT]).map{|f| f.to_s}
+      labels = []
+      self.features.each do |f|
+        (f != :unigrams) ? (labels << f) : (labels += self.unigrams)
+      end
+      labels = (labels + [self.output]).map{|f| f.to_s}
       items = self.parse_statuses statuses
       DataSet.new ({:data_labels => labels, :data_items => items})
     end
@@ -57,10 +76,10 @@ module Classifier
 
     def parse_status status, classified=false
       data = []
-      FEATURES.each do |feature|
-        data << self.send(feature.to_sym, status).to_s
+      self.features.each do |f|
+        (f != :unigrams) ? (data << self.send(f.to_sym, status).to_s) : (data += self.parse_unigrams(status))
       end
-      data << status.trained_status.send(OUTPUT.to_sym).to_s if classified
+      data << status.trained_status.send(self.output.to_sym).to_s if classified
       return data
     end
     

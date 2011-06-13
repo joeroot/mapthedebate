@@ -9,8 +9,8 @@ include Ai4r::Data
 module Classifier
   class Subjectivity
   
-    OUTPUT = :subjective
-    FEATURES = [
+    DEFAULT_OUTPUT = :subjective
+    DEFAULT_FEATURES = [
       :has_adjectives?, 
       :has_urls?, 
       :has_strong_clues?, 
@@ -19,8 +19,6 @@ module Classifier
     ]
     
     extend Classifier
-    def self.output; return OUTPUT end
-    def self.features; return FEATURES end
   
     attr_accessor :classifier, :statuses
     
@@ -30,6 +28,9 @@ module Classifier
     end
     
     def initialize params = {}   
+      self.output = params[:output] || DEFAULT_OUTPUT
+      self.features = params[:features] || DEFAULT_FEATURES
+      
       ss = params[:statuses] || Status::Status.where(:trained_status.ne => nil)
       statuses = {}
       ss.each{|s|
@@ -50,7 +51,7 @@ module Classifier
     end
     
     def build_training_set statuses
-      labels = (FEATURES + [OUTPUT]).map{|f| f.to_s}
+      labels = (self.features + [self.output]).map{|f| f.to_s}
       items = self.parse_statuses statuses
       DataSet.new ({:data_labels => labels, :data_items => items})
     end
@@ -61,10 +62,10 @@ module Classifier
   
     def parse_status status, classified=false
       data = []
-      FEATURES.each do |feature|
+      self.features.each do |feature|
         data << self.send(feature.to_sym, status).to_s
       end
-      data << status.trained_status.send(OUTPUT.to_sym).to_s if classified
+      data << status.trained_status.send(self.output.to_sym).to_s if classified
       return data
     end
     
