@@ -16,9 +16,10 @@ require "#{SENTIMENT_LIB_DIR}/statuses/classified_status.rb"
 require "#{SENTIMENT_LIB_DIR}/statuses/trained_status.rb"
 
 # Sentiment code
+require "#{SENTIMENT_LIB_DIR}/core/subjectivity.rb"
+require "#{SENTIMENT_LIB_DIR}/core/polarity.rb"
+require "#{SENTIMENT_LIB_DIR}/core/tests.rb"
 require "#{SENTIMENT_LIB_DIR}/core/classifier.rb"
-require "#{SENTIMENT_LIB_DIR}/core/subjectivity_classifier.rb"
-require "#{SENTIMENT_LIB_DIR}/core/sentiment_classifier.rb"
 
 # Search code
 require "#{SENTIMENT_LIB_DIR}/scrapers/twitter_search.rb"

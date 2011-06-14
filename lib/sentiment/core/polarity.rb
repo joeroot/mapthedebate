@@ -1,5 +1,6 @@
 require "ai4r"
 require "#{File.dirname(__FILE__)}/classifier.rb"
+require "#{File.dirname(__FILE__)}/tests.rb"
 require "#{File.dirname(__FILE__)}/clue_finder.rb"
 require "#{File.dirname(__FILE__)}/tweet_tagger.rb"
 
@@ -11,12 +12,24 @@ module Classifier
   
     DEFAULT_OUTPUT = :polarity
     DEFAULT_FEATURES = [
-      :positive_phrase_count,
-      :negative_phrase_count,
-      :unigrams
+      :unigrams,
+      # :has_positive_clues?,
+      # :has_negative_clues?
+      :has_negative_patterns?,
+      :has_positive_patterns?,
+      :has_strong_negative_clues?,
+      :has_strong_positive_clues?,
+      :has_weak_negative_clues?,
+      :has_weak_positive_clues?
+      # :no_strong_negative_clues,
+      # :no_strong_positive_clues,
+      # :no_weak_negative_clues,
+      # :no_weak_positive_clues
     ]
     
-    extend Classifier
+    extend Classifier::Tests
+    def self.default_output; DEFAULT_OUTPUT end
+    def self.default_features; DEFAULT_FEATURES end
   
     attr_accessor :classifier, :statuses, :unigrams, :output, :features
     
@@ -31,7 +44,7 @@ module Classifier
       self.output = params[:output] || DEFAULT_OUTPUT
       self.features = params[:features] || DEFAULT_FEATURES
       
-      ss = params[:statuses] || Status::Status.where(:trained_status.ne => nil)
+      ss = params[:statuses] || Status::Status.where(:trained_status.ne => nil).select{|s| ["pos", "neg"].include? s.trained_status.polarity}
       statuses = {}
       ss.each{|s|
         l = s.trained_status.send(self.output.to_sym)
@@ -93,33 +106,52 @@ module Classifier
       status.negative_clues.length
     end
     
-    def extract_patterns status
-      rules = [
-        ["adj", "noun", nil],
-        ["adverb", "adj", "noun"],
-        ["adj", "adj", "noun"],
-        ["noun", "adj", "noun"],
-        ["adverb", "verb", nil]
-      ]
-      
-      pos = status.parts_of_speech
-      
-      patterns = []
-      
-      (0...(pos.length-2)).each do |i|
-        first = TweetTagger.general pos[i]["tag"]
-        second = TweetTagger.general pos[i+1]["tag"]
-        third = TweetTagger.general pos[i+2]["tag"]
-        match = rules.map { |rule|
-          rule[0] == first and 
-          rule[1] == second and 
-          ((not rule[2]) or rule[2] != third)
-        }.inject(false){|m,n| m or n}
-        patterns << i if match
-      end
-      
-      return patterns
+    def has_positive_clues? status
+      !status.positive_clues.empty?
     end
     
+    def has_negative_clues? status
+      !status.negative_clues.empty?
+    end
+    
+    def has_weak_positive_clues? status
+      !status.weak_positive_clues.empty?
+    end
+    
+    def has_weak_negative_clues? status
+      !status.weak_negative_clues.empty?
+    end
+    
+    def has_strong_positive_clues? status
+      !status.strong_positive_clues.empty?
+    end
+    
+    def has_strong_negative_clues? status
+      !status.strong_negative_clues.empty?
+    end
+    
+    def no_weak_positive_clues status
+      status.weak_positive_clues.length
+    end
+    
+    def no_weak_negative_clues status
+      status.weak_negative_clues.length
+    end
+    
+    def no_strong_positive_clues status
+      status.strong_positive_clues.length
+    end
+    
+    def no_strong_negative_clues status
+      status.strong_negative_clues.length
+    end
+  
+    def has_positive_patterns? status
+      !status.patterns_with_positive_clues.empty?
+    end
+    
+    def has_negative_patterns? status
+      !status.patterns_with_negative_clues.empty?
+    end
   end
 end

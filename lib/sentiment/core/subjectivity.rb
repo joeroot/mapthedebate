@@ -1,5 +1,6 @@
 require "ai4r"
 require "#{File.dirname(__FILE__)}/classifier.rb"
+require "#{File.dirname(__FILE__)}/tests.rb"
 require "#{File.dirname(__FILE__)}/clue_finder.rb"
 require "#{File.dirname(__FILE__)}/tweet_tagger.rb"
 
@@ -18,9 +19,11 @@ module Classifier
       :capitalised_words_frequency
     ]
     
-    extend Classifier
+    extend Classifier::Tests
+    def self.default_output; DEFAULT_OUTPUT end
+    def self.default_features; DEFAULT_FEATURES end
   
-    attr_accessor :classifier, :statuses
+    attr_accessor :classifier, :statuses, :output, :features
     
     def classify status
       data = self.parse_status status
@@ -77,6 +80,10 @@ module Classifier
     
     def has_urls? status
       return !status.urls.empty?
+    end
+    
+    def has_mentions? status
+      return !status.mentions.empty?
     end
     
     def no_strong_clues status
