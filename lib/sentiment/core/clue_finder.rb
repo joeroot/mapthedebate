@@ -34,10 +34,11 @@ module Core
     end
     
     def self.clue_data word, pos
+      word = word.downcase
+      pos = TweetTagger.general pos
       data = nil
       clues = ClueFinder.instance.words[word] || [] 
       clues += (ClueFinder.instance.words[word.stem] || [])
-      
       clues.each do |clue|
         if (clue[:pos] == pos or clue[:pos] == "anypos")
           data = {:type => clue[:type], :polarity => clue[:polarity]}

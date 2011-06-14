@@ -115,13 +115,11 @@ class TweetTagger
     "EX",   "Pronoun, existential there",
     "FW",   "Foreign words",
     "IN",   "Preposition / Conjunction",
-    "HSH",  "Twitter Hashtag",
     "JJ",   "Adjective",
     "JJR",  "Adjective, comparative",
     "JJS",  "Adjective, superlative",
     "LS",   "Symbol, list item",
     "MD",   "Verb, modal",
-    "MNTN", "Twitter Mention",
     "NN",   "Noun",
     "NNP",  "Noun, proper",
     "NNPS", "Noun, proper, plural",
@@ -261,9 +259,25 @@ class TweetTagger
     words.each do |word|
       cleaned_word = clean_word(word)
       tag = assign_tag(@conf[:current_tag], cleaned_word)
+      original = word
+      hash = tag.last(3) == "hsh"
+      if hash
+        tmp = word.split("#")[1]
+        word = tmp if @@lexicon[tmp]
+      end
+      mention = tag.last(3) == "mtn"
+      tag = tag.split("_")[0]
       @conf[:current_tag] = tag = (tag and tag != "") ? tag : 'nn'
       tag = TweetTagger.explain_tag(tag) if verbose
-      tagged << {"word" => word, "tag" => tag}
+      tagged << {
+        "word" => word, 
+        "tag" => tag, 
+        "meta" => {
+          "hash" => hash, 
+          "mention" => mention, 
+          "original" => original
+        }
+      }
     end
     reset
     return tagged
@@ -616,11 +630,18 @@ class TweetTagger
       return "sym"
     elsif word == "-url-"
       return "url"
-    elsif word == "-mention-"
-      return "mntn"
-    elsif word == "-hashtag-"
-      return "hsh"
+    elsif word.last(3) == "mtn"
+      return "nnp_mtn"
+    elsif word.last(3) == "hsh"
+      tmp = word.split("#")[1]
+      if @@lexicon[tmp]
+         word = tmp
+         is_hashtag = true
+      else
+        return "nn_hsh"
+      end
     end
+    
     best_so_far = 0
     w = @@lexicon[word]
     t = @@hmm
@@ -650,6 +671,8 @@ class TweetTagger
         best_tag = tag
       end
     end
+    
+    best_tag += "_hsh" if is_hashtag
     return best_tag
   end    
   
@@ -682,9 +705,9 @@ class TweetTagger
     if /(?:http|https):\/\/[a-z0-9]+(?:[\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(?:(?::[0-9]{1,5})?\/[^\s]*)?/ix =~ word
       classified = "-url-"
     elsif word[0] == "@"
-      classified = "-mention-"
+      classified = word + "_mtn"
     elsif word[0] == "#"
-      classified = "-hashtag-"
+      classified = word.split("#")[1] + "_hsh"
     elsif /[\(\{\[]/ =~ word  # Left brackets
       classified = "*LRB*"
     elsif 
