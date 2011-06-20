@@ -1,0 +1,53 @@
+\chapter{Code examples}
+
+\section{Content retrieval}
+
+\begin{lstlisting}[language=Ruby, caption={Illustration of Status class' MongoMapper attributes}, label=retrieval:status_code]
+class Status
+  include MongoMapper::Document
+
+  # Attributes
+  key :text, String         
+  key :source, String
+  key :source_id, Int
+  key :posted_at, DateTime
+	key :from, String
+
+  # Relationship attributes
+  key :classified_status, ClassifiedStatus
+  key :trained_status, TrainedStatus 
+end
+\end{lstlisting}
+
+\begin{lstlisting}[language=Ruby, caption={Example Twitter search API results}, label=retrieval:example_search]
+{
+	"results":[
+		{
+			"text":"@twitterapi, look at my example tweet!",
+			"to_user_id":396524,
+			"to_user":"TwitterAPI",
+			"from_user":"jkoum",
+			"metadata":
+			{
+				"result_type":"popular",
+				"recent_retweets": 100
+			},
+			"id":1478555574,
+			"from_user_id":1833773,
+			"iso_language_code":"nl",
+			"profile_image_url":"http://twitter.com/image.jpg",
+			"created_at":"Wed, 08 Apr 2009 19:22:10 +0000"
+		}
+	],
+	"since_id":0,
+	"max_id":1480307926,
+	"refresh_url":"?since_id=1480307926&q=%40twitterapi",
+	"results_per_page":15,
+	"next_page":"?page=2&max_id=1480307926&q=%40twitterapi",
+	"completed_in":0.031704,
+	"page":1,
+	"query":"%40twitterapi"
+}
+\end{lstlisting}
+
+% \lstinputlisting[language=Ruby, caption={Example Twitter search API results}, label=retrieval:example_search]{../../lib/sentiment/statuses/status.rb}

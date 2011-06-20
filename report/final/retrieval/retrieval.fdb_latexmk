@@ -1,0 +1,9 @@
+# Fdb version 2
+["latex"] 0 "retrieval.tex" "retrieval.dvi" "retrieval" 
+  "retrieval.tex" 1308251344 3504 35f2983a11905c525affc695085fd097 ""
+["pdflatex"] 1308262300 "retrieval.tex" "retrieval.pdf" "retrieval" 
+  "e.g., `I\hbox'" 0 -1 0 ""
+  "e.g., `\hobx'" 0 -1 0 ""
+  "job aborted, no legal \end found" 0 -1 0 ""
+  "retrieval.aux" 1308261908 2206 373271b543cf87284e591c319768d66d ""
+  "retrieval.tex" 1308262285 6035 be11cf1efac4febc87b1727cbfe49d6d ""

@@ -1,8 +1,136 @@
+% p1)	reintroduces problem, and what decisions we had to make
+% 			- which features
+% 			- which classifier SVM vs NB
+% 			
+% p2) Part-of-speech tagging
+% 
+% p3)	Subj clues
+% 
+% p3)	Other features
+% 
+% p4) Choosing features
+% 
+% p5) Choosing NB or SVM
+% 
+% p6) Results
+% 
+% p7) Evaluation
+
+% Give example tweet and calculate feature set for it, then give output classification.
+% 
+% EngTagger changes:
+% 	- often names are lower case e.g. joseph -> Joseph
+% 	- added handling for @mentions
+% 
+% If using a lexicon, look at it's coverage over the training set, i.e. does each subjective word in the lexicon exist in one or more examples. How many subjective examples do not contain words from the subjective lexicon?
+
 \chapter{Subjectivity classification}
 \label{subjectivity}
 
-EngTagger changes:
-	- often names are lower case e.g. joseph -> Joseph
-	- added handling for @mentions
+Once a status has been retrieved, the first step towards understanding it's sentiment lies in determining whether it is subjective or objective. This is known as subjectivity classification and it serves as the first stage within our sentiment analysis engine. In classifying subjectivity, we decided to take a supervised approach to the problem. This is largely due to the fact, that as Wiebe and Riloff observe \cite{Wiebe:2003wa}, although unsupervised approaches' precision rates are high, achieving high recall rates is remarkably difficult. As a result, the problem now lies in designing a supervised classifier which can best separate statuses into their correct labels.
 
-If using a lexicon, look at it's coverage over the training set, i.e. does each subjective word in the lexicon exist in one or more examples. How many subjective examples do not contain words from the subjective lexicon?
+In this chapter we shall first examine how we built our training set, and the reasoning behind our labelling. With a training set in place, we will then go on to explore the features we think will be of value, along with the reasoning behind them and a discussion of their implementation. We shall then go on to look at the results of our tests, examining which feature combinations performed best and why, along with which classification method best suited the problem. Finally we shall evaluate our classifiers performance against the results commonly seen in literature.
+
+\section{Training set}
+\label{subjectvity:training}
+
+Before we can build a classifier, we need to assemble a training set which best represents the domain of our problem. Although we have already discussed our approach to labelling data in chapter \ref{retrieval}, we shall examine how this relates to subjectivity classification.
+
+\section{Features}
+
+As with any classification problem, picking a suitable feature set is decisive in classification performance. In implementing our classifier we chose to draw upon a range of previously successful features, along with new or adapted ones of our own. In this section we shall examine why and how we implemented our chosen features, but will save a discussion of their effectiveness and our final choice until later, in this chapters's results and evaluation sections. Much of the work covered by our pre-processing part of speech tagger is utilised within our feature selection.
+
+\subsection{Adjectives}
+
+As discussed in the background section, adjectives are often regarded as strong indicators of subjectivity. With our status' POS tags readily available through its \texttt{parts\_of\_speech} method. Within our tagset however, there are four different tags representing adjectives. In order to handle this, we added a \texttt{general(pos)} method to our \emph{TweetTagger} class. This method takes specific tag, such as "\emph{jjr}" or "\emph{adr}", and returns its more general tag such as "\emph{adj}" or "\emph{adverb}". This is done by comparing the specific tag against regular expressions corresponding to our more general tags. These more general tags, their meaning and their regular expression can be seen in table \ref{table:regex_pos}.
+
+With a method now available for identifying tags as adjectives, we needed a way of collecting any words being used as adjectives within our statuses. As this a method corresponding to an attribute of our status, we decided to implement this \texttt{adjectives} method within our \emph{Status} class, as in listing \ref{classifiers:status_adjectives}.
+
+\begin{lstlisting}[language=Ruby, caption={\emph{Status} object method for returning all words being used as adjectives within the status}, label=classifiers:status_adjectives]
+def adjectives
+  self.parts_of_speech.select{|pos| TweetTagger.general(pos["tag"]) == "adj"}
+end
+\end{lstlisting}
+
+It is important to note that this design decision to keep methods such as adjective collection within \emph{Status} objects is consistent throughout our implementation. Table \ref{} contains a list of \emph{Status} methods, along with their return values and a short description of their purpose.
+
+With a status' adjectives now easily accessible we were able to build our two adjective-based feature methods:
+
+\begin{description}
+	\item [\texttt{has\_adjectives?}] returns a boolean value denoting adjective presence within the status.
+	\item [\texttt{no\_adjectives}] returns one of three values based upon the number of adjectives. For zero adjectives, \texttt{0} is returned, for one or two adjectives, \texttt{1} is returned and for three or more adjectives \texttt{2} is returned.
+\end{description}
+
+\subsection{URLs}
+
+Our approach to URLs was similar to that taken for adjectives. Using a status' \texttt{urls} method, we build our two url-based feature methods:
+
+\begin{description}
+	\item [\texttt{has\_urls?}] returns a boolean value denoting URL presence within the status.
+	\item [\texttt{no\_urls}] returns one of three values based upon the number of URLs. For zero URLs, \texttt{0} is returned, for one or two URLs, \texttt{1} is returned and for three or more URLs \texttt{2} is returned.
+\end{description}
+
+\subsection{Subjective clues}
+
+As originally observed by Wiebe and Riloff \cite{Wiebe:2000ub}, subjective clues often prove to be effective discriminators when classifying subjectivity. In effect, this is done by compiling a list of clue words, alongside their subjectivity strength, in our case weak or strong. Furthermore the word's part of speech tag is noted, so as to ensure that the word being marked as a clue is in fact being used in the correct sense.
+
+Our approach to clue finding uses the same lexicon as Wiebe and Riloff \cite{Wiebe:2000ub}. Alongside this we use out own lexicon of subjective words, as collected in section \ref{subjectvity:training}. The clue data is stored is stored in regular text files, with each line consisting of one clue, as in listing \ref{subjectivity:clues}.
+
+\begin{lstlisting}[numbers=none, caption={Example clue from the subjective clue lexicon}, label=subjectivity:clues]
+type=weaksubj len=1 word1=block pos1=noun stemmed1=n priorpolarity=negative
+type=weaksubj len=1 word1=block pos1=verb stemmed1=y priorpolarity=negative
+\end{lstlisting}
+
+The \texttt{type} field represents whether a clue is \emph{strong} or \emph{weak}, the \texttt{len} field denotes the length of the clue. The \texttt{word}, \texttt{pos} and \texttt{stemmed} fields represent the properties of each word in the clues phrase, with \texttt{stemmed} meaning whether the clue applies to all un-stemmed versions of the word. For example, this means that not only is "\emph{block}" a clue in the above example, but so is the word "\emph{blocks}" when it is used as a verb. Finally the \emph{priorpolarity} field denotes the polarity of the clue.
+
+In order to find our clues, we implemented a singleton \emph{ClueFinder} class. The class loads each clue into a \texttt{clues} hashmap, in which each \emph{key} is a clue phrase, and it's \emph{value} is an array of all possible ways in which the phrase may be used as a subjective clue, as demonstrated in listing \ref{subjectivity:clues_hash}.
+
+\begin{lstlisting}[language=Ruby, caption={Ruby hashmap representation of listing \ref{subjectivity:clues}}, label=subjectivity:clues_hash]
+clues["block"]
+	=> {[
+		{:type => "weaksubj", :len => 1, :pos => ["noun"], :stemmed => ["n"], :priorpolarity => "negative"},
+		{:type => "weaksubj", :len => 1, :pos => ["verb"], :stemmed => ["y"], :priorpolarity => "negative"}
+	]}
+\end{lstlisting}
+
+With our clues now loaded in a hashmap, we defined a \texttt{clue\-\_data(words, pos)} method which when given a phrase an array of words along with its corresponding POS tags, will check the hashmap to see if the combination does in fact represent a clue. If they do, the method will return the clue \texttt{type} and \texttt{priorpolarity}, otherwise it will simply return \texttt{nil}. Using this we could now easily define three useful methods for our \emph{Status} class, \texttt{subjective\-\_clues}, \texttt{weak\-\_subjective\-\_clues}, \texttt{strong\-\_subjective\-\_clues}. These methods simply iterate over the statuses unigrams, bigrams and trigrams each time checking to see if they represent a clue, before filtering them accordingly if we are looking for weak or strong clues.
+
+With status methods now in place for easily retrieving clues, we can go on to build our six clue-based feature methods.
+
+\begin{description}
+	\item [\texttt{has\_subjective\_clues?}] returns a boolean value denoting the presence of one or more subjective clues
+	\item [\texttt{no\_subjective\_clues}] returns one of three values based upon the number of subjective clues. For zero clues, \texttt{0} is returned, for one or two clues, \texttt{1} is returned and for three or more clues \texttt{2} is returned.
+	\item [\texttt{has\_weak\_subjective\_clues?}] as with \texttt{has\-\_subjective\-\_clues?}, but only noting weak clues.
+	\item [\texttt{has\_strong\_subjective\_clues?}] as with \texttt{no\-\_subjective\-\_clues}, but only noting weak clues.
+	\item [\texttt{no\_weak\_subjective\_clues}] as with \texttt{has\-\_subjective\-\_clues?}, but only noting strong clues.
+	\item [\texttt{no\_strong\_subjective\_clues}] as with \texttt{no\-\_subjective\-\_clues}, but only noting strong clues.
+\end{description}
+
+\subsection{Capitalised words}
+
+As observed by Barbosa and Fang \cite{Barbosa:ws}, often subjective links to articles or in some worst case scenarios spam, tend to contain significant capitalisation. We experimented with two features based upon this.
+
+\begin{description}
+	\item [\texttt{capitalised\_word\_frequency}] {looks at how the ratio of capitalised words to total word, i.e.
+	\begin{equation}
+		c.w.f = \frac{|words_{capitalised}|}{|words|}
+	\end{equation}
+	Rather than returning the floating point number, one of three values are returned. For all values between 0 and 0.3, we return \texttt{0}, for values between 0.3 and 0.5, we return \texttt{1} and for values greater than 0.5, we return \texttt{2}.
+	}
+	\item [\texttt{capital\_letter\_frequency}] looks at the ratio of capitalised letters to total letters, i.e.
+	\begin{equation}
+		c.l.f = \frac{|letters_{capitalised}|}{|letters|}
+	\end{equation}
+	Rather than returning the floating point number, one of three values are returned. For all values between 0 and 0.2, we return \texttt{0}, for values between 0.2 and 0.5, we return \texttt{1} and for values greater than 0.5, we return \texttt{2}.
+\end{description}
+
+\section{Results}
+
+\section{Evaluation}
+
+
+
+% Typically, subjectivity classification focusses upon determining whether a body of text is subjective or objective. However the requirements for our subjectivity classifier are broader. Rather than simply determining whether a status is subjective or objective, we also want to check whether it is spam. In most cases the real purpose of a subjectivity classifier is to filter out anything which isn't an opinion. As Twitter has a great deal of spam however, this can lead to a classifier which labels spam as being objective or a fact. As we hope to utilise our objective statuses later within the project for trend spotting, a typical binary classification is not sufficient. Instead we need an additional layer for 
+
+
+

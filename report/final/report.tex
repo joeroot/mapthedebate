@@ -1,5 +1,4 @@
-\documentclass[a4paper,12pt]{report}
-
+\documentclass[a4paper,11pt]{report}
 
 % Maths packages
 \usepackage{verbatim, amsmath, amsfonts, amssymb, amsthm}
@@ -52,7 +51,7 @@
 % Basic typesetting
 \setmainfont[Mapping=text-text, Ligatures={Common}]{Adobe Caslon Pro}
 \setromanfont[Mapping=text-text, Ligatures={Common}]{Adobe Caslon Pro}
-\setmonofont[Scale=0.87]{Consolas}
+\setmonofont[Scale=0.90]{Consolas}
 \setlength{\parindent}{9pt}
 
 % Initialise font families
@@ -63,11 +62,11 @@
 \newfontfamily\minionoldfont[Mapping=text-text, Ligatures={Common}, Numbers=OldStyle]{Minion Pro}
 \newfontfamily\dinfont[Mapping=text-text, Ligatures={Common}]{DIN 30640 Std}
 \newfontfamily\museofont[Mapping=text-text, Ligatures={Common}, Scale=1.2]{Museo Sans 100}
-\newfontfamily\consolasfont[Mapping=text-text, Ligatures={Common}]{Consolas}
+\newfontfamily\consolasfont[Scale=0.84]{Consolas}
 
 % Section title's font and style
 \titleformat*{\section}{\Large\minionoldfont\addfontfeature{LetterSpace=2}}
-\titleformat*{\subsection}{\large\minionoldfont\addfontfeature{LetterSpace=2}}
+\titleformat*{\subsection}{\large\minionoldfont\addfontfeature{LetterSpace=2,Scale=1.1}}
 \titleformat*{\subsubsection}{\normalsize\itshape\minionoldfont\addfontfeature{Scale=1.05}}
 
 \titlespacing*{\chapter}{0pt}{-30pt}{30pt}
@@ -80,7 +79,7 @@
 \titleformat{\part}[display]
   {\LARGE\color{darkgrey}\minionfont\addfontfeature{LetterSpace=3}\scshape}
   { }
-  {0em}
+  {3em}
 	{\MakeUppercase\partname{} \thepart\MakeUppercase { } \vline { }  \color{black}\MakeUppercase}
 
 
@@ -94,21 +93,35 @@
 \usepackage{listings}
 \lstloadlanguages{Ruby}
 \lstset{
-	basicstyle=\consolasfont\color{black}\footnotesize,
+	basicstyle=\consolasfont\color{black},
 	numbers=left,
-	numberstyle=\consolasfont\color{grey}\footnotesize,
+	numberstyle=\consolasfont\addfontfeature{Scale=0.73}\color{darkgrey},
 	commentstyle=\color{darkgreen},
 	keywordstyle=\color{blue},
 	stringstyle=\color{lightred},
 	frame=lines,
-	framesep=3pt,
-	abovecaptionskip=4pt,
-	belowcaptionskip=4pt,
+	framesep=6pt,
+	abovecaptionskip=6pt,
+	belowcaptionskip=6pt,
 	breaklines=true,
+	tabsize=2,
+	showspaces=false,
+	showstringspaces=false,
 	captionpos=t
 }
 
+\usepackage[titles]{tocloft}
+\setlength{\cftbeforechapskip}{1ex}
+\setlength{\cftbeforesecskip}{0.5ex}
+
+\usepackage{longtable}
+\usepackage{array}
+
 \setcounter{secnumdepth}{3}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\occurences}{occurences}
+\DeclareMathOperator*{\pos}{pos}
 
 % Details for cover page
 \author{Joseph Root\\
@@ -117,16 +130,17 @@ jsr08@ic.ac.uk}
 \date{June 2011}
 \title{Map the Debate}
 
-\includeonly{title/title, background/background, introduction/introduction}
+% \includeonly{title/title, background/background, introduction/introduction, overview/overview}
 
 \begin{document}
 	
 	\include{title/title}
-
-	\include{abstract/abstract}
 	
 	\include{acknowledgements/acknowledgements}
 	
+	\include{abstract/abstract}
+	
+	\setcounter{tocdepth}{1}
 	\tableofcontents
 	
 	\part{Analysis}
@@ -137,22 +151,26 @@ jsr08@ic.ac.uk}
 
 	% BODY
 	% The central part of the report usually consists of three of four chapters detailing the technical work undertaken during the project. The structure of these chapters is highly project dependent. They can reflect the chronological development of the project, e.g. design, implementation, experimentation, optimisation, evaluation etc. although this is not always the best approach. However you choose to structure this part of the report, you should make it clear how you arrived at your chosen approach in preference to the other alternatives documented in the background. If you have built a new piece of software you should describe and justify the design of your program at some high level, possibly using an approved graphical formalism such as UML. It should also document any interesting problems with, or features of, your implementation. Integration and testing are also important to discuss in some cases. You need to discuss the content of these sections thoroughly with your supervisor.
-
+	
 	\part{Implementation}
 
-	\include{structure/structure}
+	\include{overview/overview}
+	
+	\include{retrieval/retrieval}
+
+	\include{classifiers/classifiers}
 
 	\include{subjectivity/subjectivity}
 	
-	\include{sentiment/sentiment}
+	\include{polarity/polarity}
+	
+	\include{emotion/emotion}
 	
 	\include{topic/topic}
 	
-	\include{engineering/engineering}
+	\include{delivery/delivery}
 	
-	\include{testing/testing}
-	
-	\part{Evalutation}
+	\part{Evaluation}
 	
 	\include{evaluation/evaluation}
 	
@@ -168,9 +186,14 @@ jsr08@ic.ac.uk}
 	% A weakness of many reports is inadequate citation of a source of information. It's easy to get this right so there are no excuses. Each entry in the bibliography should list the author(s) and title of the piece of work and should give full details of where it can be found. For example:
 	% 1 Bennett, A.J., Field, A.J. and Harrison, P.G., "Modelling and Validation of Shared Memory Coherency Protocols", Performance Evaluation, 1996, Vol. 27 & 28, 1996, pp. 541-562.
 	
-
-	\bibliographystyle{plain}
+	\bibliographystyle{ieeetr}
 	\bibliography{papers,web}	
+	
+	\part{Appendix}
+	
+	\appendix
+	\include{appendix/tables}
+	\include{appendix/code}
 
 \end{document}
 

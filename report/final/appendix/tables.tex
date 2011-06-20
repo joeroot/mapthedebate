@@ -1,0 +1,102 @@
+\chapter{Tables and figures}
+
+\section{Background}
+\begin{center}
+\begin{longtable}{ | l | l | l |}
+	\caption{The University of Pennsylvania (Penn) tagset, as proposed by Marcus et al. \cite{Marcus:1993wd}} \label{table:penn} \\
+	\hline
+	Tag & Part of speech & Example \\
+	\hline 
+	CC & Conjunction, coordinating & and, or \\
+  CD & Adjective, cardinal number & 3, fifteen \\
+  DET & Determiner & this, each, some \\
+  EX & Pronoun, existential there & there \\
+  FW & Foreign words & \\
+  IN & Preposition / Conjunction & for, of, although, that \\
+  JJ & Adjective & happy, bad \\
+  JJR & Adjective, comparative & happier, worse \\
+  JJS & Adjective, superlative & happiest, worst \\
+  LS & Symbol, list item & A, A. \\
+  MD & Verb, modal & can, could, 'll \\
+  NN & Noun & aircraft, data \\
+  NNP & Noun, proper & London, Michael \\
+  NNPS & Noun, proper, plural & Australians, Methodists \\
+  NNS & Noun, plural & women, books \\
+  PDT & Determiner, prequalifier & quite, all, half \\
+  POS & Possessive & s, ' \\
+  PRP & Determiner, possessive second & mine, yours \\
+  PRPS & Determiner, possessive & their, your \\
+  RB & Adverb & often, not, very, here \\
+  RBR & Adverb, comparative & faster \\
+  RBS & Adverb, superlative & fastest \\
+  RP & Adverb, particle & up, off, out \\
+  SYM & Symbol &  \\
+  TO & Preposition & to \\
+  UH & Interjection & oh, yes, mmm \\
+  VB & Verb, infinitive & take, live \\
+  VBD & Verb, past tense & took, lived \\
+  VBG & Verb, gerund & taking, living \\
+  VBN & Verb, past/passive participle & taken, lived \\
+  VBP & Verb, base present form & take, live \\
+  VBZ & Verb, present 3SG -s form & takes, lives \\
+  WDT & Determiner, question & which, whatever \\
+  WP & Pronoun, question & who, whoever \\
+  WPS & Determiner, possessive & question, whose \\
+  WRB & Adverb, question & when, how, however \\
+  PP & Punctuation, sentence ender & ., !, ? \\
+  PPC & Punctuation, comma  & , \\
+  PPD & Punctuation, dollar sign & \$ \\
+  PPL & Punctuation, quotation mark left & \\
+  PPR & Punctuation, quotation mark right & '' \\
+  PPS & Punctuation, colon, semicolon, elipsis & :, ..., - \\
+  LRB & Punctuation, left bracket & (, \{, [ \\
+  RRB & Punctuation, right bracket & ), \}, ] \\
+	\hline
+\end{longtable}
+\end{center}
+
+\section{Content retrieval}
+
+\begin{figure}[h!]
+	\caption{Class structure for representing tweets/statuses}
+	\label{fig:status_uml}
+	\centering
+	\includegraphics[width=1\textwidth]{figures/labeller_search_screenshot.png}
+\end{figure}
+
+\begin{figure}[h!]
+	\caption{Class structure for representing tweets/statuses}
+	\label{fig:status_uml}
+	\centering
+	\includegraphics[width=1\textwidth]{figures/labeller_label_screenshot.png}
+\end{figure}
+
+\begin{center}
+\begin{longtable}{ | l | p{4in} |}
+	\caption{Regular expressions for matching features} \label{table:regex} \\
+	\hline
+	Feature & Regular expression \\
+	\hline 
+	URLs & \texttt{/(?:http|https):\textbackslash/\textbackslash/[a-z0-9]+(?:[\textbackslash-\textbackslash.]\{1\}[a-z0-9]+)\*\textbackslash\-.[a-z]\{2,5\}\-(?:(?::[0-9]\{1,5\})?\textbackslash/[\^\textbackslash s]\*)?/ix} \\
+	\hline
+\end{longtable}
+\end{center}
+
+\begin{center}
+\begin{longtable}{ | l | l | l |}
+	\caption{Regular expressions for generalising part of speech tags} \label{table:regex_pos} \\
+	\hline
+	General term & General tag & Regular expression \\
+	\hline
+	Adjective & \texttt{adj} & \texttt{/jj[rs]*/} \\
+ 	Noun & \texttt{noun} & \texttt{/nn[sp]*/} \\
+	Verb & \texttt{verb} & \texttt{/vb[dgnpz]*/} \\
+	Adverb & \texttt{adverb} & \texttt{/r((b[rs]*)|p)/} \\
+	Pronoun & \texttt{pronoun} & \texttt{/(ex)|(wp)/} \\
+	\hline
+\end{longtable}
+\end{center}
+
+
+
+
