@@ -148,6 +148,7 @@ Turney \cite{Turney:2002vv} suggests a two part approach to supervised sentiment
 
 \begin{table}[h]
 	\caption{Extraction patterns for identifying opinionated two-word phrases}
+	\label{background:patterns}
 	\centering
 	\begin{tabular}
 		{ l | l l l }
@@ -176,7 +177,7 @@ The resulting semantic orientation is a measure of a phrase's sentiment. An SO l
 
 \subsubsection{Supervised sentiment classification}
 
-Shortly after Turney published his paper on supervised approaches \cite{Turney:2002vv}, Pang et al. put forward a counter paper. This addressed the potential of supervised learning within the same domain of internet reviews as Turney's original paper. At its core, Pang et al. address the issue that often sentiment can be expressed in very subtle ways. For example, "\emph{How could anyone sit through this movie?}" does not express negative opinion in any readily apparent way. Essentially the proposition put forward by Pang et al. is that the nuanced structures through which we express opinion are too vast and varied. They cannot simply be whittled down into a simple set of rules, and rather, we should look to experience to guide our classification.
+Shortly after Turney published his paper on supervised approaches \cite{Turney:2002vv}, Pang et al. \cite{Pang:2002tu} put forward a counter paper. This addressed the potential of supervised learning within the same domain of internet reviews as Turney's original paper. At its core, Pang et al. address the issue that often sentiment can be expressed in very subtle ways. For example, "\emph{How could anyone sit through this movie?}" does not express negative opinion in any readily apparent way. Essentially the proposition put forward by Pang et al. is that the nuanced structures through which we express opinion are too vast and varied. They cannot simply be whittled down into a simple set of rules, and rather, we should look to experience to guide our classification.
 
 As with any supervised problem, the learning experience is largely guided by our choice of features. Before we examine these, it is important to introduce the concept of \emph{n-grams} and how they work as features. For example, if we use unigram feature set, there is a feature for every possible word. A feature set this large is unnecessary however, as the only words which will be important in classification are those we encounter in training. Thus we build a feature set from the words we encounter when training. If our training set only contained "\emph{I love the NHS}", we would have the following feature set for classification $\langle f_{I}, f_{love}, f_{the}, f_{NHS} \rangle$. Alternatively if we used bigrams (2 word phrases), we would have a feature set $\langle f_{(I,love)}, f_{(love,the)}, f_{(the,NHS)} \rangle$. But what values do we assign to these features when given a sentence to classify? Pang et al. experiment with two options:
 

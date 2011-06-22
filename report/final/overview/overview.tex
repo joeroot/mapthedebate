@@ -11,15 +11,15 @@ The approach we will take within this project can be broadly divided into six co
 	\item \emph{Content retrieval} - interfaces with Twitter's various APIs to retrieve relevant twitter statuses for classification. This will serve as the system's main input.
 	\item \emph{Subjectivity classification} - given a twitter status, this module will serve as a mechanism for identifying whether the status is opinionated or not.
 	\item \emph{Polarity classification} - given an opinionated status, this module hopes to classify it's polarity, along with the strength of the opinion expressed.
-	\item \emph{Topic extraction} - given an opinionated status, this module will determine the topic's at which the opinion is directed.
-	\item \emph{Emotion classification} - given an opinionated status, this module hopes to determine the emotional state of the tweet, classified according to the labels put forward by Plutchik.
-	\item \emph{Classification storage} - once classified, statuses must be persisted for use within external modules, such as visualisation. The storage of the necessary data will be handled by this module.
+	\item \emph{Topic extraction} - given an opinionated status, this module will determine the topics at which the opinion is directed.
+	\item \emph{Emotion classification} - given an opinionated status, this module hopes to determine the emotional state of the tweet; classified according to the labels put forward by Plutchik.
+	\item \emph{Classification storage} - once classified, statuses must be persisted for use within external modules, such as the visualisation engine.
 \end{enumerate}
 
 The way in which these components interlink is best demonstrated visually, as shown in figure \ref{fig:outline_diagram}.
 
 \begin{figure}[h!]
-	\caption{Structure for sentiment analysis}
+	\caption{Structure for sentiment analysis engine}
 	\label{fig:outline_diagram}
 	\centering
 		\includegraphics[width=1\textwidth]{figures/outline.eps}
@@ -29,7 +29,7 @@ We will discuss the first five components in more detail in their own relevant c
 
 \section{Implementation narrative}
 
-Through our discussion of the project's implementation we shall use five example tweets to help illustrate the classification process within the system. 
+Throughout our discussion of the project's implementation we shall use five example tweets to help illustrate the classification process within the system. 
 
 \begin{tabular}{ | l | p{4in} | }
 	\hline

@@ -1,7 +1,7 @@
 \chapter{Classifiers}
 \label{classifiers}
 
-At the heart of this project's sentiment analysis lie our three classifiers for subjectivity, polarity and emotion. For reasons we shall discuss in their respective chapters, we have elected to take a supervised approach to learning for all three classifiers. As a result, our classifiers' implementations share much much in common, and this chapter shall look at how this commonality was unified through our \emph{Classifier} class. This project is largely experimental in nature, looking at how we can best adapt, use and develop existing and new ideas for classifying sentiment on Twitter. As a result, we wanted to design a parent \emph{Classifier} class which would best remove the  complexities of correctly assembling and training our classifiers. Instead we wanted a class which would allow us to focus on experimenting with different feature sets and classification techniques, along with providing tools for gathering and comparing our results. The remainder of this chapter shall first outline our core aims for the class, before going on to outline our approach. After this we will summarise the methods discussed and implemented within the class, before finally evaluating it's performance against our original aims.
+At the heart of this project's sentiment analysis lie our three classifiers for subjectivity, polarity and emotion. For reasons we shall discuss in their respective chapters, we have elected to take a supervised approach to learning for all three classifiers. As a result, our classifiers' implementations share much in common. In particular, this chapter shall focus on how this commonality can be unified through our \emph{Classifier} class. This project is largely experimental in nature, looking at how we can best adapt, use and develop existing and new ideas for classifying sentiment on Twitter. As a result, we wanted to design a parent \emph{Classifier} class which would best remove the  complexities of correctly assembling and training our classifiers. We wanted a class which would allow us to focus on experimenting with different feature sets and classification techniques, along with providing tools for gathering and comparing our results. The remainder of this chapter shall first outline our core aims for the class, before going on to discuss our approach. After this we will summarise the methods discussed and implemented within our class, before finally evaluating overall performance against our original aims.
 
 \section{Overview}
 \label{overview}
@@ -17,7 +17,7 @@ As discussed above, our \emph{Classifier} class hopes to unify the overall appro
 \section{Preparing the data}
 \label{classifiers:preparing_data}
 
-In order to train our classifier, we first need to prepare our \emph{training data} accordingly. This means building a feature set for our training data, according to both the \emph{features} we want to use, and the \emph{label} we with which we are looking to classify statuses, as shown in figure \ref{fig:building_feature_set}.
+In order to train our classifier, we first need to prepare our \emph{training data} accordingly. This means building a feature set for our training data, according to both the \emph{features} we want to use, and the \emph{label} with which we are looking to classify statuses, as explained in figure \ref{fig:building_feature_set}.
 
 \begin{figure}[h!]
 	\caption{Outline for building feature set}
@@ -26,23 +26,24 @@ In order to train our classifier, we first need to prepare our \emph{training da
 		\includegraphics[width=0.6\textwidth]{figures/build_training_data.eps}
 \end{figure}
 
-We wanted our approach to this to be as generic as possible, and in doing so made use of Ruby's \texttt{send} method. Every object within Ruby has a \texttt{send} method which accepts a symbol\footnote{explain ruby symbol} and a series of arguments. When called, Ruby will in turn attempt to call the object's method which corresponds to the given symbol, along with any additional arguments. For example \texttt{"Hello, Joe".send(:split, ", ")} is in effect the same as \texttt{"Hello, Joe".split(", ")} and will return \texttt{["Hello", "Joe"]}. It is this we make use of when trying to take a flexible approach to feature choice. It is important to note that all feature methods take a \emph{Status} object and are object level methods within the class extending our \emph{Classifier} class. Thus, using the send method, we can initialise our classifier with an array of symbols representing feature methods, before using this array to generically create our training set, as shown in listing \ref{classifiers:status_feature_set}.
+We wanted our approach to this to be as generic as possible, and in doing so made use of Ruby's \texttt{send} method. Every object within Ruby has a \texttt{send} method which accepts a symbol\footnote{\emph{Symbols} are Ruby's approach to efficient \emph{String} usage. In our case, rather than initialising a new \emph{String} object every time we want to refer to a certain method, a symbol is only very initialised once but can be used throughout our code. Essentially a symbol can be used as a low footprint replacement for \emph{Strings}.} and a series of arguments. When called, Ruby will in turn attempt to call the object's method which corresponds to the given symbol, along with any additional arguments. For example \texttt{"Hello, Joe".send(:split, ", ")} is in effect the same as \texttt{"Hello, Joe".split(", ")} and will return \texttt{["Hello", "Joe"]}. It is this we make use of when trying to take a flexible approach to feature choice. It is important to note that all feature methods take a \emph{Status} object and must be implemented as object level methods within any class extending our \emph{Classifier} class. Thus, using the send method, we can initialise our classifier with an array of symbols representing feature methods, before using this array to generically create our training set, as shown in listing \ref{classifiers:status_feature_set}.
 
-\begin{lstlisting}[language=Ruby, caption={Method for building a status's feature set, where \texttt{@features = [:feature\_1,..., :feature\_n]}}, label=classifiers:status_feature_set]
+\begin{lstlisting}[language=Ruby, caption={Method for building a status' feature set}, label=classifiers:status_feature_set]
+# @features = [:feature\_1,..., :feature\_n]
 def build_status_feature_set(status)
 	return @features.map{|f| self.send(f, status)}
 end
 \end{lstlisting}
 
-Thus given a training set, we simply iterate over it, creating a feature set for each training status. This array of feature sets can now be used to train our classifier.
+Given a training set, we simply iterate over it, creating a feature set for each training status. This array of feature sets can now be used to train our classifier.
 
-Before we train our classifier, we also need the an array containing each of the training statuses appropriate label, such as the status' polarity or subjectivity. It is this label which are classifier will be trained to identify, and just as we defined an array of features to build our feature sets, we will instantiate a single \texttt{label} variable used to store the label's method symbol, such as \texttt{:is\_subjective?} or \texttt{polarity}. This is built in a similar manner to our feature sets, using the object \texttt{send} method coupled with the \texttt{label} symbol, and is wrapped up in the \texttt{fetch\_status\_label(status)} method.
+Before we train our classifier, we also need an array containing each of the training statuses' appropriate label, such as their polarity or subjectivity. It is the values of this label which are classifier will be trained to identify, and just as we defined an array of features to build our feature sets, we will instantiate a single \texttt{label} variable to store the label's method symbol, such as \texttt{:is\_subjective?} or \texttt{polarity}. This is built in a similar manner to our feature sets, using the object \texttt{send} method coupled with the \texttt{label} symbol, and is wrapped up in the \texttt{fetch\-\_status\-\_label\-(status)} method.
 
 \section{Training and classifying}
 
-With our training data now prepared in the form of two arrays, one of feature sets and one of labels, we can now train our classifier. As explored by Pang et al. \cite{Pang:2008wj}, the classification method used can impact the effectiveness of our results. We decided to experiment with the two leading probabilistic and non-probabilistic methods, Naive Bayes classifier and Support Vector Machines. 
+With our training data now prepared in the form of two arrays, one containing feature sets and one containing labels, we can train our classifier. As explored by Pang et al. \cite{Pang:2008wj}, the classification method used can impact the effectiveness of our results. We decided to experiment with both the leading probabilistic and non-probabilistic methods, these being the \emph{Naive Bayes (NB)} classifier and the \emph{Support Vector Machine (SVM)}. 
 
-Rather than building our own SVM and NB classifiers, we elected to use two well established libraries, LIBSVM and AI4R, as discussed in section \ref{background:tools}. As both utilise their own methods and input schemas for training and classification, we implement two intermediary interface for both the LIBSVM and the AI4R libraries. Both our \emph{NaiveBayes} and \emph{SupportVectorMachine} classes serve as this layer, and share the same public methods. Effectively this allows us to initialise both our classifiers using the feature sets and labels generated above, as demonstrated in listing \ref{classifiers:build_classifiers}. 
+Rather than building our own SVM and NB classifiers, we elected to use two well established libraries, LIBSVM and AI4R, as discussed in section \ref{background:tools}. As both utilise their own methods and input schemas for training and classification, we implemented an intermediary interface for both the LIBSVM and the AI4R libraries. Both our \emph{NaiveBayes} and \emph{SupportVectorMachine} classes adhere to this interface, and share the same public methods. Effectively this allows us to initialise both our classifiers using the feature sets and labels generated above, as demonstrated in listing \ref{classifiers:build_classifiers}. 
 
 \begin{lstlisting}[language=Ruby, caption={Example initialisation of LIBSVM and AI4R Naive Bayes classifiers through intermediary layer}, label=classifiers:build_classifiers]
 feature_sets = training_statuses.map{|s| self.build_status_feature_set s}
@@ -63,11 +64,11 @@ def classify(status)
 end
 \end{lstlisting}
 
-With unobtrusive support for different feature sets and classification methods now implemented within our \emph{Classifier} class, we can finally look at the approach to performance testing.
+With unobtrusive support for different feature sets and classification methods now implemented within our \emph{Classifier} class, we can finally look at the approach taken to performance testing.
 
 \section{Testing}
 
-Due to the project's strong element of experimentation, providing a robust framework for evaluating our classifiers was essential. As is common within both machine learning and sentiment analysis, our four chosen measure of performance are \emph{accuracy}, \emph{precision}, \emph{recall} and \emph{f-measure}. These four metrics combined give a fairly clear portrait of a classifiers strengths and weaknesses. In order to better explain each measure we shall first introduce four terms commonly used within binary classification.
+Due to the project's strong element of experimentation, providing a robust framework for evaluating our classifiers was essential. As is common within both machine learning and sentiment analysis, our four chosen measure of performance are \emph{accuracy}, \emph{precision}, \emph{recall} and \emph{f-measure}. These four metrics combine to give a fairly clear portrait of a classifiers strengths and weaknesses. In order to better explain each measure we shall first introduce four terms commonly used within binary classification:
 
 \begin{description}
 	\item [True positives] are the set of of correctly classified documents for the positive label. For example in subjectivity classification, this could be taken to be all statuses correctly classified as subjective.
@@ -83,11 +84,11 @@ Using these four definitions, we can now go onto better define our performance m
 	\begin{equation}
 		accuracy = \frac{| TP \cup TN |}{| TP \cup FP \cup TN \cup FN |}
 	\end{equation}
-	\item [Precision] is a measure of how accurate our positively labelled data actually is. This is done by looking at what fraction of positively labelled data is actually positive.
+	\item [Precision] is a measure of how accurate our positively labelled data is. This is done by looking at what fraction of positively labelled data is actually positive.
 	\begin{equation}
 		precision = \frac{| TP |}{| TP \cup FP |}
 	\end{equation}
-	\item [Recall] is a measure of how much of our positive data is correctly labelled by the classifier. This is done by looking at what fraction of positive data was correctly labelled.
+	\item [Recall] is a measure of how much of our positive data is correctly labelled as positive by the classifier. This is done by looking at what fraction of positive data was correctly labelled.
 	\begin{equation}
 		recall = \frac{| TP |}{| TP \cup FN |}
 	\end{equation}
@@ -97,15 +98,15 @@ Using these four definitions, we can now go onto better define our performance m
 	\end{equation}
 \end{description}
 
-With the definitions for our measures in place, we now had to introduce a suitable method for making use of them. The first method, \texttt{test(k,statuses)}, performs \emph{k-fold cross validation} across the labelled statuses passed in to the method. Effectively k-fold cross validation divides our labelled statuses up into $k$ partitions, before iterating through the them, using $(k-1)$ partitions as training data, and $1$ partition as testing data. This is repeated $k$ times, and the average measures across each of the folds are taken as the overall test's measures.
+With the definitions of our measures in place, we now had to introduce a suitable method for calculating them. The first method, \texttt{test(k,statuses)}, performs \emph{k-fold cross validation} across the labelled \emph{statuses} passed in to the method. Effectively k-fold cross validation divides our labelled statuses up into $k$ partitions, before iterating through them, each time using $(k-1)$ partitions as training data, and $1$ partition as testing data. This is repeated $k$ times, and the average measures across each of the folds are taken as the test's overall measures. In order to ensure that training is not biased, we always keep the number of training examples belonging to each label the same.
 
-Although this proved suitable for binary classification, it is not suitable for multi-class classification. Instead for classification with two or more output labels, the \emph{precision}, \emph{recall} and \emph{f-measure} are returned for each potential label. As \emph{accuracy} measures correct classification across all labels, there was no need for it's results to be calculated for each possible label. The full implementation details for this can be seen in listing \ref{}.
+Although this proved suitable for binary classification, it is not suitable for multi-class classification. Instead for classification with two or more output labels, the \emph{precision}, \emph{recall} and \emph{f-measure} are returned for each potential label. As \emph{accuracy} is already measured across all labels, there was no need for it's results to be calculated for each indiviudal label. The full implementation details for this can be seen in listing \ref{}.
 
 We felt however that for strenuous testing one test was not enough, and instead a \texttt{repeat\_test(k,statuses,n)} method was introduced. This repeats the \texttt{test(k,statuses)} method $n$ times, before returning the average of the measures across those $n$ repetitions.
 
 \section{Class summary}
 
-Before we evaluate the performance of our classifier, we will give a quick overview of the core method names along with a description of their inputs, outputs and purpose.
+Before we evaluate the performance of our classifier, we will give a quick overview of the core methods along with a description of their inputs, outputs and purpose.
 
 \begin{centering}
 	\begin{longtable}{| l | p{0.16\textwidth} | p{0.16\textwidth} | p{0.4\textwidth} |}
@@ -125,7 +126,7 @@ Before we evaluate the performance of our classifier, we will give a quick overv
 
 \section{Evaluation}
 
-The \emph{Classifier} class proved a fundamental class and tool within this project. It allowed for the remainder of the implementations focus to be placed upon innovative feature use and performance, rather than a struggle for consistency across different classifiers. In order to better evaluate the classifier, we shall examine to what extent it met it's original three aims:
+The \emph{Classifier} class proved fundamental within this project both as a class and a tool. It has allowed for the remainder of our implementation to focus on innovative feature use and performance, rather than a struggle for consistency across different classifiers. In order to better evaluate the classifier, we shall examine to what extent it met it's original three aims:
 
 \begin{enumerate}
 	\item The approach taken to simple feature switching meant that new ideas could be experimented and developed easily, without having to worry about adapting our code elsewhere.
@@ -133,4 +134,4 @@ The \emph{Classifier} class proved a fundamental class and tool within this proj
 	\item The strong performance testing suite provided a very simple method for meaningfully comparing features and classification methods. This proved vital in understanding how best to approach feature and method selection, along with being fundamental to our evaluation process.
 \end{enumerate}
 
-Although no numeric measure can be given to express the class' performance, the fact that it met each of its original aims and the freedom it gave to focus on innovation and testing clearly marks it a success.
+Although no numeric measure can be given to express the class' performance, the fact that it met each of its original aims and the freedom it gave to focus on innovation and testing clearly made it a success.
