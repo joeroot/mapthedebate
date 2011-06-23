@@ -20,197 +20,229 @@ The style file: ieeetr.bst
 A level-1 auxiliary file: appendix/tables.aux
 A level-1 auxiliary file: appendix/code.aux
 Database file #1: papers.bib
-"{" immediately follows a field part---line 13 of file papers.bib
- : url = \url
- :           {http://www.google.com/patents?hl=en&lr=&vid=USPAT7356761&id=qkSoAAAAEBAJ&oi=fnd&dq=corex+web&printsec=abstract},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 28 of file papers.bib
- : url = \url
- :           {http://portal.acm.org/citation.cfm?id=1118704&dl=GUIDE)7},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 42 of file papers.bib
- : url = \url
- :           {http://portal.acm.org/citation.cfm?id=1073153&dl=GUIDE,},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 57 of file papers.bib
- : url = \url
- :           {http://www.aaai.org/ocs/index.php/ICWSM/ICWSM10/paper/viewPDFInterstitial/1536/1842},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 71 of file papers.bib
- : url = \url
- :           {http://www2.research.att.com/~lbarbosa/publications/coling_2010.pdf},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 84 of file papers.bib
- : url = \url
- :           {http://onlinelibrary.wiley.com/doi/10.1002/asi.21462/full},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 99 of file papers.bib
- : url = \url
- :           {http://www-nlp.stanford.edu/courses/cs224n/2009/fp/3.pdf},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 114 of file papers.bib
- : url = \url
- :           {http://www.stanford.edu/~alecmgo/papers/TwitterDistantSupervision09.pdf},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 129 of file papers.bib
- : url = \url
- :           {http://portal.acm.org/citation.cfm?id=1859761},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 143 of file papers.bib
- : url = \url
- :           {http://www.aaai.org/ocs/index.php/ICWSM/ICWSM10/paper/viewFile/1441/1852},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 158 of file papers.bib
- : url = \url
- :           {http://arxiv.org/pdf/0911.1583},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 172 of file papers.bib
- : url = \url
- :           {http://portal.acm.org/citation.cfm?id=1753504},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 187 of file papers.bib
- : url = \url
- :           {http://portal.acm.org/citation.cfm?id=1871741},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 202 of file papers.bib
- : url = \url
- :           {https://www.aaai.org/Papers/AAAI/2000/AAAI00-113.pdf},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 217 of file papers.bib
- : url = \url
- :           {http://portal.acm.org/citation.cfm?id=990864&dl=},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 232 of file papers.bib
- : url = \url
- :           {http://portal.acm.org/citation.cfm?id=1220309},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 247 of file papers.bib
- : url = \url
- :           {http://portal.acm.org/citation.cfm?id=1699535&dl=GUIDE,},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 261 of file papers.bib
- : url = \url
- :           {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.139.5380&rep=rep1&type=pdf},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 275 of file papers.bib
- : url = \url
- :           {http://acl.ldc.upenn.edu/P/P07/P07-1123.pdf},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 289 of file papers.bib
- : url = \url
- :           {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.84.9337&rep=rep1&type=pdf},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 303 of file papers.bib
- : url = \url
- :           {http://terrierteam.dcs.gla.ac.uk/publications/blogoverview07.pdf},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 318 of file papers.bib
- : url = \url
- :           {http://iitatlns2.iit.nrc.ca/iit-publications-iti/docs/NRC-50417.pdf},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 332 of file papers.bib
- : url = \url
- :           {http://portal.acm.org/citation.cfm?id=972475},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 346 of file papers.bib
- : url = \url
- :           {http://portal.acm.org/citation.cfm?id=1220648},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 360 of file papers.bib
- : url = \url
- :           {http://www.eurasip.org/proceedings/ext/isccsp2006/defevent/papers/cr1024.pdf},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 374 of file papers.bib
- : url = \url
- :           {http://www.ark.cs.cmu.edu/TweetNLP/gimpel+etal.acl11.pdf},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 393 of file papers.bib
- : url = \url
- :           {http://portal.acm.org/citation.cfm?doid=1034678.1034721},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 408 of file papers.bib
- : url = \url
- :           {http://portal.acm.org/citation.cfm?id=1220619},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 423 of file papers.bib
- : url = \url
- :           {http://acl.ldc.upenn.edu/P/P07/P07-1124.pdf},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 438 of file papers.bib
- : url = \url
- :           {http://oasys.umiacs.umd.edu/oasysnew/papers/icwsmV2.pdf},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 453 of file papers.bib
- : url = \url
- :           {http://www.cs.uic.edu/~liub/FBS/NLP-handbook-sentiment-analysis.pdf},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 467 of file papers.bib
- : url = \url
- :           {http://www.aaai.org/Papers/Symposia/Spring/2004/SS-04-07/SS04-07-019.pdf},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 481 of file papers.bib
- : url = \url
- :           {http://acl.ldc.upenn.edu/P/P07/P07-1055.pdf},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 495 of file papers.bib
- : url = \url
- :           {http://www.paulekman.com/wp-content/uploads/2009/02/The-Repertoire-Of-Nonverbal-Behavior-Categories-Origins-.pdf},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 509 of file papers.bib
- : url = \url
- :           {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.164.6282&rep=rep1&type=pdf},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 523 of file papers.bib
- : url = \url
- :           {http://portal.acm.org/citation.cfm?id=1220426&dl=GUIDE,},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 537 of file papers.bib
- : url = \url
- :           {https://www.aaai.org/Papers/ICWSM/2008/ICWSM08-010.pdf},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 552 of file papers.bib
- : url = \url
- :           {http://portal.acm.org/citation.cfm?id=1454711.1454712},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 565 of file papers.bib
- : url = \url
- :           {http://portal.acm.org/citation.cfm?id=1218990&dl=GUIDE,},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 579 of file papers.bib
- : url = \url
- :           {http://www.springerlink.com/index/n5262u343u171jx1.pdf},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 594 of file papers.bib
- : url = \url
- :           {http://www.computer.org/portal/web/csdl/doi/10.1109/MIS.2008.57},
-I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 609 of file papers.bib
+"{" immediately follows a field part---line 14 of file papers.bib
  : url = \url
  :           {http://portal.acm.org/citation.cfm?id=604067},
 I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 623 of file papers.bib
+"{" immediately follows a field part---line 29 of file papers.bib
  : url = \url
- :           {http://portal.acm.org/citation.cfm?id=1119369},
+ :           {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.150.8054&rep=rep1&type=pdf},
 I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 637 of file papers.bib
+"{" immediately follows a field part---line 43 of file papers.bib
+ : url = \url
+ :           {http://www.csie.ntu.edu.tw/~cjlin/talks/freiburg.pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 62 of file papers.bib
+ : url = \url
+ :           {http://portal.acm.org/citation.cfm?doid=1143844.1143865},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 76 of file papers.bib
+ : url = \url
+ :           {http://www.ark.cs.cmu.edu/TweetNLP/gimpel+etal.acl11.pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 90 of file papers.bib
+ : url = \url
+ :           {http://portal.acm.org/citation.cfm?id=972475},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 108 of file papers.bib
+ : url = \url
+ :           {http://portal.acm.org/citation.cfm?doid=1119355.1119369},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 122 of file papers.bib
+ : url = \url
+ :           {http://acl.ldc.upenn.edu/P/P07/P07-1123.pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 142 of file papers.bib
+ : url = \url
+ :           {http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=991427},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 157 of file papers.bib
+ : url = \url
+ :           {http://portal.acm.org/citation.cfm?id=1220619},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 172 of file papers.bib
+ : url = \url
+ :           {http://acl.ldc.upenn.edu/P/P07/P07-1124.pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 187 of file papers.bib
+ : url = \url
+ :           {http://oasys.umiacs.umd.edu/oasysnew/papers/icwsmV2.pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 202 of file papers.bib
+ : url = \url
+ :           {http://www.cs.uic.edu/~liub/FBS/NLP-handbook-sentiment-analysis.pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 216 of file papers.bib
+ : url = \url
+ :           {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.84.9337&rep=rep1&type=pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 231 of file papers.bib
+ : url = \url
+ :           {http://acl.ldc.upenn.edu/P/P07/P07-1055.pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 245 of file papers.bib
+ : url = \url
+ :           {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.164.6282&rep=rep1&type=pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 259 of file papers.bib
+ : url = \url
+ :           {http://portal.acm.org/citation.cfm?id=1220426&dl=GUIDE,},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 273 of file papers.bib
+ : url = \url
+ :           {https://www.aaai.org/Papers/ICWSM/2008/ICWSM08-010.pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 288 of file papers.bib
+ : url = \url
+ :           {http://portal.acm.org/citation.cfm?id=1454711.1454712},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 301 of file papers.bib
+ : url = \url
+ :           {http://portal.acm.org/citation.cfm?id=1218990&dl=GUIDE,},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 315 of file papers.bib
+ : url = \url
+ :           {http://www.springerlink.com/index/n5262u343u171jx1.pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 330 of file papers.bib
+ : url = \url
+ :           {http://www.computer.org/portal/web/csdl/doi/10.1109/MIS.2008.57},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 349 of file papers.bib
+ : url = \url
+ :           {http://portal.acm.org/citation.cfm?doid=1034678.1034721},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 364 of file papers.bib
  : url = \url
  :           {http://www.race.u-tokyo.ac.jp/~fukuhara/Research/paper/07/fukuhara-icwsm07-camera.pdf},
 I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 653 of file papers.bib
+"{" immediately follows a field part---line 380 of file papers.bib
  : url = \url
  :           {http://ieeexplore.ieee.org/search/srchabstract.jsp?tp=&arnumber=5563059&queryText%3D%28%28sentiment+analysis%29%29%26openedRefinements%3D*%26sortType%3Ddesc_Publication+Year%26matchBoolean%3Dtrue%26rowsPerPage%3D50%26searchField%3DSearch+All},
 I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 672 of file papers.bib
+"{" immediately follows a field part---line 399 of file papers.bib
  : url = \url
  :           {http://ieeexplore.ieee.org/search/srchabstract.jsp?tp=&arnumber=5475086&queryText%3D%28%28sentiment+analysis%29%29%26openedRefinements%3D*%26sortType%3Ddesc_Publication+Year%26matchBoolean%3Dtrue%26rowsPerPage%3D50%26searchField%3DSearch+All},
 I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 691 of file papers.bib
+"{" immediately follows a field part---line 418 of file papers.bib
  : url = \url
  :           {http://ieeexplore.ieee.org/search/srchabstract.jsp?tp=&arnumber=1167344&queryText%3D%28%28amazon.com+recommendations%29%29%26openedRefinements%3D*%26sortType%3Ddesc_Publication+Year%26matchBoolean%3Dtrue%26rowsPerPage%3D50%26searchField%3DSearch+All},
 I'm skipping whatever remains of this entry
-"{" immediately follows a field part---line 706 of file papers.bib
+"{" immediately follows a field part---line 432 of file papers.bib
+ : url = \url
+ :           {http://www.google.com/patents?hl=en&lr=&vid=USPAT7356761&id=qkSoAAAAEBAJ&oi=fnd&dq=corex+web&printsec=abstract},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 447 of file papers.bib
+ : url = \url
+ :           {http://portal.acm.org/citation.cfm?id=1118704&dl=GUIDE)7},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 461 of file papers.bib
+ : url = \url
+ :           {http://portal.acm.org/citation.cfm?id=1073153&dl=GUIDE,},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 476 of file papers.bib
+ : url = \url
+ :           {http://www.aaai.org/ocs/index.php/ICWSM/ICWSM10/paper/viewPDFInterstitial/1536/1842},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 490 of file papers.bib
+ : url = \url
+ :           {http://www2.research.att.com/~lbarbosa/publications/coling_2010.pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 503 of file papers.bib
+ : url = \url
+ :           {http://onlinelibrary.wiley.com/doi/10.1002/asi.21462/full},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 518 of file papers.bib
+ : url = \url
+ :           {http://www-nlp.stanford.edu/courses/cs224n/2009/fp/3.pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 532 of file papers.bib
+ : url = \url
+ :           {http://www.eurasip.org/proceedings/ext/isccsp2006/defevent/papers/cr1024.pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 547 of file papers.bib
+ : url = \url
+ :           {http://www.stanford.edu/~alecmgo/papers/TwitterDistantSupervision09.pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 562 of file papers.bib
+ : url = \url
+ :           {http://portal.acm.org/citation.cfm?id=1859761},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 576 of file papers.bib
+ : url = \url
+ :           {http://www.aaai.org/ocs/index.php/ICWSM/ICWSM10/paper/viewFile/1441/1852},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 591 of file papers.bib
+ : url = \url
+ :           {http://arxiv.org/pdf/0911.1583},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 605 of file papers.bib
+ : url = \url
+ :           {http://portal.acm.org/citation.cfm?id=1753504},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 620 of file papers.bib
+ : url = \url
+ :           {http://portal.acm.org/citation.cfm?id=1871741},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 635 of file papers.bib
+ : url = \url
+ :           {https://www.aaai.org/Papers/AAAI/2000/AAAI00-113.pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 650 of file papers.bib
+ : url = \url
+ :           {http://portal.acm.org/citation.cfm?id=990864&dl=},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 665 of file papers.bib
+ : url = \url
+ :           {http://portal.acm.org/citation.cfm?id=1220309},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 680 of file papers.bib
+ : url = \url
+ :           {http://portal.acm.org/citation.cfm?id=1699535&dl=GUIDE,},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 694 of file papers.bib
+ : url = \url
+ :           {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.139.5380&rep=rep1&type=pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 708 of file papers.bib
+ : url = \url
+ :           {http://www.aaai.org/Papers/Symposia/Spring/2004/SS-04-07/SS04-07-019.pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 721 of file papers.bib
+ : url = \url
+ :           {http://www.cc.gatech.edu/home/isbell/classes/reading/papers/Rish.pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 735 of file papers.bib
+ : url = \url
+ :           {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.66.2871&rep=rep1&type=pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 750 of file papers.bib
+ : url = \url
+ :           {http://iitatlns2.iit.nrc.ca/iit-publications-iti/docs/NRC-50417.pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 768 of file papers.bib
+ : url = \url
+ :           {http://portal.acm.org/citation.cfm?id=1015330.1015388&coll=DL&dl=ACM&CFID=27848079&CFTOKEN=65693460},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 783 of file papers.bib
+ : url = \url
+ :           {http://portal.acm.org/citation.cfm?id=1220648},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 799 of file papers.bib
+ : url = \url
+ :           {http://portal.acm.org/citation.cfm?id=1557769.1557809},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 814 of file papers.bib
  : url = \url
  :           {http://www.emotionalcompetency.com/papers/plutchiknatureofemotions%202001.pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 828 of file papers.bib
+ : url = \url
+ :           {http://terrierteam.dcs.gla.ac.uk/publications/blogoverview07.pdf},
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 842 of file papers.bib
+ : url = \url
+ :           {http://www.paulekman.com/wp-content/uploads/2009/02/The-Repertoire-Of-Nonverbal-Behavior-Categories-Origins-.pdf},
 I'm skipping whatever remains of this entry
 Database file #2: web.bib
 Warning--entry type for "norvig" isn't style-file defined
@@ -223,45 +255,47 @@ Warning--entry type for "kennedy" isn't style-file defined
 --line 27 of file web.bib
 Warning--empty journal in Pang:2004us
 Warning--empty year in Barbosa:ws
-You've used 24 entries,
+Warning--empty journal in Yang:2007wx
+Warning--empty journal in Chang:2001ta
+You've used 30 entries,
             1876 wiz_defined-function locations,
-            621 strings with 6983 characters,
-and the built_in function-call counts, 3488 in all, are:
-= -- 290
-> -- 123
+            654 strings with 7828 characters,
+and the built_in function-call counts, 4903 in all, are:
+= -- 434
+> -- 170
 < -- 0
-+ -- 55
-- -- 31
-* -- 199
-:= -- 558
-add.period$ -- 24
-call.type$ -- 24
-change.case$ -- 24
++ -- 73
+- -- 43
+* -- 294
+:= -- 757
+add.period$ -- 30
+call.type$ -- 30
+change.case$ -- 30
 chr.to.int$ -- 0
-cite$ -- 26
-duplicate$ -- 212
-empty$ -- 440
-format.name$ -- 31
-if$ -- 831
+cite$ -- 34
+duplicate$ -- 288
+empty$ -- 577
+format.name$ -- 43
+if$ -- 1174
 int.to.chr$ -- 0
-int.to.str$ -- 24
-missing$ -- 20
-newline$ -- 75
-num.names$ -- 24
-pop$ -- 116
+int.to.str$ -- 30
+missing$ -- 26
+newline$ -- 93
+num.names$ -- 30
+pop$ -- 136
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 55
+skip$ -- 106
 stack$ -- 0
-substring$ -- 32
-swap$ -- 27
+substring$ -- 128
+swap$ -- 55
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 2
-while$ -- 27
-width$ -- 26
-write$ -- 191
-(There were 48 error messages)
+warning$ -- 4
+while$ -- 42
+width$ -- 32
+write$ -- 243
+(There were 56 error messages)

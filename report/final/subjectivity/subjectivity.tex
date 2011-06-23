@@ -56,9 +56,7 @@ def adjectives
 end
 \end{lstlisting}
 
-It is important to note that the design decision to keep methods such as adjective collection within the \emph{Status} object is consistent throughout our implementation. Table \ref{} contains a list of \emph{Status} methods, along with their return values and a short description of their purpose.
-
-With a status' adjectives now easily accessible we were able to build our two adjective-based feature methods:
+It is important to note that the design decision to keep methods such as adjective collection within the \emph{Status} object is consistent throughout our implementation. With a status' adjectives now easily accessible we were able to build our two adjective-based feature methods:
 
 \begin{description}
 	\item [\texttt{has\_adjectives?}] returns a boolean value denoting adjective presence within the status.
@@ -73,6 +71,8 @@ Our approach to URLs was implemented in a similar to that taken for adjectives. 
 	\item [\texttt{has\_urls?}] returns a boolean value denoting URL presence within the status.
 	\item [\texttt{no\_urls}] returns one of three values based upon the number of URLs. For zero URLs, \texttt{0} is returned, for one or two URLs, \texttt{1} is returned and for three or more URLs \texttt{2} is returned.
 \end{description}
+
+\subsection{Mentions}
 
 \subsection{Subjective clues}
 
@@ -130,11 +130,100 @@ As observed by Barbosa and Fang \cite{Barbosa:ws}, objective statuses tend to co
 
 \section{Results}
 
+In this section we present our subjectivity classifier's performance across a variety of tests. In doing so we will observe how individual features and combinations of them perform, along with exploring the effect of different classifier types on overall performance. All tests are performed using three-fold cross validation over a set of 300 labelled tweets, and repeated 30 times to ensure an accurate measure.
+
+\subsection{Individual feature performance}
+
+In deciding a suitable feature set for our classifier, we first wanted to observe which features perform best on their own. In order to do this each individual feature was used to initialise our classifer, before running our test methods on each single-feature classifier. In order to truly understand the performance of each feature, we decided to focus on their \emph{accuracy}, \emph{precision} and \emph{recall}. For each measure we wanted to look at not only the average, but the spread of results across the 100 repetitions. This was so as to provide a better understanding as to the sensitivity of each measure to changes in its training data. We have presented our results for each measure below, and we shall now examine the results for each measure in turn.
+
+It is important to note that in order to present our data in a tidier fashion, we will use the following numbering system when discussing and presenting features:
+
+\begin{longtable}{|p{0.25in}|p{1.05in}|p{0.25in}|p{1.05in}|p{0.25in}|p{1.05in}|}
+		\hline
+		No. & Feature & No. & Feature & No. & Feature \\
+		\hline
+		1 & has\-\_adjectives? & 7 & has\-\_clues? & 13 & \multirow{3}{3pt}{capitalised\-\_words\-\_frequency} \\
+		\cline{1-4}
+    2 & no\-\_adjectives & 8 & no\-\_clues & & \\
+		\cline{1-4}
+    3 & has\-\_urls? & 9 & has\-\_strong\-\_clues? & & \\
+		\hline
+    4 & no\-\_urls & 10 & no\-\_strong\-\_clues & 14 & \multirow{3}{3pt}{capitalised\-\_letters\-\_frequency} \\
+		\cline{1-4}
+    5 & has\-\_mentions? & 11 & has\-\_weak\-\_clues? & & \\
+		\cline{1-4}
+		6 & no\-\_mentions & 12 & no\-\_weak\-\_clues & & \\
+		\hline
+\end{longtable}
+
+In figures \ref{fig:subj_a}, \ref{fig:subj_p} and \ref{fig:subj_r} we present the test results for each of our single-feature classifiers.
+
+\begin{figure}
+	\caption{Accuracy average and spread for each individual feature}
+	\label{fig:subj_a}
+	\centering
+		\includegraphics[width=1.0\textwidth]{graphs/subj_a.pdf}
+\end{figure}
+
+We found that URLs and strong subjectives clues were the most informative feature in terms of accuracy. URLs are clearly the most discriminative feature, and when used as a presence-based feature heralded an average classification accuracy of 72.84\%. The presence of strong subjective clues also served as a particularly discriminative feature, classifying 66.9\% of examples correctly when used as a presence-based feature. Furthermore, when used as individual features, we found that URLs and strong subjective clues presented little spread in our accuracy results. This suggests that unlike features such as adjectives or weak subjective clues, URLs and strong subjective clues are not sensitive to changes in training data. Interestingly however, we also found that there was little change in accuracy when basing a feature on presence or number of occurrences within the status. All our features, other than weak subjective clue presence, resulted in accuracies greater than 50\%. As such, although some do little better than simply guessing, most offer at least some additional insight when classifying a status' subjectivity.
+
+\begin{figure}
+	\caption{Precision average and spread for each individual feature}
+	\label{fig:subj_p}
+	\centering
+		\includegraphics[width=1.0\textwidth]{graphs/subj_p.pdf}
+\end{figure}
+
+In general, we found that features on their own presented little in the way of precision. As with accuracy, URLs again offered the best as far as precision rates were concerned, with precision rates of 63.1\% when used as a presence-feature and 61.8\% when the number of occurrences was taken into account. Also of note was our capitalised words feature which achieved a precision rate of 54.3\%. Again weak subjectives performed weakly as a feature, and both it and adjectives suggested that their sensitivity to changes in training data made them unreliable.
+
+\begin{figure}
+	\caption{Recall average and spread for each individual feature}
+	\label{fig:subj_r}
+	\centering
+		\includegraphics[width=1.0\textwidth]{graphs/subj_r.pdf}
+\end{figure}
+
+Recall rates proved much better for our features. This is probably largely due to the one sided-ness of much of their classification, especially in the case of capitalised words, which labelled almost 100\% of its test data as subjective. Of note however are the high recall rates achieved by URLs and strong subjective clues, which we had already identified as strong potential features. Again adjectives and weak subjective clues demonstrated their tendency to be strongly affected by changes in training data, suggesting their potential unsuitability for subjectivity classification. For adjectives, this is strongly at odds with prior research in the field, and as a result we will further experiment with it when testing how our classifier performs with groups of features.
+
+\subsection{Feature set performance}
+\label{subjectivity:feature_set}
+
+As a result of our individual feature analysis, we put forward five feature-combinations for further testing:
+
+\begin{enumerate}
+	\item has\_urls?, has\_strong\_clues?
+	\item has\_urls?, has\_strong\_clues?, no\_clues
+	\item has\_urls?, has\_strong\_clues?, capitalised\_words\_frequency
+	\item has\_urls?, has\_strong\_clues?, no\_clues, capitalised\_words\_frequency
+	\item has\_urls?, has\_strong\_clues?, no\_clues, capitalised\_words\_frequency, has\_adjectives?
+\end{enumerate}
+
+The results of our tests using the five feature sets are listed in figure \ref{fig:subj_multi}. Blue bars represent precision, red represents accuracy and green represents recall.
+
+\begin{figure}
+	\caption{Individual figure accuracy}
+	\label{fig:subj_multi}
+	\centering
+		\includegraphics[width=0.9\textwidth]{graphs/subj_multi.pdf}
+\end{figure}
+
+All classifiers perform well, with our fourth feature set performing strongest in terms of accuracy achieving an average of 80.5\%. It performed marginally worse that feature set two with regards to precision, scoring an average of 81.0\%. Although it's precision was not the best, its strong accuracy and recall, combined with it's low sensitivity to changes in the training set, make it our preferred feature set. Interestingly adjectives seemed to have an adverse effect on our overall accuracy, precision and recall.
+
+\subsection{Classifier type}
+
+In order to determine the most appropriate classifier type, we ran our tests using a Support Vector Machine for one test and a Naive Bayes Classifier for the other. When building our classifiers, we used the fourth feature set from section \ref{subjectivity:feature_set}. We present our results in figure \ref{fig:subj_class}.
+
+\begin{figure}
+	\caption{Individual figure accuracy}
+	\label{fig:subj_class}
+	\centering
+		\includegraphics[width=0.8\textwidth]{graphs/subj_class.pdf}
+\end{figure}
+
+Although both the SVM and NB classifiers perform strongly, the SVM's average accuracy of 80.5\% against the NB classifier's 77.2\% make it the stronger candidate. Interestingly however, the spread in accuracies suggests that perhaps the NB classifier is slightly less sensitive to changes in the underlying data. Given a larger training set however and we feel that perhaps this might not be the case, and existing research \cite{Pang:2008wj} suggests that SVMs are in fact more stable.
+
 \section{Evaluation}
 
-
-
-% Typically, subjectivity classification focusses upon determining whether a body of text is subjective or objective. However the requirements for our subjectivity classifier are broader. Rather than simply determining whether a status is subjective or objective, we also want to check whether it is spam. In most cases the real purpose of a subjectivity classifier is to filter out anything which isn't an opinion. As Twitter has a great deal of spam however, this can lead to a classifier which labels spam as being objective or a fact. As we hope to utilise our objective statuses later within the project for trend spotting, a typical binary classification is not sufficient. Instead we need an additional layer for 
 
 
 

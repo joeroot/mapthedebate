@@ -26,20 +26,20 @@ Through Twitter's RESTful API \footnote{RESTful APIs allow developers to retriev
 \section{Sentiment analysis}
 \label{background:sentiment_analysis}
 
-Sentiment analysis as a field, is the exploration of how we can computationally understand opinions expressed within a body of text. In order to do this, we must first define a computational structure for expressing opinions. In general \cite{Liu:2010tm} this is done by breaking an opinion down into four parts. Firstly we must determine the opinion's focus of discussion, also known as its \emph{topic} \footnote{This is more commonly referred to within literature as an opinion's \emph{feature}, however to avoid later confusion with the machine learning term, we will use the term \emph{topic}.}. This in practise can encompass anything from Government policy to mobile phone battery life. Often opinion is not necessarily that of the author, but of a referenced person or group, therefore it is important to determine the opinion's \emph{holder}. Along with this it is also often necessary to determine the \emph{time} at which the opinion was expressed. Finally, we hope to \emph{classify} (or in some cases quantify) the opinion which has been passed. Leading research \cite{Pang:2002tu,Turney:2002vv} has typically focussed on discrete classification, such as deciding whether an opinion is positive, negative or neutral. A fifth \emph{object} component is sometimes introduced for larger documents, which serves as an identifier for related topics. For example, within a phone review the majority of opinions may share the same object, in this case the phone, but focus on different topics such as battery life or call quality. 
+Sentiment analysis as a field, is the exploration of how we can computationally understand opinions expressed within a body of text. In order to do this, we must first define a computational structure for expressing opinions. In general \cite{Liu:2010tm} this is done by breaking an opinion down into four parts. Firstly we must determine the opinion's focus of discussion, also known as its \emph{topic}\footnote{This is more commonly referred to within literature as an opinion's \emph{feature}, however to avoid later confusion with the machine learning term, we will use the term \emph{topic}.}. This in practise can encompass anything from Government policy to mobile phone battery life. Often opinion is not necessarily that of the author, but of a referenced person or group, therefore it is important to determine the opinion's \emph{holder}. Along with this it is also often necessary to determine the \emph{time} at which the opinion was expressed. Finally, we hope to \emph{classify} (or in some cases quantify) the opinion which has been passed. Leading research \cite{Pang:2002tu,Turney:2002vv} has typically focussed on discrete classification, such as deciding whether an opinion is positive, negative or neutral. A fifth \emph{object} component is sometimes introduced for larger documents, which serves as an identifier for related topics. For example, within a phone review the majority of opinions may share the same object, in this case the phone, but focus on different topics such as battery life or call quality. 
 
 How do we computationally discover opinions and identify their parts? In general the approach can be loosely split into two components, \emph{sentence-level classification} and \emph{document-level classification}. Sentence-level classification determines whether a sentence expresses an opinion along with classifying that opinion if it exists. Furthermore if an opinion is found, sentence-level classification will try to determine its topic, holder and the time at which the opinion was cast. Document-level classification goes on to collate the sentence-level results, in order to form a general description of the document's sentiment. Both these approaches draw heavily upon machine learning techniques. It is important to note here however, a core criticism of the field. Linguists such as Chomsky \cite{norvig} observe that rather than truly trying to understand and define the semantics of sentiment, the field takes a heavily statistical approach. This means that rather than determining sentiment by forming a semantic conclusion, the field uses a limited linguistic foundation to predict sentiment based upon experience. Nonetheless, redefining natural language processing and sentiment analysis is not within the scope of this project, and we shall proceed with the field's successfully tried and tested approaches.
 
 As we shall discuss in more detail in chapter \ref{subjectivity}, only sentence-level classification is relevant to this project. Furthermore, methods for determining an opinion's holder and time are unnecessary and will not be discussed here. The remainder of this section will instead focus on the three relevant topics from within sentence-level classification. Firstly we shall explore what exactly an opinionated sentence is and how we can computationally determine this. Next we will look at common approaches to classifying sentiment, before finally examining how we determine the topic of an opinion. Before this however, we shall briefly outline the concepts and methods of \emph{supervised learning} as this shall form the core for each of our classification problems.
 
-\subsection{Supervised learning}
+\section{Supervised learning}
 \label{background:supervised_learning}
 
-Supervised learning is a task within machine learning which infers a function from a set of training data. This approach is well suited to classification problems, and in our case is particularly relevant to classifying opinion and determining polarity. Thus, the remainder of this section will discuss supervised learning with respect to the classification of sentences. 
+Supervised learning is a task within machine learning which infers a function from a set of training data. This approach is well suited to classification problems, and in our case is particularly relevant in discovering opinion and determining polarity. Thus, the remainder of this section will discuss supervised learning with respect to the classification of sentences. 
 
-\subsubsection{Defining the problem}
+\subsection{Defining the problem}
 
-In both problems we want to find an approximate hypothesis function $h$ for our actual function $c$. Both functions will map an input sentence $s\in S$, to a discrete classification $o\in O$, where $S$ is the set of all possible sentences and $O$ is the set of all possible classifications, for example $O=\{positive, neutral, negative\}$, such that:
+In both discovering opinion and determining polarity we want to find an approximate hypothesis function $h$, for an actual function $c$, where $c$ would perfectly perform either task. Both functions will map an input sentence $s\in S$, to a discrete classification $o\in O$, where $S$ is the set of all possible sentences and $O$ is the set of all possible classifications, for example $O=\{positive, negative\}$, such that:
 
 \begin{equation}
 	h \approx c:S \rightarrow O
@@ -48,10 +48,10 @@ In both problems we want to find an approximate hypothesis function $h$ for our 
 In order to find our best fit hypothesis function $h$, we will first need to determine a set of \emph{features} for our sentences. Within machine learning, features are the attributes which best describe and discriminate our input data when trying to classify it. For example if we are trying to learn a function to decide whether we should play tennis or not, features might include humidity and sunlight. In essence we want to identify a list of the most useful features $f_1, f_2,\dots,f_n$ for our sentences, such that:
 	
 \begin{equation}
-	h \approx c' : \langle f_1, f_2,\dots,f_n \rangle \rightarrow O
+	h \approx c : \langle f_1, f_2,\dots,f_n \rangle \rightarrow O
 \end{equation}
 
-Once a set of features has been chosen we can approximate $h$ by training it. In order to find the perfect hypothesis function for classifying subjective functions, $h=c$, we would require knowledge of every single possible sentence along with its correct classification. Clearly we could never produce the set of all possible sentences, let alone determine every sentence's classification. Instead, we select a sample of training sentences $T \subseteq S$, and manually \emph{label} each sentence $t \in T$ with a classification $l \in O$. This is our \emph{training data} $D$, such that:
+Once a set of features has been chosen we can approximate $h$ by training it. In order to find the perfect hypothesis function for classifying subjective functions, i.e. $h=c$, we would require knowledge of every single possible sentence along with its correct classification. Clearly we could never produce the set of all possible sentences, let alone determine every sentence's classification. Instead, we select a sample of training sentences $T \subseteq S$, and manually \emph{label} each sentence $t \in T$ with a classification $l \in O$. This is our \emph{training data} $D$, such that:
 
 \begin{equation}
 	D = \{(t, l) : \forall t \in T \textit{ there exists a manually labelled classification $l$} \}
@@ -59,12 +59,32 @@ Once a set of features has been chosen we can approximate $h$ by training it. In
 
 Given this training data we can now determine as accurate a hypothesis function as possible for classifying \emph{all} sentences. There are numerous, largely statistical methods for training our hypothesis function. Each brings their own positives and negatives, and there has been extensive research \cite{Pang:2004us} into which methods perform best for opinion based classification. We will discuss the most appropriate methods, features and training data for each classification problem in their respective parts.
 
-\subsubsection{Common approaches}
+\subsection{Naive Bayes Classifier}
 
-\subsection{Discovering opinion}
+The \emph{Naive Bayes (NB)} classifier is a probabilistic supervised classifier \cite{Rish:2001vu}. Using Bayes' theorem, it statistically predicts an inputs most likely classification based upon previous experience. Thus given an input represented as the feature set, $f_1, f_2,\dots,f_n$, a Naive Bayes classifier will essentially classify it with label $o \in O$, according to:
+
+\begin{equation}
+	\argmax_{o \in O} \Pr(o | f_1, f_2,\dots,f_n)
+\end{equation}
+
+In order to be able to predict this probability, the classifier learns from its training data, which is also represented as a series of feature sets. 
+
+Within sentiment analysis literature \cite{Pang:2008wj,Liu:2010tm}, Naive Bayes classifiers are often experimented with, and unlike in more genral applications \cite{ChihWeiHsu:2002gr}, it often performs strongly. Naive Bayes classifiers also have the additional advantage of requiring only a limited amount of training data in order to be able to perform well.
+
+\subsection{Support Vector Machines}
+
+Unlike Naiver Bayes classifiers, \emph{Support Vector Machines (SVM)} are non-probabilistic, binary classifiers. Given a set of training data presented as feature sets, $f_1, f_2,\dots,f_n$, SVMs hope to find a hypothesis function which best divides the training data into its two respective classes \cite{Lin:2004th}. In essence, this is done by plotting the features in $n$ dimensions, before trying to find the hyperplane which "best" separates the features into their respective classes. In finding the "best" hyperplane, SVMs look for the hyperplane with the largest $n$-dimensional distance between it and it's nearest training example.
+
+As Support Vector Machines present themselves as binary-classifiers, they need to be adapted in order to be able to classify more than two labels. This is referred to as multi-class classification. As outlined by Hsu et al., there have numerous attempts at implementing multi-class classification using SVMs, with each presenting its own benefits. As Caruana et al. observe, typically SVMs outperform NB classifiers, and within sentiment analysis \cite{Pang:2008wj,Liu:2010tm} in particular, Support Vector Machines often perform strongest.
+
+\subsection{Un-supervised learning}
+
+Un-supervised learning is a fairly general term, often used to describe approaches to learning in which there is no labelled data to draw upon on. Typically this means that data is instead clustered based upon attributes known or unknown, to the programmer. As a result of no core underlying approaches, un-supervised learning is difficult to define. However, within this project it shall refer to approaches which use no training data, and in particular those which apply no supervised techniques.
+
+\section{Discovering opinion}
 \label{background:discovering_opinion}
 
-In general opinion manifests itself either \emph{explicitly} through \emph{subjective} sentences and phrases, or \emph{implicitly} through \emph{objective} sentences and phrases. An objective sentence expresses factual information, whilst a subjective sentence expresses a mental or emotional state, such as a sentiment or belief. A subjective sentence such as, "\emph{I love the NHS, it's bloody marvellous}", explicitly states an opinion. Similarly however, a sentence such as "\emph{Lost my job due to recent Coalition cuts}" although objective, could also be considered an implicit opinion. This clearly poses a difficult challenge for classification, and as Mihalcea et al. \cite{Mihalcea:2007uh} note, it is one which "has often proved to be more difficult than subsequent polarity classification". As observed by Liu \cite{Liu:2010tm} however, opinionated sentences tend to be a subset of subjective sentences. Due to this, the approaches for classifying them are similar and the terms are taken as interchangeable. This is referred to as \emph{subjectivity classification}.
+In general opinion manifests itself either \emph{explicitly} through \emph{subjective} sentences and phrases, or \emph{implicitly} through \emph{objective} sentences and phrases. An objective sentence expresses factual information, whilst a subjective sentence expresses a mental or emotional state, such as a sentiment or belief. A subjective sentence such as, "\emph{I love the NHS, it's bloody marvellous}", explicitly states an opinion. Similarly however, a sentence such as "\emph{Lost my job due to recent Coalition cuts}" although objective, could also be considered an implicit opinion. This clearly poses a difficult challenge for classification, and as Mihalcea et al. \cite{Mihalcea:2007uh} note, it is one which "has often proved to be more difficult than subsequent polarity classification". As observed by Liu \cite{Liu:2010tm} however, opinionated sentences tend to be a subset of subjective sentences. Due to this, the approaches for classifying them are alike and the terms are taken as interchangeable. This is referred to as \emph{subjectivity classification}.
 
 Subjectivity classification is typically achieved through a mix of supervised and unsupervised learning. In general, unsupervised learning is used to bootstrap a relatively small but accurate training set. The bootstrapped training set is then utilised to train a classifier. Numerous feature choices have been proposed for training subjectivity classifiers. We shall first examine some of the the more commonly used features, as discussed by Wiebe et al. \cite{Wiebe:1999cj}:
 
@@ -80,7 +100,7 @@ Subjectivity classification is typically achieved through a mix of supervised an
 	
 \end{description}
 
-Wiebe et al. \cite{Wiebe:1999cj} observed that using the first 3 techniques, coupled with cardinal numbers and a single document-level feature, resulted in classification rates of 71.2\%. 
+Wiebe et al. \cite{Wiebe:1999cj} observed that using the first three features, coupled with a feature noting cardinal numbers presence, resulted in classification rates of 71.2\%. 
 
 But how can we identify these features within a sentence? Adjectives, adverbs and pronouns are all known as \emph{parts of speech (POS)}. A word's POS can take on one of eight roles within a sentence: \emph{verb}, \emph{noun}, \emph{pronoun}, \emph{adjective}, \emph{adverb}, \emph{preposition}, \emph{conjunction} and \emph{interjection}. A word's part of speech is often determined by its position within the sentence. For example "\emph{love}" can be a noun or a verb, dependant upon the context in which it is used. Below is an example of a sentence whose words have been \emph{tagged} with their POS:
 
@@ -88,18 +108,18 @@ But how can we identify these features within a sentence? Adjectives, adverbs an
 	\underbrace{{\rm She}}_{\rm pron.} \overbrace{{\rm likes}}^{\rm verb} \underbrace{{\rm big}}_{\rm adj.} \overbrace{{\rm snakes}}^{\rm noun} \underbrace{{\rm but}}_{\rm conj.} \overbrace{{\rm I}}^{\rm pron.} \underbrace{{\rm hate}}_{\rm verb} \overbrace{{\rm them.}}^{\rm pron.}
 \end{equation}
 
-\subsubsection{Part of speech tagging}
+\subsection{Part of speech tagging}
 \label{background:pos}
 
-Given a phrase or sentence, \emph{part of speech tagging} computationally determines each word's POS. This can be done in variety of ways. Typically basic implementations use a lexicon of words with their appropriate tags, or a more advanced dictionary such as WordNet\footnote{Wordnet is a detailed dictionary with additional levels of detail describing the semantic interlinking between words. It will be used throughout this project and shall be discussed in more detail in chapter \ref{subjectivity}.}. In general these implementations are naive and often simply return a list of possibilities. More intuitive techniques tend to use machine learning to recognise patterns, or are built with a set of linguistic rules. We will discuss the merits of these techniques and their implementation in more detail in chapter \ref{subjectivity}. With a fully tagged sentence it is now possible to build a feature set based upon the relevant parts of speech.
+Given a phrase or sentence, \emph{part of speech tagging} computationally determines each word's POS. This can be done in variety of ways. Typically basic implementations use a lexicon of words with their appropriate tags, or a more advanced dictionary such as WordNet\footnote{WordNet is a detailed dictionary with additional levels of detail describing the semantic interlinking between words. It will be used throughout this project and shall be discussed in more detail in section \ref{emotion:wordnet}.}. In general these implementations are naive and often simply return a list of possibilities. More intuitive techniques tend to use machine learning to recognise patterns, or are built with a set of linguistic rules. We will discuss the merits of these techniques and their implementation in more detail in chapter \ref{subjectivity}. With a fully tagged sentence it is now possible to build a feature set based upon the relevant parts of speech.
 
-\subsubsection{Use of supervised techniques}
+\subsection{Use of supervised techniques}
 
-As noted in our discussion of features, some adjectives are more useful in classifying subjectivity than others. Determining these adjectives, and in this case their polarity, would prove tedious if carried out by hand. Instead, Wiebe \cite{Wiebe:2000ub} suggests a supervised approach using a set of seed words and a large corpora of text. The corpora is examined for conjunctions, such as "\emph{handsome} and \emph{smart}", and disambiguations such as "\emph{smart but cruel}". When a seed word is found within either scenario, its fellow word's polarity can be inferred. For conjunctions, if one of the words is known as positive, then the unknown word is likely to be positive also. The converse holds for disambiguations, where the unknown word is inferred to be the opposite of the known word. This technique enables the rapid building of a polarised adjective lexicon. It is particularly useful in domains which assign their own meaning to adjectives, for example \emph{sick} is often a positive adjective within youth culture.
+As noted in our discussion of features, some adjectives are more useful in classifying subjectivity than others. Determining these adjectives, and in this case their polarity, would prove tedious if carried out by hand. Instead, Wiebe \cite{Wiebe:2000ub} suggests a supervised approach using a small set of a hundred or so seed words, such as \emph{good} and \emph{bad}, and a large corpora of text. The corpora is examined for conjunctions, such as "\emph{handsome} and \emph{smart}", and disambiguations such as "\emph{smart but cruel}". When a seed word is found within either scenario, its fellow word's polarity can be inferred. For conjunctions, if one of the words is known as positive, then the unknown word is likely to be positive also. The converse holds for disambiguations, where the unknown word is inferred to be the opposite of the known word. This technique enables the rapid building of a polarised adjective lexicon. It is particularly useful in domains which assign their own meaning to adjectives, for example \emph{sick} is often a positive adjective within youth culture.
 
 Building a training set significant enough for accurate subjectivity classification can often be time consuming. Liu \cite{Liu:2010tm} and Akkaya et al. \cite{Akkaya:2009ww} describe a supervised method for bootstrapping an initial training set. A high precision, low recall rule based classifier, as originally proposed by Wiebe and Riloff \cite{Wiebe:2003wa}, is used to build a small training set from a large corpora. The classifier does this by identifying strong and weak subjective clues within a sentence. If there are two or more strong subjective clues the sentence is classified as subjective. In order to determine objectivity, the sentences on either side are taken into account. If between them neither contain more than one strong and two weak clues, along with no strong clues in the analysed sentence, the sentence is considered objective. If the conditions for subjectivity and objectivity are not met, the classifier leaves the sentence unclassified. The use of supervised methods such as this and the lexicon builder described above are typical within the field. They provide simple and efficient ways of optimising the overall training process.
 
-\subsubsection{Present research and issues}
+\subsection{Present research and issues}
 
 Recent literature has also explored numerous improvements to the classic algorithm as described above. One such improvement of notable effect is \emph{subjectivity word sense disambiguation (SWSD)}, originally presented by Wiebe et al. \cite{Wiebe:2006te}, and further refined by Akkaya et al. \cite{Akkaya:2009ww}. SWSD tries to reduce the misclassification of objective words, and thus possibly the sentence, as subjective. These false hits often occur as a result of assuming that if a word exists within a subjective lexicon, it is being used in subjective sense. For example, \emph{pain} is often used subjectively, however within, \emph{early symptoms include body pain}, \emph{pain} is used in an objective sense. SWSD attempts to eliminate this source of error. A subjective lexicon of words is built, and for each of its words, a classifier is trained. Given a potentially subjective word within a sentence, the classifier will label the word's sense as objective or subjective. The classifier is trained using a corpora of sentences whose subjective words have been labelled as either subjective or objective. The classifier is then used to ensure that all subjective words are used in their subjective sense. Using SWSD within subjectivity classification, Wiebe et al. \cite{Akkaya:2009ww} noted a 24\% reduction in error against a classifier using the regular subjectivity lexicon when looking for subjective words. 
 
@@ -133,7 +153,7 @@ Effects of adjective orientation \cite{Wiebe:2000tk}
 \end{comment}
 
 
-\subsection{Classifying opinion}
+\section{Classifying opinion}
 \label{background:sentiment_classification}
 
 An opinionated sentence can express a diverse range of sentiment, and classifying this can prove difficult. Sentiment can be classified in numerous ways, for example "\emph{I liked the tone of his speech, however I am uncertain of the proposals within it}", could be interpreted in any number of ways. At a phrase level, we might consider the first part to express some form of delight, while the latter expresses distrust. Of course, to a certain extent these are subjective, and more detailed emotional labels shall be discussed in section \ref{background:emotion}. A more broad classification might classify the first part as positive and the second part as negative. Developing methods for labelling a sentence's polarity has served as a focus for much of the research into classifying opinion. This field is referred to as \emph{sentiment classification}.
@@ -142,7 +162,7 @@ But how do we determine sentiment? At first this may seem simple. For example "\
 
 At its heart sentiment classification poses a significant linguistic challenge, and the approaches vary as a result of it. They can be broadly split into two approaches however, supervised and unsupervised. Unsupervised methods propose that sentiment can be understood by analysing its linguistic form. By understanding the rules which allow sentiment to be expressed, we should be able to both identify and understand it within a sentence. Supervised methods suggest that the complexities of language make unsupervised methods too specific and difficult to identify. Instead it hopes to make use of machine learning's supervised techniques in order to better classify sentiment. We will explore and contrasts these two methods. In particular, we will focus upon the unsupervised approach put forward by Turney \cite{Turney:2002vv}, and the supervised approach proposed by Pang et al. \cite{Pang:2002tu}.
 
-\subsubsection{Unsupervised sentiment classification}
+\subsection{Unsupervised sentiment classification}
 
 Turney \cite{Turney:2002vv} suggests a two part approach to supervised sentiment classification. As discussed when exploring subjectivity in section \ref{background:discovering_opinion}, adjectives tend to be a significant grammatical structure through which sentiment is expressed. Thus, Turney proposes extracting phrases containing adjectives and whose structure indicates an expression of sentiment. Given a sentence, we tag its parts of speech, before extracting any two-word phrases whose structure can be found within the following linguistic patterns:
 
@@ -175,7 +195,7 @@ Where $\operatorname{p}(word_1,word_2)$ is the probability that $word_1$ and $wo
 
 The resulting semantic orientation is a measure of a phrase's sentiment. An SO larger than 0 denotes positive polarity, while an SO less than zero indicates negative polarity. Thus, a sentence's overall polarity is simply the average of its phrases' SO. This approach to supervised sentiment classification has proven effective across a variety of review domains. Turney reports an impressive 80\% when classifying bank reviews and an even better 84\% accuracy for automobile reviews. He does note however, that movie reviews present a challenge for his supervised approach, reporting an accuracy of 65.83\% within the movie domain. Nonetheless, across domains Turney reports classification rates of 74.39\%, demonstrating the strong potential which lies within unsupervised methodologies.
 
-\subsubsection{Supervised sentiment classification}
+\subsection{Supervised sentiment classification}
 
 Shortly after Turney published his paper on supervised approaches \cite{Turney:2002vv}, Pang et al. \cite{Pang:2002tu} put forward a counter paper. This addressed the potential of supervised learning within the same domain of internet reviews as Turney's original paper. At its core, Pang et al. address the issue that often sentiment can be expressed in very subtle ways. For example, "\emph{How could anyone sit through this movie?}" does not express negative opinion in any readily apparent way. Essentially the proposition put forward by Pang et al. is that the nuanced structures through which we express opinion are too vast and varied. They cannot simply be whittled down into a simple set of rules, and rather, we should look to experience to guide our classification.
 
@@ -200,7 +220,7 @@ Pang et al. also experiment with appending POS tags to the end of each word, thu
 
 The different feature sets were tested within the movie review domain. The presence feature set for unigrams performs strongest in their experiments with an accuracy of 82.9\%. The combination of unigrams and bigrams sees a marginal drop in accuracy to 82.7\%. Interestingly POS tags also have a slight negative effect on accuracy, seeing it drop to 81.9\% when coupled with a unigram presence feature set. In domains where the expression of sentiment is subtle, supervised approached have a clear benefit over their unsupervised counterparts. However, supervised learning requires one to build a training set, which can often prove time consuming. Furthermore its understanding of sentiment is based upon experience, thus it could never really explain why it reached its decision. Deciding which approach is better is difficult, and we shall explore this is more detail in section \ref{polarity}.
 
-\subsubsection{Present research and issues}
+\subsection{Present research and issues}
 
 Recent research has focussed on how combinations of supervised and unsupervised learning can be used to improve classification rates. Essentially these improvements have hoped to introduce greater linguistic detail into the supervised approach described by Pang et al.. In the following section we shall provide a general overview of two improved methodologies put forward by Wilson et al. \cite{Wilson:2005tt} and Benamara et al. \cite{Benamara:2007wz}.  We shall explore these approaches in greater detail in section \ref{polarity}.
 
@@ -234,7 +254,7 @@ Movie reviews, thumbs up/down \cite{Turney:2002vv} \cite{Pang:2002tu}
 
 \end{comment}
 
-\subsection{Topic extraction}
+\section{Topic extraction}
 \label{background:topic_extraction}
 
 \begin{comment}
@@ -344,42 +364,18 @@ The level of detail within Plutchik's research provides a wider scope of definit
 
 \subsection{Computational classification}
 
-\begin{comment}
+As with defining emotion, approaches to classifying it are broad and in general, un-unified. Each present their own definitions of emotion, and as a result approaches can vary quite widely. Although essentially a machine learning problem, unlike polarity classification for example, emotion classification can not be attributed to one single field. It is commonly researched within Natural Language Processing, however other fields such as Human-computer interaction, also present their own approaches. 
 
-As discussed in section \ref{background:sentiment_analysis}, research into sentiment analysis has largely focussed on the polarity of sentiment i.e. is it negative or positive. 
+As with most machine learning problems, classifying emotion can be approached both through supervised and un-supervised techniques. Yang et al. \cite{Yang:2007wx} propose a largely unsupervised approach to classification, largely based upon an emotion corpora built with distant supervision. In a similar fashion to Go et al. \cite{Go:2009ut}, blog posts are scraped for sentences containing emoticons. These sentences are then classified with an emotion based upon the that which Yang et al. perceive the emoticon to hold. Once done, each word in any sentence containing an emotion is given a point-wise mutual information score, based upon how often it co-occurs with its sentence's emotion. With a corpora of words and their relation to any given emotion now built, Yang et al. classify new sentences by examining their corpora to see if any of the sentence's words exist within it. If any words do exist within their corpora, the sentence's score for the word's emotion is increased. Yang et. al see considerable success with this method, however the diversity of the emotion they can label is limited to measures of \emph{valence} and \emph{energy}. Furthermore, the approach uses no manual annotation when testing, instead relying on its unsupervised labels, and thus it could be seen as merely favouring its own error.
 
-Emotions from text \cite{Alm:2005vc}
-	- application for reading with emotion
+In an alternative approach, Alm et al. \cite{Alm:2005vc} put forward a supervised method for classifying emotion. In training their classifier, Alm et al. manually annotate a corpus of 185 children's stories with on of six emotions, \emph{angry}, \emph{disgusted}, \emph{fearful}, \emph{happy}, \emph{sad} and \emph{surprised}. Interestingly, they note that their annotators only achieved an agreement rate of between 45 and 65\%, suggesting that classification rates such as those seen in subjectivity and sentiment analysis can never truly be achieved. With their corpora now annotated, they draw upon thirty core features for training and classifying. Many of these features are similar to those used in polarity classification such as unigrams and adjectives. However, of particular interest and novelty is their use of WordNet as a feature for exploring how the semantic grouping of a word will effect a sentences emotional classification. This is done by grouping WordNet words based upon their relation to each of the six emotions. Although Alm et al. do not report the success rates seen in work by Yang et al., their classifier performs well, on average achieving accuracy rates of 63\% when determining whether emotion exists. They are less successful in classifying the actual emotion and are only able to achieve an F-score of 32\% for when classifying negative emotions such as fear, and 13\% for positive emotions such as happiness. 
 
-Real world knowledge for affect sensing \cite{Liu:2003ts}
-
-Twitter and emotion \cite{Bollen:2009wva}
-
-\end{comment}
+It is clear from the work of Alm et al. \cite{Alm:2005vc} that classifying emotion with any degree of detail or certainty is a remarkably difficult process, and one in which there is a lot of progress still to be made. Although emotion classification across a limited range has seen some success, such as that seen by Yang et al., as ones definition of emotion increases in scope, our ability to accurately classify it drastically falls.
 
 \section{Tools and languages}
 \label{background:tools}
 
 Although speed is not the primary performance measure within this project, we still hope to maximise efficiency where possible. This desire to strike a balance between programming practicality and speed has defined our choice of tools and languages. As a result languages have primarily been chosen based upon their practicality with regards to rapid development and experimentation, On the other hand, data critical tools such as database software have been chosen with the hope of maximising efficiency whilst remaining flexible. The remainder of this section shall focus upon which languages and tools we have chosen and why, along with any potential pitfalls we may encounter in using them.
-
-\subsection{Ruby}
-
-Ruby (www.ruby-lang.org) is a high-level interpreted programming language. It was deemed well suited to the project for several reasons:
-
-\begin{itemize}
-	\item Its functional aspects make data manipulation simple and fluid. This is particularly relevant for sentiment analysis in which fast data manipulation is essential, especially when building feature sets or partitioning data for training.
-	\item Ruby is easily extensible with C/C++, and support for JAVA libraries is stable. This means that we are not simply limited to Ruby libraries when building our classifiers. As most research into sentiment analysis and NLP has been conducted in JAVA or C++, this extensibility is useful in allowing us to make use of leading work and libraries.
-	\item Ruby's focus on simplicity means that components can be rapidly developed and experimented with. The freedom afforded by it's simplicity means that we can focus on experimenting with our approach rather than focussing on the complexities of lower-level languages such as C or C++.
-	\item Ruby has well-established frameworks for building web-services such as \emph{Sinatra} and \emph{Ruby on Rails}. These allow database-driven websites to be rapidly developed and will enable both simple collection and visualisation of data.
-\end{itemize}
-
-This project draws upon some core Ruby frameworks, in particular making use of:
-
-\begin{description}
-	\item [Sinatra] is a simple web application framework for Ruby. In essence it allows methods to be easily bound to specific web addresses and is perfect for rapidly developing sites. It is stable and well supported by the open source community. Within this project it shall be used to deliver the data visualisation and provide a backend through which tweets can be found and labelled in order to train our classifiers.
-	\item [Artificial Intelligence for Ruby] is a detailed library providing an array of machine learning focussed tools. In particular the library includes a Naive-Bayes classifier which will be used within each of our three classifiers.
-	\item [LIBSVM] is a well establish C++ library for support vector machines. This can be used within Ruby through a LIBSVM interface written by Tom Zeng\footnote{https://github.com/tomz/libsvm-ruby-swig}. As LIBSVM is written in C++ it is much faster than Ruby alternatives. Additionally it supports multi-class classification without any additional work.
-\end{description}
 
 \subsection{MongoDB}
 
@@ -408,6 +404,26 @@ The simplicity of document-oriented databases has led to a rapid adoption amongs
 	\item Due to the lack of a relational layer, when inserting data and performing basic queries, MongoDB performs much faster than SQL derivatives\cite{kennedy}. This is important, both if we hope to retrieve and classify large swathes of data from Twitter, and if we intend to train our classifiers using a large body of data.
 	\item Relationships are of little importance to this project, and thus the benefits of a schema-less database far outweigh the negatives.
 \end{itemize}
+
+\subsection{Ruby}
+
+Ruby (www.ruby-lang.org) is a high-level interpreted programming language. It was deemed well suited to the project for several reasons:
+
+\begin{itemize}
+	\item Its functional aspects make data manipulation simple and fluid. This is particularly relevant for sentiment analysis in which fast data manipulation is essential, especially when building feature sets or partitioning data for training.
+	\item Ruby is easily extensible with C/C++, and support for JAVA libraries is stable. This means that we are not simply limited to Ruby libraries when building our classifiers. As most research into sentiment analysis and NLP has been conducted in JAVA or C++, this extensibility is useful in allowing us to make use of leading work and libraries.
+	\item Ruby's focus on simplicity means that components can be rapidly developed and experimented with. The freedom afforded by it's simplicity means that we can focus on experimenting with our approach rather than focussing on the complexities of lower-level languages such as C or C++.
+	\item Ruby has well-established frameworks for building web-services such as \emph{Sinatra} and \emph{Ruby on Rails}. These allow database-driven websites to be rapidly developed and will enable both simple collection and visualisation of data.
+\end{itemize}
+
+This project draws upon some core Ruby frameworks, in particular making use of:
+
+\begin{description}
+	\item [Sinatra] is a simple web application framework for Ruby. In essence it allows methods to be easily bound to specific web addresses and is perfect for rapidly developing sites. It is stable and well supported by the open source community. Within this project it shall be used to deliver the data visualisation and provide a backend through which tweets can be found and labelled in order to train our classifiers.
+	\item [Artificial Intelligence for Ruby] is a detailed library providing an array of machine learning focussed tools. In particular the library includes a Naive-Bayes classifier which will be used within each of our three classifiers.
+	\item [LIBSVM] is a well established C++ library for support vector machines. Originally proposed and built by Chang et al. \cite{Chang:2001ta}, it has become a popular tool for SVM classification. This will be used within Ruby through a LIBSVM interface written by Tom Zeng\footnote{https://github.com/tomz/libsvm-ruby-swig}. As LIBSVM is written in C++ it is much faster than Ruby alternatives. Additionally it supports multi-class classification without any additional work.
+	\item [MongoMapper] is a Ruby framework for interfacing between MongoDB and Ruby. It provides an array of functionality, and in particular simplifies the task of building Ruby classes which map to MongoDB documents. Rather than fetching data from MongoDB and storing it in a Ruby object, MongoMapper creates an open link between the two. Thus whenever attributes are read or written to a Ruby object, they are in fact directly read or written to the corresponding MongoDB document.
+\end{description}
 
 \subsection{Processing.js}
 

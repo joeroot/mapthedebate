@@ -32,7 +32,7 @@ In order to express this JSON structure within Ruby, we will create three new cl
 	\caption{Class structure for representing tweets/statuses}
 	\label{fig:status_uml}
 	\centering
-	\includegraphics[width=0.83\textwidth]{figures/status_uml_class_diagram.eps}
+	\includegraphics[width=0.83\textwidth]{figures/status_uml_class_diagram.pdf}
 \end{figure}
 
 As we go on to explore other components in later chapters, we will add and expand upon this initial core set of attributes and methods. 
@@ -105,7 +105,7 @@ TweetTagger.new.fetch_tags("I think David Cameron is doing a rather good job: st
 	=>	[{"word" : "I", "tag" : "prp"}, {"word" : "think", "tag" : "vbp"}, {"word" : "David", "tag" : "nnp"}, {"word" : "Cameron", "tag" : "nnp"}, {"word" : "is", "tag" : "vbz"}, {"word" : "doing", "tag" : "vbg"}, {"word" : "a", "tag" : "det"}, {"word" : "rather", "tag" : "rb"}, {"word" : "good", "tag" : "jj"}, {"word" : "job", "tag" : "nn"}, {"word" : ":", "tag" : "pps"}, {"word" : "strong", "tag" : "jj"}, {"word" : "leader", "tag" : "nn"}, {"word" : ",", "tag" : "ppc"}, {"word" : "holding", "tag" : "vbg"}, {"word" : "together", "tag" : "rb"}, {"word" : "seemingly", "tag" : "rb"}, {"word" : "impossible", "tag" : "jj"}, {"word" : "coalition", "tag" : "nn"}, {"word" : ",", "tag" : "ppc"}, {"word" : "keeping", "tag" : "vbg"}, {"word" : "labour", "tag" : "nn"}, {"word" : "at", "tag" : "in"}, {"word" : "bay", "tag" : "nn"}]
 \end{lstlisting}
 
-Our implementation of Colburn's part of speech tagger proves both fast and accurate on spell-checked bodies of text. However, it performs less well when confronted with the abbreviations, acronyms and mis-spellings common amongst Twitter statuses. Furthermore, it fails to account for Twitter protocols such as hashtags and mentions. It is these issues we will confront in our next section, \ref{retrieval:pos_statuses}.
+Our implementation of Colburn's part of speech tagger proves both fast and accurate on spell-checked bodies of text. However, it performs less well when confronted with the abbreviations, acronyms and mis-spellings common amongst Twitter statuses. Furthermore, it fails to account for Twitter protocols such as hashtags and mentions. It is these issues we will confront in our next section, \ref{retrieval:statuses}.
 
 \subsection{Tagging Twitter statuses}
 \label{subjectivity:statuses}

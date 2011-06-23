@@ -1,2 +1,17 @@
 \chapter{Emotion classification}
 \label{emotion}
+
+With a status' polarity and subjectivity now classified, we can go on to look at what further understanding of a status' sentiment can be gained through classifying its emotion. Rather than taking a supervised approach as often seen in literature \cite{Alm:2005vc}, we will approach our emotion classification through a largely un-supervised approach. As our goal is to gain additional understanding as to a status' sentiment, we felt that a precise approach, with easily justifiable results was more appropriate. Techniques such as that put forward by Yang et al. \cite{Yang:2007wx}, although seemingly accurate, source labelled data for training and testing with no human input. Instead they use emoticons to generate labels which we felt provided significant room for misguided emotion classification. In particular there is no attempt within their work to determine whether the emoticon truly represents the emotion they are ascribing it. Despite this, we will draw upon elements discussed in supervised approaches, especially with regards to the use of WordNet such as in the approach put forward by Alm et al. \cite{Alm:2005vc}. 
+
+
+Our approach aims to blend aspects of common lexicon-based classification, with the deeper semantic insight gained through the use of tools such as WordNet. Essentially, we hope to determine whether a word and the sense in which it is being used, relate any information to is regarding emotion. As WordNet semantically defines concepts of emotion and feeling, it will prove fundamental in our approach. Within this chapter we shall first briefly examine what exactly WordNet is, before going on to discuss our implementation of it. We shall then go on to explore how exactly we used WordNet to generate our lexicon, before examining how exactly it is used in order to determine any emotion a status might contain. Lastly we shall examine the extent to which our approach was a success along with its potential for any further improvements.
+
+\section{WordNet}
+\label{emotion:wordnet}
+
+
+\section{Building an emotion lexicon}
+
+\section{Classifying emotion}
+
+\section{Evaluation}

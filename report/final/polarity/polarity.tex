@@ -48,6 +48,7 @@ parse_unigrams status
 \end{lstlisting}
 
 \subsection{Polarity clues}
+\label{polarity:clues}
 
 Polarity clues are used to identify terms which express polarised opinion. This is a core feature of most polarity classifiers, although the approaches to determining whether a word is polarised vary. We will again draw upon the work of Wiebe and Riloff \cite{Wiebe:2003wa} using chapter \ref{subjectivity}'s \emph{ClueFinder} class. In addition to using the polarised clues presented by Wiebe and Riloff, we also use our own annotated collection of clues and seed words by additionally loading them into the lexicon.
 
@@ -66,9 +67,9 @@ Using our \emph{ClueFiner}'s original \texttt{clue\_data} method we define an ad
 
 In Turney's \cite{Turney:2002vv} un-supervised approach, he proposes five grammatical structures for identifying subjective phrases. He suggest that the polarity of these phrases are in turn indicative of their sentence's overall polarity. Although we felt that as an un-supervised approach alone it was not suitable for the project, we decided to explore the possibility of using it as a feature within our supervised classification.
 
-Each of the rules from table \ref{background:patterns}
+Each of the rules from table \ref{background:patterns} are assembled as items within a \texttt{rules} array. Each rule is encoded as a series of three arrays, the first two contain all possible part of speech which the first two words of the phrase \emph{must} be, whilst the last array contains all the parts of speech which the third word \emph{must not} be, as implemented in lines 2 to 8 of listing \ref{background:patterns}. We use \texttt{nil} instead of a third array when the third word can take on any part of speech. With a rule structure now in place, we can split our status into its individual trigrams. Each trigram is then iterated over, each time checking to see if it matches any of the rules expressed in our \texttt{rules} array. Any trigram which matches one of the five rules is added to a \texttt{patterns} array, which is returned upon method completion.
 
-\begin{lstlisting}[language=Ruby, caption={Unigram parsing for \emph{Example 1} using a small unigram set}, label=polarity:unigram_output]
+\begin{lstlisting}[language=Ruby, caption={\emph{Status} object method for extracting patterns}, label=polarity:patterns]
 def patterns
   rules = [
     [["jj"], ["nn","nns"], nil],
@@ -96,9 +97,37 @@ def patterns
 end
 \end{lstlisting}
 
+Once our patterns have been extracted we can then look for clues pertaining to their polarity. This is done by using the \emph{ClueFinder} class to determine if the first two word to occur in our clue lexicon, and if so what their polarity is. Using this we define two pattern-based features\footnote{As there is typically no more than one pattern in a status, we have opted to use only presence as featured and not a count.}:
 
+\begin{description}
+	\item [\texttt{has\_negative\_patterns?}] returns a boolean value denoting the presence of one or more pattern with a negative polarity. 
+	
+	\item [\texttt{has\_positive\_patterns?}] returns a boolean value denoting the presence of one or more pattern with a positive polarity. 
+\end{description}
 
 \section{Results}
+
+\begin{figure}
+	\caption{Individual feature accuracy spreads}
+	\label{fig:polarity_accuracy}
+	\centering
+		\includegraphics[width=1.0\textwidth]{graphs/polarity_a.pdf}
+\end{figure}
+
+\begin{figure}
+	\caption{Individual figure accuracy}
+	\label{fig:polarity_precision}
+	\centering
+		\includegraphics[width=1.0\textwidth]{graphs/polarity_p.pdf}
+\end{figure}
+
+\begin{figure}
+	\caption{Individual figure accuracy}
+	\label{fig:polarity_recall}
+	\centering
+		\includegraphics[width=1.0\textwidth]{graphs/polarity_r.pdf}
+\end{figure}
+
 
 \section{Evaluation}
 
