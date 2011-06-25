@@ -79,11 +79,11 @@ J.~Wiebe, ``{Effects of adjective orientation and gradability on sentence
   subjectivity},'' \emph{Proceedings of the 18th conference {\ldots}}, 2000.
 
 \bibitem{Wiebe:2000ub}
-------, ``{Learning subjective adjectives from corpora},'' \emph{Proceedings of
+J.~Wiebe, ``{Learning subjective adjectives from corpora},'' \emph{Proceedings of
   the National Conference on Artificial {\ldots}}, 2000.
 
 \bibitem{Akkaya:2009ww}
-------, ``{Subjectivity word sense disambiguation},'' \emph{Proceedings of the
+C.~Akkaya and J.~Wiebe, ``{Subjectivity word sense disambiguation},'' \emph{Proceedings of the
   2009 {\ldots}}, 2009.
 
 \bibitem{Wiebe:2003wa}
@@ -97,7 +97,7 @@ J.~Wiebe, ``{Word sense and subjectivity},'' \emph{{\ldots} of the 21st
   International Conference on {\ldots}}, 2006.
 
 \bibitem{Wilson:2005tt}
-------, ``{Recognizing contextual polarity in phrase-level sentiment
+T.~Wilson and J.~Wiebe, ``{Recognizing contextual polarity in phrase-level sentiment
   analysis},'' \emph{Proceedings of the conference on {\ldots}}, 2005.
 
 \bibitem{Benamara:2007wz}
