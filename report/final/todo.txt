@@ -1,30 +1,6 @@
-Write streaming API
-
-Write subjectivity evaluation
-
-Write polarity training data
-Write polarity feature intro
-write polarity results!
-Write polarity evaluation
-
-Write topic extraction EASY
-
-Write wordnet implementation
-Write lexicon building
-Write implementation for classifying
-Write evaluation
-
-Write delivery EASY
-
-Write final evaluation
-Write final conclusion
 
 
-
-DONE
-
-Write SVM and NB
-Write unsupervised approach
-Write topic extraction
-Write emotion classification background
-Write emotion overview
+FINAL:
+	
+	Evaluation
+	Conclusion

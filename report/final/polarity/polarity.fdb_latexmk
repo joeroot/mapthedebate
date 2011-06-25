@@ -1,9 +1,9 @@
 # Fdb version 2
 ["latex"] 0 "polarity.tex" "polarity.dvi" "polarity" 
   "polarity.tex" 1308692160 3772 1d0e5fe40a550454de6719062e75a3d9 ""
-["pdflatex"] 1308692744 "polarity.tex" "polarity.pdf" "polarity" 
+["pdflatex"] 1308905871 "polarity.tex" "polarity.pdf" "polarity" 
   "e.g., `I\hbox'" 0 -1 0 ""
   "e.g., `\hobx'" 0 -1 0 ""
   "job aborted, no legal \end found" 0 -1 0 ""
-  "polarity.aux" 1308692331 2112 ac499a9888164cd4fbe0b4ea2e672f54 ""
-  "polarity.tex" 1308692160 3772 1d0e5fe40a550454de6719062e75a3d9 ""
+  "polarity.aux" 1308905851 5296 8ba59afd5b176e085918c06497dbe441 ""
+  "polarity.tex" 1308905842 18295 d6a5155b8a8600850b9e0d18477cdf54 ""

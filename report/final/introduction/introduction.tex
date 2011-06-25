@@ -6,9 +6,9 @@
 
 \section{Motivation}
 
-From women's rights to civil rights, the influence of public opinion on government policy has been pivotal. Within a healthy democracy the voice of the electorate should be heard and recognised by those chosen to represent them. Throughout history platforms have often been provided for public opinion to be made known, from the early public forums of Greece and Rome, to speaker's corner and the house of commons today. Providing a means for people to express their opinion enables them to both challenge and shape the direction their elected governments take. As a result, finding ways of gathering and understanding this opinion has increasingly proven fundamental if a government wishes to be successful.
+From women's rights to civil rights, the influence of public opinion on government policy has been pivotal. Within a healthy democracy the voice of the electorate should be heard and recognised by those chosen to represent them. Throughout history platforms have often been provided for public opinion to be made known, from the early public forums of Greece and Rome, to Speaker's Corner and the House of Commons today. Providing a means for people to express their opinion enables them to both challenge and shape the direction their elected governments take. As a result, finding ways of gathering and understanding this opinion has increasingly proved fundamental if a government wishes to be successful.
 
-Current methods of measuring opinion are largely statistical, with methods such as polling looking at the opinion of a sample group, before using their results to make further predictions. These can be informative, however their small sampling rates mean that figures can often be askew. Furthermore polling is both costly and time consuming to conduct, and thus can neither be used to find opinion on breaking news or across a large number of topics. None the less, as methods for measuring public opinion have improved both in accuracy and detail, politicians and policy makers have increasingly turned to them not only for affirmation of their policies, but for guidance and new initiative.
+Current methods of measuring opinion are largely statistical, with methods such as polling looking at the opinion of a sample group, before using their results to make further predictions. These can be informative, however their small sampling rates mean that figures can often be askew. Furthermore polling is both costly and time consuming to conduct, and thus can be used neither to find opinion on breaking news, nor across a large number of topics. Nonetheless, as methods for measuring public opinion have improved both in accuracy and detail, politicians and policy makers have increasingly turned to them not only for affirmation of their policies, but for guidance and new initiatives.
 
 As the web has become more prevalent throughout society, it is increasingly becoming a platform for discussion and opinion. The initial growth of blogging demonstrated the web's ability to serve as a forum for debate and opinion. However the technical knowledge required to start a blog, alongside the time required to write a post meant that adoption was limited. In the past two years we have seen the rise of micro-blogging (essentially 140 character blog posts) through services such as Twitter. These have seen unprecedented levels of adoption, with Twitter's 200 million users posting 25 billion micro-blog posts in 2010. Due to the simple nature of writing short posts, micro-blog discussion tends to break quickly around news topics, and offers genuine insight into public opinion surrounding news topics.
 
@@ -16,18 +16,27 @@ This project hopes to utilise the growth of publicly available opinion on the we
 
 \section{Contributions}
 
-\begin{enumerate}
+Based upon this, our project hopes to deliver the following core set of contributions,
+\begin{itemize}
+\item An engine for collecting and understanding sentiment on Twitter:
+	\begin{itemize}
+		\item A Twitter scraper which will fetch live statuses from Twitter.
+		\item A method for determining whether fetched statuses are opinionated or not.
+		\item A method for identifying whether fetched statuses' opinion is positive or negative.
+		\item A method for identifying the core topics which our fetched statuses are discussing.
+		\item A means of persisting our statuses and the results of the above methods, such that they can be easily retrieved at any time.
+	\end{itemize}
+\item A web service which can serve as an interface to our engine, through which,
+	\begin{itemize}
+		\item Requests can be made to classify a status, upon which the service should return the classification engine's results.
+		\item A method for requesting any classified data our engine may have stored.
+	\end{itemize}	
+\end{itemize}
 
-\item Ruby implementation of a sentiment analysis engine based upon current research. The engine should be able to correctly identify sentences containing sentiment, and classify the sentiment as positive or negative. Different implementations should be tested and compared to determine which algorithms and techniques work best.
+Combined, these should provide a tool for collecting, analysing and storing sentiment from Twitter. We should be able to read and access this in order to gain a better understanding of overall sentiment on Twitter. The web service should make our data available to others so they to can use it however they deem fit.
 
-\item An algorithm for classifying sentiment as a range of emotion and feeling, rather than just a score along a scale of positive to negative. The algorithm should be implemented in Ruby and included in the sentiment analysis engine.
-
-\item Research optimisations for current algorithms, in order to tailor the sentiment analysis engine for micro-blog posts from services such as Twitter. These optimisation should be implemented within the engine.
-
-\item Research optimisations for current algorithms, in order to better facilitate the understanding of Politically focussed micro-blog data. These optimisation should be implemented within the engine.
-
-\item A Ruby based Twitter module to store and classify live data from Twitter. 
-
-\item Visualisations should be designed and implemented to help better understand the data and classification results.
-
-\end{enumerate}
+Additionally, if possible we hope to implement the following extensions to our project,
+\begin{itemize}
+	\item Extend our sentiment analysis engine to give a more detailed account of a broader spectrum of emotion.
+	\item Web based visualisation tool for better understanding and exploring sentiment on Twitter
+\end{itemize}

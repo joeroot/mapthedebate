@@ -1,7 +1,7 @@
 \chapter{Content retrieval}
 \label{retrieval}
 
-In order to analyse sentiment on Twitter, the first problem posed is how exactly we retrieve the necessary data for analysis. In essence there are two types of data we need, Twitter data for labelling in order to train our system and a much larger set of Twitter data to classify, in order to better understand sentiment on Twitter. We will draw these two slightly disparate elements together under the banner of content retrieval, as although their intended use is quite different, the two types of data share many similarities both in the way they are collected and stored. Once collected the data must then be prepared either for training or classification. This chapter shall first examine the Twitter APIs relevant to this project along with how they are accessed and used. It will then go on to discuss any pre-processing which takes place, before going on to discuss how we label and annotate our data. Lastly we shall evaluate the success of the system in our evaluation section.
+In order to analyse sentiment on Twitter, the first problem posed is how exactly we retrieve the necessary data for analysis. In essence there are two types of data we need: Twitter data for labelling in order to train our system and a much larger set of Twitter data to classify, in the hope of better understanding sentiment on Twitter. We will draw these two slightly disparate elements together under the banner of content retrieval. Although their intended use is quite different, the actual data being collected shares much in common. Once collected the data must then be prepared either for training or classification. This chapter shall first examine the Twitter APIs relevant to this project, before going on to discuss how they are accessed and used. We will then look at the pre-processing which takes place, along with how we label and annotate our data. Lastly we shall evaluate the success of the system within our evaluation section.
 
 \section{Data structure and storage}
 \label{retrieval:data}
@@ -28,7 +28,7 @@ As described above, information regarding statuses\footnote{We will use the term
 
 In order to express this JSON structure within Ruby, we will create three new classes, \emph{Status}, \emph{TrainedStatus} and \emph{ClassifiedStatus}. The core status class will consist of all the attributes described within our JSON schema (listing \ref{retrieval:example_json_tweet}), along with attributes for retrieving a \emph{Status}'s relevant training or classification data. Both the \emph{TrainedStatus} and \emph{ClassifiedStatus} classes will maintain the \emph{Status} class' original attributes, along with new ones for accessing any relevant label data. As shown in figure \ref{fig:status_uml}, both \emph{TrainedStatus} and \emph{ClassifiedStatus} inherit attributes from their parent \emph{Status} class.
 
-\begin{figure}[h!]
+\begin{figure}
 	\caption{Class structure for representing tweets/statuses}
 	\label{fig:status_uml}
 	\centering
@@ -46,7 +46,7 @@ Twitter offers three core APIs for accessing their data, all of which return the
 \begin{description}
 	\item [REST API] - Twitter's REST API provides direct access to Twitter's data model. Requests can be made to access a wide variety of Twitter data, such as user information, timelines, statuses and trends. Essentially Twitter makes all of their sites functionality available through it's API.
 	\item [Search API] - Twitter's search API makes their internal status search engine available to developers. Given a query and set of parameters, the search API will find all relevant statuses and return them in the requested format. The status objects returned contain less information than those in the REST API.
-	\item [Streaming API] - Twitter's streaming API grants developers access to a high-throughput near-realtime percentage of Twitter's live data. In general Twitter makes 1\% to 10\% of all statuses available through the API and includes further methods for filtering by keywords.
+	\item [Streaming API] - Twitter's streaming API grants developers access to a high throughput, near-realtime percentage of Twitter's live data. In general Twitter makes 1\% to 10\% of all statuses available through the API and includes further methods for filtering by keywords.
 \end{description}
 
 This project shall make use of the \emph{search} and \emph{streaming} APIs. The search API will be used to find tweets for labelling whilst the streaming API shall be employed to collect and filter data for classification. As noted in section \ref{retrieval:data}, data is stored in MongoDB as JSON objects, thus all API calls will request that results be returned in JSON.
@@ -55,13 +55,17 @@ This project shall make use of the \emph{search} and \emph{streaming} APIs. The 
 
 Twitter's search API allows developers to search for tweets matching a specified set of criteria. This is made available through a web-based API, accessible by making GET requests to \texttt{http://\-search\-.\-twitter\-.\-com\-/\-search\-.\-json}. Parameters can be passed to the API through the request headers. For example appending \texttt{q=\-david\-\%20cameron} to the request headers would prompt the API to search for all statuses containing the words "david" and "cameron". Twitter formats the returned data as JSON, with the search results being stored as an array of tweets in the \texttt{results} variable, as demonstrated in listing \ref{retrieval:example_search}.
 
-In order to search and store Twitter data, we created a singleton \emph{TwitterSearch} class. It's \texttt{search} method takes a query string and a parameters hash\footnote{It is common practise amongst Ruby developers to use a \emph{parameters hash} for passing in optional methods to a method. The hash is declared last in a method's arguments, and can be left out when calling the method. If left out, the method definition ensures that the parameters hash is instantiated as an empty hash to prevent any \texttt{nil} errors.}. The parameters hash is used to pass in optional arguments, which map directly to Twitter's search API's optional arguments. Optional parameters include restricting tweets to certain languages through the \texttt{locale} parameter or the \texttt{until} parameter for finding tweets up to a specified date. The query string and parameters are then combined to generate a request URL. Once generated, the \texttt{open-uri} library is used to make a GET request to the URL, and the returned JSON data is stored in a local variable for formatting. Each result's JSON data is amended with a \texttt{source} attribute to identify that the status was retrieved using the Twitter search API. The remaining JSON data however is left unchanged and intact. Once amended, each result is initialised as a \emph{Status} object using it's JSON data. When initialised, MongoMapper automatically writes the data to MongoDB for later use, thus all results are persisted within our database.
+In order to search and store Twitter data, we created a singleton \emph{TwitterSearch} class. It's \texttt{search} method takes a query string and a parameters hash\footnote{It is common practise amongst Ruby developers to use a \emph{parameters hash} for passing in optional arguments to a method. The hash is declared last in a method's arguments, and can be left out when calling the method. If left out, the method definition ensures that the parameters hash is instantiated as an empty hash to prevent any \texttt{nil} errors.}. The parameters hash is used to pass in optional arguments, which map directly to Twitter's search API's optional arguments. Optional parameters include restricting tweets to certain languages through the \texttt{locale} parameter or the \texttt{until} parameter for finding tweets up to a specified date. The query string and parameters are then combined to generate a request URL. Once generated, the \texttt{open-uri} library is used to make a GET request to the URL, and the returned JSON data is stored in a local variable for formatting. Each result's JSON data is amended with a \texttt{source} attribute to identify that the status was retrieved using the Twitter search API. The remaining JSON data however is left unchanged and intact. Once amended, each result is initialised as a \emph{Status} object using it's JSON data. When initialised, MongoMapper automatically writes the data to MongoDB for later use, thus all results are persisted within our database.
 
 Although there are plenty of Ruby libraries available for accessing Twitter's search API, they are often bloated. Many implement their own class structure for representing Twitter's object model which is both unhelpful and unnecessary for this project. Furthermore, although some offer cacheing, none provide support for database persistence. Instead our choice of MongoDB and MongoMapper mean that simply through retrieving the JSON results and using them to initialise \emph{Status} objects, we will have persistent access to the results. 
 
 \subsection{Streaming API}
 
 Twitter's graded streaming APIs deliver developers realtime Twitter data. The three grades, \emph{spritzer}, \emph{garden-hose} and \emph{fire-hose} offer different volumes, ranging from 1\% to 100\% of all realtime tweets. This project shall utilise the \emph{garden-hose} level, which delivers between 1\% and 10\% of all live statuses. Furthermore Twitter offer API methods for filtering the stream ensuring that only tweets matching an array of keywords are included. Twitter make this available by opening an HTTP connection, but never closing it. Tweets are then passed down this connection to the developer. The method call is made to \texttt{http://\-stream\-.twitter\-.com\-/1\-/statuses\-/fi\-l\-ter\-.json} using the \texttt{track} parameter to pass in the set of keywords. For example appending \texttt{track=nhs,david\%20cameron} to the request header will filter the stream for all tweets containing "nhs" or "david cameron". The results are formatted as JSON with each result being separated by a line break. The returned data is slightly more detailed than that returned by the search API, however the core data still adheres to the same schema.
+
+In order to collect and store data from Twitter's "\emph{garden-hose}" streaming API we created a singleton \emph{TwitterStream} class. It's \texttt{open\-\_stream\-(track)} method setups a persistent connection to Twitter through the \texttt{open-uri} library. All incoming data is cached and whenever a new line symbol is processed, the data is removed from the cache and written to MongoDB. As with our search API, each status' JSON data is amended with a \texttt{source} attribute to indicate that the status was retrieved using the streaming API. As our project does not require the streaming API to instantiate Status objects, it simply needs add the JSON to MongoDB.
+
+Similarly to our search API, although there are a plethora of streaming libraries available for Ruby, they are all too bloated for the purposes of this project. Our lightweight implementation has a low footprint and runs smoothly, thus serving the requirements of our project perfectly.
 
 \section{Pre-processing}
 \label{subjectivity:pre-processing}
@@ -96,7 +100,7 @@ TweetTagger.new.split("Hello, please split this string.")
 	=> ["Hello", ",", "please", "split", "this", "string", "."]
 \end{lstlisting}
 
-Once split, we are able to tag each word and punctuation mark with it's appropriate part of speech tag. This is done through the \texttt{assign\_tag\-(word\-, \-previous\_tag)} method, a Ruby implementation of equation \ref{eqn:pos}. Where a word does not exists within our lexicon of trained probabilities, and thus no probability score can be calculated for it, it is passed on to the \texttt{unknown\_word\-(word)} method. This attempts to find the word elsewhere, and will be of particular use when adapting the tagger for use on Twitter statuses, and is discussed in detail in section \ref{retrieval:pos_statuses}. For now however, we will assume it manages to find the correct tag.
+Once split, we are able to tag each word and punctuation mark with it's appropriate part of speech tag. This is done through the \texttt{assign\_tag\-(word\-, \-previous\_tag)} method, a Ruby implementation of equation \ref{eqn:pos}. Where a word does not exist within our lexicon of trained probabilities, and thus no probability score can be calculated for it, it is passed on to the \texttt{unknown\_word\-(word)} method. This attempts to find the word elsewhere, and will be of particular use when adapting the tagger for use on Twitter statuses, and is discussed in detail in section \ref{retrieval:statuses}. For now however, we will assume it manages to find the correct tag.
 
 Once every word has been tagged, the \texttt{fetch\_tags(text)} method returns a JSON formatted, ordered array of words and their corresponding tags. For example, if we were to call \texttt{fetch\_tags} with \emph{Example 1}, the returned JSON would be as shown in listing \ref{overview:example_1_pos_json}.
 
@@ -108,16 +112,16 @@ TweetTagger.new.fetch_tags("I think David Cameron is doing a rather good job: st
 Our implementation of Colburn's part of speech tagger proves both fast and accurate on spell-checked bodies of text. However, it performs less well when confronted with the abbreviations, acronyms and mis-spellings common amongst Twitter statuses. Furthermore, it fails to account for Twitter protocols such as hashtags and mentions. It is these issues we will confront in our next section, \ref{retrieval:statuses}.
 
 \subsection{Tagging Twitter statuses}
-\label{subjectivity:statuses}
+\label{retrieval:statuses}
 
 This section shall examine the improvements and additions we have made to Colburn's original tagger, in order to better suit it to the task of tagging Twitter statuses.
 
 \subsubsection{URLs}
-\label{subjectivity:urls}
+\label{retrieval:urls}
 
 URLs are frequently used within tweets, however Colburn's original design provides no mechanism for handling or tagging them. In order to account for this we decided to introduce an additional \emph{URL} tag to the Penn tag-set along with amending our original tagger to both identify and tag URLs.
 
-But how does this fit into out \emph{TweetTagger} class? As discussed in the previous section, any words which cannot be found in the lexicon are passed on to the \texttt{unknown\-\_word\-(word)} method. Typically this is used to pick up words representing ordinal and float numbers which are not included in the word-probability lexicon. If the unknown word is not a number, other identifiers are examined, such as it's suffix, in the hope that they might provide additional clues for identifying the word's POS. For example, words suffixed with "\emph{ly}" tend to be adverbs or adjectives, thus if the actual word cannot be found in the word-probability lexicon, we assign it probabilities based upon all words ending in "\emph{ly}". In order to match unknown words to their most appropriate identity, such as a number or suffixed word, each word is compared against a regular expression\footnote{Explain regular expressions} corresponding to a potential identity through a series of \emph{if-else} statements. Statements higher up the list take priority, thus for identities which provide certainty, such as numbers, we place their condition higher up the \emph{if-else} chain. In order to help better illustrate this, example code from the method itself is included in listing \ref{overview:example_unknown_function}.
+But how does this fit into out \emph{TweetTagger} class? As discussed in the previous section, any words which cannot be found in the lexicon are passed on to the \texttt{unknown\-\_word\-(word)} method. Typically this is used to pick up words representing ordinal and float numbers which are not included in the word-probability lexicon. If the unknown word is not a number, other identifiers are examined, such as it's suffix, in the hope that they might provide additional clues for identifying the word's POS. For example, words suffixed with "\emph{ly}" tend to be adverbs, thus if the actual word cannot be found in the word-probability lexicon, we assign it probabilities based upon all words ending in "\emph{ly}". In order to match unknown words to their most appropriate identity, such as a number or suffixed word, each word is compared against a regular expression\footnote{Explain regular expressions} corresponding to a potential identity through a series of \emph{if-else} statements. Statements higher up the list take priority, thus for identities which provide certainty, such as numbers, we place their condition higher up the \emph{if-else} chain. In order to better illustrate this, example code from the method itself is included in listing \ref{overview:example_unknown_function}.
 
 \begin{lstlisting}[language=Ruby, caption={Example if-else statements for handling unknown words}, label=overview:example_unknown_function]
 def classify_unknown_word(word)
@@ -136,14 +140,14 @@ end
 
 In order to determine whether a word is in fact a URL, an additional condition is added to the \texttt{unknown\_word(word)} method in order to  check whether it matches against our URL regular expression (see table \ref{table:regex}). With the tagger now amended, if a tweet containing a URL is passed in, the URL is split off into it's own word and tagged as a URL, as demonstrated in listing \ref{overview:example_url_function}. Finally it is important to note that as we have now introduced a URL tag, we need to introduce a probability set for words following our new tag within the \emph{tag-probability} lexicon. The new entry into the lexicon is used for calculating the most appropriate tags for any word directly following a URL. URLs are typically used as nouns when not at the end of sentences, thus rather than rebuilding our lexicons with a small corpora of tweets, we chose to simply assign the same next tag probabilities to URLs as we have for nouns.
 
-\begin{lstlisting}[language=Ruby, numbers=none, caption={Example use of split function}, label=overview:example_url_function]
+\begin{lstlisting}[language=Ruby, numbers=none, caption={Part of speech tagging for \emph{Example 2}, taking into account URLS as potential tags.}, label=overview:example_url_function]
 TweetTagger.new.fetch_tags("BBC Obama, Merkel warn on Europe debt http://bbc.in/jfZW3I")
 	=>[{"word" : "BBC", "tag" : "nnp"}, {"word" : "Obama", "tag" : "nnp"}, {"word" : ",", "tag" : "ppc"}, {"word" : "Merkel", "tag" : "nnp"}, {"word" : "warn", "tag" : "vbp"}, {"word" : "on", "tag" : "in"}, {"word" : "Europe", "tag" : "nnp"}, {"word" : "debt", "tag" : "nn"}, {"word" : "http://bbc.in/jfZW3I", "tag" : "url"}] 
 \end{lstlisting}
 
 \subsubsection{Mentions}
 
-As with URLs, mentions are not handled by our initial implementation of Colburn's tagger. Mentions represent a unique entity, thus rather than needing a new tag, they are and can be tagged as proper nouns. Essentially they are used as replacements for names therefore this is both a natural and correct assumption to make. Although we decided to tag mentions as proper nouns, we also wanted to design a way of acknowledging that the word additionally contains Twitter meta-data. In order to do this we decided to expand upon our initial JSON representation to include a \emph{meta} object for each word. Within this meta object we are then able to include additional Twitter data, and in the case of mentions, this is done with a boolean attribute, \texttt{mention}, to denote whether the word is being used as a Twitter mention, as in listing \ref{overview:example_mention_schema}.
+As with URLs, mentions are not handled by our initial implementation of Colburn's tagger. Mentions represent a unique entity, thus rather than needing a new tag, they are and can be tagged as proper nouns. Essentially they are used as replacements for names; therefore this is both a natural and correct assumption to make. Although we decided to tag mentions as proper nouns, we also wanted to design a way of acknowledging that the word additionally contains Twitter meta-data. In order to do this we decided to expand upon our initial JSON representation to include a \emph{meta} object for each word. Within this meta object we are then able to include additional Twitter data, and in the case of mentions, this is done with a boolean attribute, \texttt{mention}, to denote whether the word is being used as a Twitter mention, as in listing \ref{overview:example_mention_schema}.
 
 \begin{lstlisting}[language=Ruby, numbers=none, caption={Example JSON structure for representing a mention word}, label=overview:example_mention_schema]
 {
@@ -153,7 +157,7 @@ As with URLs, mentions are not handled by our initial implementation of Colburn'
 }
 \end{lstlisting}
 
-Our approach to identifying mentions is similar to that used for URLs. As no word beginning with "@" exist within our lexicon, it is safe to assume all mentions will be passed on to the \texttt{unknown\_word(word)} method. Within this method, an additional condition is added for identifying words which are mentions. The word is accordingly tagged as a proper noun, and it's meta object's mention attribute is set to true.
+Our approach to identifying mentions is similar to that used for URLs. As no word beginning with "@" exist within our lexicon, it is safe to assume all mentions will be passed on to the \texttt{unknown\_word(word)} method. Within this method, an additional condition is added for identifying words which are mentions. The word is accordingly tagged as a proper noun, and its meta object's mention attribute is set to true.
 
 \subsubsection{Hashtags}
 
@@ -175,10 +179,28 @@ The \emph{TweetTagger} class approaches this by first ammeding all hashtag-words
 
 As with both URLs and mentions, this is achieved by adding an additional condition to the \texttt{unknown\_word(word)} method. Unlike with mentions and URLs however, the word is stripped of it's opening hashtag, and passed back for retagging. This enables us to find its genuine part of speech tag by observing its position within the status text.
 
-\subsubsection{Names, misspelling and acronyms}
-
 \section{Labelling data}
 \label{retrieval:labelling}
 
-The primary use of our search API interface, \emph{TwitterSearch}, is to ease the process of collecting data for labelling. Rather than doing this within code, it was deemed simpler and quicker to build a web-based interface for searching and classifying tweets. The interface is built using a combination of HTML, CSS and JavaScript for the front-end, whilst the back-end data management is handled by a Ruby web-framework, Sinatra.
+The primary use of our search API interface, \emph{TwitterSearch}, is to ease the process of collecting data for labelling. Rather than doing this within code, it was deemed simpler and quicker to build a web-based interface for searching and classifying tweets. The interface is built using a combination of HTML, CSS and JavaScript for the front-end, whilst the back-end data management is handled by a Ruby web-framework, Sinatra. Our labelling system aimed to provide as simple and seamless an interface for annotating data as possible, whilst also remaining open and flexible to changes in labelling needs.
 
+Our labeller offers three core services:
+
+\begin{description}
+	\item [\texttt{/search}] enables new tweets for classification to be searched for by the user. This makes use of our earlier \emph{TwitterSearch} API. Figure \ref{fig:labeller_search} contains a screenshot of the form itself.
+	\item [\texttt{/train}] presents all unlabelled tweets for labelling. This only presents Tweets whose \texttt{source} indicates they were found with the \emph{TwitterSearch} API. Our backend handles correctly formatting the labelled data along with writing it to MongoDB. Our front-end makes use of AJAX techniques. This means that rather than the user having to reload the page every time they classify a tweet, it is handled seamlessly within the browser. Figure \ref{fig:labeller_label} contains a screenshot of an individual un-labelled status.
+	\item [\texttt{/trained/:filter}] presents all labelled tweets for examination or correction. Using the same layout as our \texttt{/train} page, this allows for editing of trained statuses. The optional \texttt{:filter} parameter allows for the user to filter the results they see. For example passing in \texttt{polarity="positive"} displays only positive trained statuses.
+\end{description}
+
+The labellers implementation proved to be simple and efficient for classifying statuses quickly. Furthermore its simple layout meant that adding fields for additional annotation later on within the project proved simple. Our approach to storing labelled data again proved effective, and ensured that the process of adding additional label attributes later was simple.
+
+\section{Evaluation}
+
+As the elements discussed within this section are slightly disparate, we shall evaluate each component individually.
+
+\begin{description}
+	\item [Data structure and storage] - We felt that our methods for storing data were flexible, and found that as components and attributes changed throughout our project, the adaptable nature of MongoDB and our approach made change much simpler. Furthermore our classes were simple to use, and made interfacing with Twitter statuses seamless.
+	\item [Retrieval] - Both APIs provided stable and simple methods for retrieving content and storing it.
+	\item [Pre-processing] - Our part of speech tagger proved fundamental in the success of the project. It performed quickly and handled the nuanced complexities presented by Twitter. Conversely, we felt that the underlying statistical data used in predicting tags was not as appropriate for our Twitter domain. Future work might look at training the tagger using part of speech labelled Twitter statuses instead.
+	\item [Labelling] - The interface provided for labelling data was simple and easy to use. It facilitated quick data entry and was easily adaptable as changes in requirement progressed throughout the project.
+\end{description}

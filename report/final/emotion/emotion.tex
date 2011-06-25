@@ -1,17 +1,120 @@
 \chapter{Emotion classification}
 \label{emotion}
 
-With a status' polarity and subjectivity now classified, we can go on to look at what further understanding of a status' sentiment can be gained through classifying its emotion. Rather than taking a supervised approach as often seen in literature \cite{Alm:2005vc}, we will approach our emotion classification through a largely un-supervised approach. As our goal is to gain additional understanding as to a status' sentiment, we felt that a precise approach, with easily justifiable results was more appropriate. Techniques such as that put forward by Yang et al. \cite{Yang:2007wx}, although seemingly accurate, source labelled data for training and testing with no human input. Instead they use emoticons to generate labels which we felt provided significant room for misguided emotion classification. In particular there is no attempt within their work to determine whether the emoticon truly represents the emotion they are ascribing it. Despite this, we will draw upon elements discussed in supervised approaches, especially with regards to the use of WordNet such as in the approach put forward by Alm et al. \cite{Alm:2005vc}. 
+With status polarity and subjectivity now classified, we can go on to look at what further understanding of status sentiment can be gained through classifying emotion. Rather than taking a supervised approach as often seen in literature \cite{Alm:2005vc}, we will approach our emotion classification through a largely un-supervised approach. As our goal is to gain additional understanding as to a status' sentiment, we felt that a precise approach, with easily justifiable results was more appropriate. Techniques such as that put forward by Yang et al. \cite{Yang:2007wx}, although seemingly accurate, source labelled data for training and testing with no human input. Instead they use emoticons to generate labels which we felt provided significant room for misguided emotion classification. In particular there is no attempt within their work to determine whether the emoticon truly represents the emotion they are ascribing to it. Despite this, we will draw upon elements discussed in supervised approaches, especially with regards to the use of WordNet such as in the approach put forward by Alm et al. \cite{Alm:2005vc}. 
 
 
-Our approach aims to blend aspects of common lexicon-based classification, with the deeper semantic insight gained through the use of tools such as WordNet. Essentially, we hope to determine whether a word and the sense in which it is being used, relate any information to is regarding emotion. As WordNet semantically defines concepts of emotion and feeling, it will prove fundamental in our approach. Within this chapter we shall first briefly examine what exactly WordNet is, before going on to discuss our implementation of it. We shall then go on to explore how exactly we used WordNet to generate our lexicon, before examining how exactly it is used in order to determine any emotion a status might contain. Lastly we shall examine the extent to which our approach was a success along with its potential for any further improvements.
+Our approach aims to blend aspects of common lexicon-based classification, with the deeper semantic insight gained through the use of tools such as WordNet. Essentially, we hope to determine whether a word and the grammatical way in which it is being used, can help relate to us any emotion. As WordNet semantically defines concepts of emotion and feeling, it will prove fundamental in our approach. Within this chapter we shall first briefly examine what exactly WordNet is, before going on to discuss our implementation of it. We shall then go on to explore how exactly we used WordNet to generate our lexicon, before examining how exactly it is used in order to determine any emotion a status might contain. Lastly we shall examine the extent to which our approach was a success along with its potential for any further improvements.
 
 \section{WordNet}
 \label{emotion:wordnet}
 
+WordNet is a large lexical database of and for the English language. Words are semantically grouped amongst each other through \emph{synsets}, each of which denotes a concept of commonality. The results is a huge, detailed network of interconnected and semantically intertwined words. In order to grant a better picture as to how this is done, we have defined it's core concepts below:
+
+\begin{description}
+	\item [Words] serve as the core entities within WordNet. A \emph{word} entity can however also be a phrase, thus the phrase "\emph{academic year}" for example is considered a word, even though it would not be in the traditional sense of the word.
+	\item [Synsets] serve as sense based groupings for similar words. For example the \emph{synset} grouping together words which describing "\emph{a beloved person; used as terms of endearment}" includes the words "\emph{beloved}", "\emph{dearest}" and "\emph{honey}".
+	\item [Senses] a word can take on any number of senses. Essentially, each \emph{sense} maps any given word to a sysnet. 
+	\item [Lexicon links] link one word-synset pair (or sense), to another word-synset pair. The link itself is semantic, thus if for example it is a \emph{hyponym} link, would imply that a word which is a hyponym of another is in fact a more specific term for the other word. For example "scarlet" might be considered a hyponym of "red". Other link types denote \emph{similarity} or \emph{hypernyms} (the opposite of hyponyms).
+	\item [Categories] help better define synsets, for example denoting that words being used as a memeber of certain synset might be emotion verbs or location nouns.
+\end{description} 
+
+WordNet's structure is of particular use within this project. For example, given the word "\emph{adore}", WordNet can proceed to move up and down it's chain of generality. In trying to find a more general meaning for the word, we can use WordNet to find its hypernym "\emph{love}". Essentially WordNet provides layers of details, with each increase in layer leading to further generalisation. Thus, if we were to label words at a higher layer with their appropriate emotion classification, given any word, we should be able to move up the layers in order to determine whether it is related to an emotion.
+
+In order to make use of this functionality within Ruby we had to build our own API for accessing WordNet. The WordNet database is distributed in various forms, and for the purpose of this project we chose to use its MySQL distribution. A basic class structure was implemented, in particular focussing on several core methods, noted in table \ref{table:wordnet}. All classes inherit from a \emph{Model} class which handles reading from the database. In particular, it offers a \texttt{find(params)} method which when given a series of attributes and their corresponding values, will search the database for any matching instances.
+
+\begin{longtable}{|l|l|p{3in}|}
+	\caption{Core WordNet classes and methods} \label{table:wordnet} \\
+	\hline
+	Class & Method & Description \\
+	\hline
+	\multirow{3}{*}{Word}	& senses			& Returns all potential senses in which the word can be used. These are returned as an array of \emph{Sense} objects\\
+												\cline{2-3}
+												& synsets			& Will return each senses corresponding synset. These are returned as an array of \emph{Synset} objects.\\
+	\hline
+	\multirow{3}{*}{Sense}	& definition	& Returns the senses corresponding textual description. This is returned as a \emph{String} object. \\
+													\cline{2-3}
+													& pos					& Returns the senses corresponding general part of speech, e.g. "adj" or "noun". \\
+													\cline{2-3}
+													& sysnet			& Returns the senses corresponding synset. This is returned as a \emph{Synset} object. \\
+													& word				& Returns the senses corresponding word. This is returned as a \emph{Word} object. \\
+	\hline
+	\multirow{3}{*}{Synset}	& category		& Returns the synsets corresponding category e.g. "verb.emotion". \\
+													\cline{2-3}
+													& similar			& Returns all sysnets which are semantically linked to as similar. These are returned as an array of \emph{Synset} objects. \\
+													\cline{2-3}
+													& hyponyms		& Returns all sysnets which this synset is semantically linked to as a hyponym. These are returned as an array of \emph{Synset} objects. \\
+													\cline{2-3}
+													& hypernyms		& Returns all sysnets which this synset is semantically linked to as a hypernym. These are returned as an array of \emph{Synset} objects. \\
+													& antonyms		& Returns the sysnet's antonym, i.e. the synset whose sense is opposite, e.g. love to hate. These are returned as an array of \emph{Synset} objects. \\
+	\hline
+	
+\end{longtable}
 
 \section{Building an emotion lexicon}
 
+In order to classify words according to their correct emotion, a lexicon mapping a certain layer of words to each of our eight emotions is required. In order to do this, we took each of our eight emotions along with their similar words, and defined an emotion lexicon, as listed in table \ref{table:emotion}.
+
+\begin{longtable}{|l|p{3.7in}|}
+	\caption{Core emotion labels and corresponding Wordnet senses} \label{table:emotion} \\
+	\hline
+		Joy & joy(v), rejoice(v), gladden(v), joy(n), delight(n), pleasure(n), joyousness(n), joyfulness(n), happy(adj), well-chosen(adj), glad(adj), felicitous(adj) \\
+		\hline
+		Trust & trust(v), believe(v), hope(v), entrust(v), intrust(v), confide(v), commit(v), trust(n), confidence(n), faith(n), reliance(n), trustingness(n), trustfulness(n), trustful(adj), trusting(adj) \\
+		\hline
+		Fear & fear(v), dread(v), worry(v), reverence(v), fear(n), fright(n),  frightened(adj), scared(adj) \\
+		\hline
+		Surprise & surprise(v), affect(v), impress(v), attack(v), assail(v), act(v), surpise(n), astonishment(n), amazement(n), surprised(adj) \\
+		\hline
+		Sadness & sadness(n), gloominess(n), lugubriousness(n), sadness(n), unhappiness(n), sorrow(n), sad(adj), deplorable(adj), distressing(adj), lamentable(adj), pitiful(adj), sad(adj), sorry(adj) \\
+		\hline
+		Disgust & disgust(v), revolt(v), nauseate(v), sicken(v), churn up(v), gross out(v), revolt(v), repel(v), disgust(n), disgusting(adj), disgustful(adj), distasteful(adj), foul(adj), loathly(adj), loathsome(adj), repellent(adj), repellant(adj), repelling(adj), revolting(adj), skanky(adj), wicked(adj), yucky(adj) \\
+		\hline
+		Anger & wrath(n), anger(n), ire(n), ira(n), angry(adj), furious(adj), raging(adj), tempestuous(adj), wild(adj) \\
+		\hline
+		Anticipation & anticipation(n), expectation(n), prediction(n), prevision(n), expectancy(n), predict(v), foretell(v), prognosticate(v), call(v), forebode(v), anticipate(v), promise(v), expect(v), know(v) \\
+	\hline
+\end{longtable}
+
+In order to determine if a word and it's corresponding part of speech exist within our lexicon, we build a singleton \emph{EmotionFinder} class. Our lexicon is stored within a text file, and is read into a hashmap. Each key within our hashmap represents an emotion, whilst its corresponding values consist of word and part of speech pairs, as demonstrated in listing \ref{emotion:lexicon_1}.
+
+\begin{lstlisting}[language=Ruby, numbers=none, caption={Example key usage for emotion lexicon hashmap}, label=emotion:lexicon_1]
+# let @@emotions be our lexicon hashmap
+@@emotions[:anger]
+	=>
+		[
+			["wrath", "noun"], 
+			["anger", "noun"], 
+			["ire", "noun"], 
+			["ira", "noun"], 
+			["angry", "adj"], 
+			["furious", "adj"], 
+			["raging", "adj"], 
+			["tempestuous","adj"], 
+			["wild","adj"]
+		]
+\end{lstlisting}
+
+Within our \emph{EmotionFinder} class we have implemented a \texttt{fetch\-\_emotion\-(word,pos)} method, which when given a word and part of speech, will check to see if they have a corresponding emotion. If they do the corresponding emotion symbol will be returned, and if not nil is returned, see listing \ref{emotion:lexicon_2}.
+
+\begin{lstlisting}[language=Ruby, caption={\emph{EmotionFinder} method for determining whether a word and its corresponding part of speech indicate an emotion}, label=emotion:lexicon_2]
+def fetch_emotion(word,pos)
+	return @@emotions.select{|k,v| v.include? [word,pos]}.keys
+end
+\end{lstlisting}
+
 \section{Classifying emotion}
 
+But with a lexicon defined, how do we set about classifying emotion. As Plutchik's model suggests, emotion can be combined, thus we are not approaching this problem with the hope of producing one single emotion label. Instead, we are hoping to identify all of the emotions expressed. In order to do this we look at each individual word within our status, in the hope of identifying a relationship to an emotion from within our lexicon.
+
+For example, within \emph{Example 4} one might say that the phrase "\emph{wait and see}" contains an element of \emph{anticipation}. But how does our classifier determine this? For each word in our status we first retrieve all senses of the word and its part of speech using our \emph{Sense} class' \texttt{find} method, passing in \texttt{\{:word => word, :pos => pos\}} as parameters. With our senses retrieved, each sense and its corresponding sysnset is examined. For each word in the synset being examined, we check to see whether it has corresponding emotion by calling our \emph{EmotionFinder}'s \texttt{fetch\-\_emotion\-(word,pos)} method. If no emotion is found, we now examine our current synset's corresponding hyponym synset. We again repeat the process, checking whether any of the synsets words exist within our emotion lexicon. If no emotion is found, this is repeated until we reach a synset with no hyponym, in which case we have reached the top-layer and can generalise no further. Typically our search will have to examine no more than two layers before reaching this top-most layer. It is important to note that negation is handled in a manner similar as to when classifying polarity in chapter \ref{polarity}. Whenever a negation word is encountered, all words up to the next grammatical punctuation are negated. This means when retrieving our first synset, rather than simply returning it, it's antonym is returned instead.
+
+Returning to \emph{Example 4}, the word "\emph{wait}" is used as a verb. Thus when fetching the relevant senses, we would be returned four potential senses. The first two senses' corresponding synsets contain no emotion words, however the third synset consists of the words "\emph{expect}", "\emph{look}" and "\emph{await}", each of which are being used as verbs. When passed on to our \emph{EmotionFinder} class, both "\emph{look}" and "\emph{await}" return nothing, however "\emph{expect}" returns the emotion \emph{anticipation}. Thus our status will have the emotion \emph{anticipation} added to its classification.
+
 \section{Evaluation}
+
+Overall our emotion classifier performed well, however unlike our subjectivity and polarity classifiers, its effectiveness proved far more challenging to evaluate. There are a series of blurred lines between the emotion labels, and as Alm et al. \cite{Alm:2005vc} observe, even human disagreement is frequent. Furthermore, as a result of our limited training data and low classification recall rate, automated testing was difficult. In manually checking each emotion, we felt that the classifier performed well. In general we agreed with the majority of classification labels even though they may not have been our first choice. Importantly, as our emotion classifier takes an unsupervised approach, its ability to explain any classification was found to be useful and insightful. 
+
+The avenue explored within our research certainly has potential to be expanded upon, and we feel that in particular if two improvements are made, significant progress could be made. The first improvement is, as discussed in previous chapters, word-sense disambiguation. We feel thats WSD is most important in emotion classification where differences are often subtle. Along with this, we feel that in building a more accurate lexicon, in which synsets (i.e. groups of words with the same sense) are labelled with emotions, our classifiers performance could be greatly improved.
+
+Overall, we felt that our emotion classifier performed well, and with small tweaks and a concerted lexicon building effort, we feel that significant improvements could continue to be made.

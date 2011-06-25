@@ -2,8 +2,18 @@
 \label{conclusion}
 % The project's conclusions should list the things which have been learnt as a result of the work you have done. For example, "The use of overloading in C++ provides a very elegant mechanism for transparent parallelisation of sequential programs", or "The overheads of linear-time n-body algorithms makes them computationally less efficient than O(n log n) algorithms for systems with less than 100000 particles". Avoid tedious personal reflections like "I learned a lot about C++ programming...", or "Simulating colliding galaxies can be real fun...". It is common to finish the report by listing ways in which the project can be taken further. This might, for example, be a plan for doing the project better if you had a chance to do it again, turning the project deliverables into a more polished end product, or extending the project into a programme for an MPhil or PhD.
 
+\section{Contributions}
 
-Expand training data, more detailed labels, MUCH LARGER
-	- need a much more defined approach
-Adverb strength, general strength
-Expand polarity to better handle neutrality
+This project's primary contribution is its sentiment analysis engine, which provides a fully working system for determining each component of a Twitter statuses emotion in significant detail. Its subjectivity and polarity classifiers successfully both implement and adapt existing research, along with introducing new ideas and approaches. Our emotion classifier presents one of the first significant attempts at understanding detailed emotion on Twitter, and the research conducted into it proved promising, suggesting that our approach is a valid one for exploring in further work.
+
+Our project's ability to source and process live data make it a valuable tool, and the web services implemented make our data and engine easily available to other developers. Finally the visualisation offers an insightful way of exploring emotion on Twitter, and really helps demonstrate the practical use of understanding sentiment.
+
+\section{Further work}
+
+\begin{description}
+	\item [Word-sense disambiguation] - As discussed in chapter \ref{background}, word-sense disambiguation looks at how we can understand the sense in which a word is being used. In effect, it looks at taking part of speech tagging one step further by introducing an additional layer of detail. We feel that if done well, a words-sense disambiguation tool could have a dramatic impact on the precision of our classifiers. Our present ability to confuse the sense in which words are being used might be perceived by many to be sloppy, and we too feel that it is an issue. Research into it is limited however, thus further work exploring it would need to be significant.
+	\item [Training data] - Supervised Machine Learning is fundamentally dependant upon a strong body of labelled data. We feel that our project was let down somewhat by our limited data set. When training our classifiers, we found that no over-fitting was seen, serving as a quantitate indication that our training set was indeed to small. In future work, we would spend a much more significant portion of time on building an appropriately sized training set. 
+	\item [Subjectivity classification] - Further improvements to our subjectivity classifier might look at how we can build our classifier to be less dependant upon URL based features. We felt that this was a significant bias in our classification and would hope to introduce other features which might alleviate this problem in future work. Additionally we would like to introduce an additional spam label, to help better distinguish our objective data.
+	\item [Polarity classification] - Along with the word-sense disambiguation described above, we would like to approach introducing a third neutral label to our classifier. Furthermore, we would like to explore polarity strength in further work, an area which this project didn't have time to touch upon, but could be of significant use.
+	\item [Emotion classification] - We felt that our classifier opened up an interesting avenue for future work. Alongside word-sense disambiguation, we would like to explore the possibility of labelling WordNet's synsets with their appropriate emotion classifications. We feel this could be a genuine significant step forward, as the level of detail afforded by senses allows for much more certainty when classifying emotion. Ultimately, we believe that this is the most significant improvement which could be made to our work.
+\end{description}

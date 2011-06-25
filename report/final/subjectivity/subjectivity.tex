@@ -27,16 +27,16 @@
 \chapter{Subjectivity classification}
 \label{subjectivity}
 
-Once a status has been retrieved, the first step towards understanding it's sentiment lies in determining whether it is subjective or objective. This is known as subjectivity classification and it serves as the first stage within our sentiment analysis engine. In classifying subjectivity, we decided to take a supervised approach to the problem. This is largely due to the fact, that as Wiebe and Riloff observe \cite{Wiebe:2003wa}, although unsupervised approaches' precision rates are high, achieving high recall rates is remarkably difficult. As a result, the problem now lies in designing the elements which will best enable our supervised classifier to separate statuses into their correct labels.
+Once a status has been retrieved, the first step towards understanding it's sentiment lies in determining whether it is subjective or objective. This is known as subjectivity classification and it serves as the first stage within our sentiment analysis engine. In classifying subjectivity we decided to take a supervised approach to the problem. This is largely due to the fact, that as Wiebe and Riloff observe \cite{Wiebe:2003wa}, although unsupervised approaches' precision rates are high, achieving high recall rates is remarkably difficult. As a result, the problem now lies in designing the elements which will best enable our supervised classifier to separate statuses into their correct labels.
 
-In this chapter we shall first examine how we built our training set, and the reasoning behind our labelling. With a training set in place, we will then go on to explore the features we think will be of value, along with the reasoning behind them and a discussion of their implementation. We shall then go on to look at the results of our tests, examining which feature combinations performed best and why, along with which classification method best suited the problem. Finally we shall evaluate our classifiers performance against the results commonly seen in literature.
+In this chapter we shall first examine how we built our training set, and the decisions behind our labelling. With a training set in place, we will then go on to explore the features we think will be of value, along with the reasoning behind them and a discussion of their implementation. We shall then go on to look at the results of our tests, examining which feature combinations performed best and why, along with which classification method best suited the problem. Finally we shall evaluate our classifiers performance against the results commonly seen in literature.
 
 \section{Training set}
 \label{subjectvity:training}
 
 Before we can build a classifier, we need to assemble a training set which best represents the domain of our problem. Furthermore in assembling our training set, we also want to be able to annotate it so as to better explain our decisions. Although we have already discussed our approach to labelling data in chapter \ref{retrieval}, we shall examine what aspects of our approach particularly relate to subjectivity classification within the remainder of this section.
 
-Our approach to subjectivity classification takes a two label approach of either \emph{subjective} or \emph{objective}. Thus the first annotation we want to make to our \emph{TrainedStatus} class is one denoting subjectivity. Accordingly each \emph{TrainedStatus} is given an \texttt{is\_subjective?} attribute, taking a value of either "\emph{t}" or "\emph{f}". Alongside this we want to collect a more detailed picture of why exactly the status is subjective. In order to do this we collect the phrases which have implied subjectivity in a \texttt{phrases} array. Although for the purpose of later classifiers this array is further divided, for now all we are interested in is collecting the subjective phrases, not annotating them with any additional sentiment detail.
+Our approach to subjectivity classification takes a two label approach of either \emph{subjective} or \emph{objective}. Thus the first annotation we want to make to our \emph{TrainedStatus} class is one denoting subjectivity. Accordingly each \emph{TrainedStatus} is given an \texttt{subjective} attribute, which takes a value of either "\emph{t}" or "\emph{f}". Alongside this we want to collect a more detailed picture of why exactly the status is subjective. In order to do this we collect the phrases which have implied subjectivity in a \texttt{phrases} array. Although for the purposes of polarity classification we will eventually have to divide our \texttt{phrases} array into two, for now all we are interested in is collecting subjective phrases, but not annotating them with any additional sentiment detail.
 
 With each status now annotated with its subjectivity label and an array of any subjective phrases, we can focus on building our feature set and training our classifier.
 
@@ -50,7 +50,7 @@ As discussed in the background section, adjectives are often regarded as strong 
 
 With a method now available for identifying tags as adjectives, we can focus on how we collect those adjectives for any given status. As this a method corresponding to an attribute of our status, i.e. its adjectives, we decided to implement this as an \texttt{adjectives} method within our \emph{Status} class, as included in listing \ref{classifiers:status_adjectives}.
 
-\begin{lstlisting}[language=Ruby, caption={\emph{Status} object method for returning its adjectives}, label=classifiers:status_adjectives]
+\begin{lstlisting}[language=Ruby, caption={\emph{Status} object's \texttt{adjective} method for returning all parts of speech used as adjectives}, label=classifiers:status_adjectives]
 def adjectives
   self.parts_of_speech.select{|pos| TweetTagger.general(pos["tag"]) == "adj"}
 end
@@ -201,7 +201,7 @@ As a result of our individual feature analysis, we put forward five feature-comb
 The results of our tests using the five feature sets are listed in figure \ref{fig:subj_multi}. Blue bars represent precision, red represents accuracy and green represents recall.
 
 \begin{figure}
-	\caption{Individual figure accuracy}
+	\caption{Precision (square), accuracy (circle) and recall (diamond) results for our five different feature sets.}
 	\label{fig:subj_multi}
 	\centering
 		\includegraphics[width=0.9\textwidth]{graphs/subj_multi.pdf}
@@ -214,16 +214,26 @@ All classifiers perform well, with our fourth feature set performing strongest i
 In order to determine the most appropriate classifier type, we ran our tests using a Support Vector Machine for one test and a Naive Bayes Classifier for the other. When building our classifiers, we used the fourth feature set from section \ref{subjectivity:feature_set}. We present our results in figure \ref{fig:subj_class}.
 
 \begin{figure}
-	\caption{Individual figure accuracy}
+	\caption{Precision (square), accuracy (circle) and recall (diamond) results for SVM and NB classifier.}
 	\label{fig:subj_class}
 	\centering
 		\includegraphics[width=0.8\textwidth]{graphs/subj_class.pdf}
 \end{figure}
 
-Although both the SVM and NB classifiers perform strongly, the SVM's average accuracy of 80.5\% against the NB classifier's 77.2\% make it the stronger candidate. Interestingly however, the spread in accuracies suggests that perhaps the NB classifier is slightly less sensitive to changes in the underlying data. Given a larger training set however and we feel that perhaps this might not be the case, and existing research \cite{Pang:2008wj} suggests that SVMs are in fact more stable.
+In terms overall performance, there is little difference between our SVM and NB performance. Overall SVM slightly outperforms NB in terms of accuracy with an average of 72.7\% against the NB average of 71\%. We feel however that in the future if the amount of training data we have is to increase, the SVM would provide a more robust and useful classification method.
 
 \section{Evaluation}
 
+Our subjectivity classification rates were strong. With an average accuracy of 80.5\%, our classifiers performance further improved upon results typically seen in the field, such as the average accuracy of 70.2\% seen by Wiebe et al. \cite{Wiebe:2000tk}. The class itself was both simple to use, and train, though this was largely due to the success of our \emph{Classifier} class implementation. We used a good blend of both linguistic features and Twitter meta-features such as URLs, and as a result saw strong classification rates.
 
+In future work there are five areas in particular which we would look to for further improvement,
+
+\begin{description}
+	\item [Training set size] - Overall we felt that the limited size of our training set limited our classifiers ability. In future work we would spend more time building up a much more significant amount of labelled data.
+	\item [Word-sense disambiguation] - Although we use part-of-speech tagging to distinguish between the grammatical usage of words, word-sense disambiguation may have seen a further improvement in results. In distinguishing between the senses of words, we provide ourselves with a more dtailed account of their use and are thus better informed when classifying subjectivity.
+	\item [No URL feature] - The presence of URLs proved to be a highly discriminative feature when classifying subjectivity. Unlike most other subjectivity classifiers which never come across URLs within their domain, we were able to use this as a feature. We felt that as this was such a dominant feature, its usage both benefitted our classification, but perhaps decreased its linguistic credibility. In future work, we would like to experiment with other features so as not to use URLs which we felt biased our classifier.
+	\item [Objective, but opinion] - In examining our objective statuses, we found that there were occasionally objective statuses and links, which although objective, inferred opinion. In future work we hope to examine ways in which a third classification might be introduced for objective statuses which imply opinion.
+	\item [Spam classification] - Within our current implementation spam is labelled as objective. As the purpose of our classifier was to help identify opinion, this wasn't a problem, however in future work if we want to make better use of our objective data, a third spam label would be an interesting addition.
+\end{description}
 
 

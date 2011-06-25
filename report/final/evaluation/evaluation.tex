@@ -2,4 +2,43 @@
 
 \chapter{Evaluation}
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+As each component has been evaluated in its respective chapter, within this chapter we shall instead evaluate to what extent our original project aims have been met. We shall first examine those discussed within our core aims, before finally evaluating to what extent our secondary aims were met.
+
+\section{Core aims}
+
+\subsection{Sentiment analysis engine}
+
+\begin{enumerate}
+		\item \emph{A Twitter scraper which will fetch live statuses from Twitter.} \\
+		Our content retrieval module draws live data from the size in an effective and stable manner. Statuses are pre-processed and stored in MongoDB, whilst our Status class provides a simple interface for accessing the data from within Ruby.
+		\item \emph{A method for determining whether fetched statuses are opinionated or not.} \\
+		Our subjectivity classifier performs strongly in identifying opinionated text, and serves as an effective tool for doing this. We feel that our blend of existing research with Twitter focussed aspects worked well, and our accuracy rates are better than those seen in literature.
+		\item \emph{A method for identifying whether fetched statuses' opinion is positive or negative.} \\
+		Our polarity classifier serves as an effective tool for determining polarity. Its classification accuracy is on par with others in literature, although there are some which marginally outperform ours. We feel that this is largely due to our limited training set size, and future work would place a much larger focus on building this.
+		\item \emph{A method for identifying the core topics which our fetched statuses are discussing.} \\
+		Our topic extraction module performs well within the context of our project, and serves as a useful tool for drawing together statuses whose focus is similar.
+		\item \emph{A means of persisting our statuses and the results of the above methods, such that they can be easily retrieved at any time.} \\
+		As discussed in our first point, the MongoDB store serves as a robust store for our data and the Status class makes accessing its data simple. 
+\end{enumerate}
+
+\subsection{Web services}
+
+\begin{enumerate}
+	\item \emph{Requests can be made to classify a status, upon which the service should return the classification engine's results.} \\
+	Our classification web service provided a simple to use way for external developer to make use of our sentiment analysis engine. Response times were fast, and the formatted JSON results made computer interpretation simple.
+	\item \emph{A method for requesting any classified data our engine may have stored.} \\
+	Our results web service provided an easy way of accessing our live, and past, results. The parameters allowed developers to tailor the results they were retrieving, so that only information relevant to them was returned. Furthermore, as with our classification web service, response times were fast and the JSON results made computer interpretation simple.
+\end{enumerate}
+	
+\section{Additional aims}
+
+\begin{enumerate}
+	\item \emph{Extend our sentiment analysis engine to give a more detailed account of a broader spectrum of emotion.} \\
+	Little research has been conducted into emotion classification. We felt that our emotion classifier presented an innovative and unique take on emotion classification. The assigned emotion labels were in general close to our own manual annotations, and we felt that it provided a viable and effective method for classification.
+	\item \emph{Web based visualisation tool for better understanding and exploring sentiment on Twitter.}
+	Our visualisation tool was an innovative and uniqe way of exploring opinion. It presented our detailed results in a simple and fluid manner, along with making the results easily accessible to all.
+\end{enumerate}
+
+\section{Summary}
+
+In summary we feel that the project met all of its goals with in general a great deal of success. Our subjectivity classifier performed well, and although our polarity classifier was not perfect, we feel that the we have identified the changes required to improve it. Our exploration into emotion classification proved insightful, and the results were promising. Our topic extraction engine serves its purpose within the project and managed to identify core topics well. Additionally, we felt that the engine has a whole was fairly extensible, and our approach to its design means that using it with other micro-blogging services should be simple. Finally, we felt that our overall delivery methods were simple to use, and managed to mask the complexity of the tasks they were interfacing to well.

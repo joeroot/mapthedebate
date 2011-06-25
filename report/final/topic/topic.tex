@@ -1,2 +1,30 @@
 \chapter{Topic extraction}
 \label{topic}
+
+With our statuses' sentiment now classified, we can now look to better understanding the targets and key themes within it. Our approach to topic extraction hopes to identify key words and topics, thus the term topic extraction is used loosely. Our approach hopes to observe and extract the grammatical patterns of keywords within our training data, and use those in turn to extract key words and topics from previously unseen statuses. Although we do not want incorrect keywords, as our ultimate aim is to identify similar statuses through matching topics, to a certain extent we are less worried in identifying too many topics, than we are with identifying too few.
+
+\section{Extracting patterns}
+
+In order to build up a set of topic extraction patterns, we first had to annotate our data in a suitable manner. We added an additional \texttt{topics} attribute to our trained status objects, allowing us to specify an array of topics. Each topic can be one or more words, but must be annotated as it is represented in the data. For example, if we were to annotate \emph{Example 3}, we might select "\emph{Obama}", "\emph{European debt crisis}" and "\emph{US}" as its core topics and keywords. However in labelling the status, we could not for example use "\emph{Europe's debt crisis}" as a topic, as it does not represent how the topic is actually expressed within the status.
+
+Our patterns hope to identify the part of speech structures used to express topics within statuses. In order to do this we look to extract the parts of speech used to express the topic, along with the parts of speech for the two words which precede and follow the topic itself. Thus using the topics we selected for \emph{Example 3}, we might observe the following patterns:
+
+\begin{enumerate}
+	\item \emph{Obama}: \texttt{[nil, "nnp", "vbz"]}
+	\item \emph{European debt crisis}: \texttt{["vbz", "jj", "nn", "nn", "md"]}
+	\item \emph{US}: \texttt{["nn", "nnp", "rb"]}
+\end{enumerate}
+
+In order to achieve this, we must first identify each annotated topic within our parts of speech array. This is done by first noting the word length, $n$ of the topic being identified, before then splitting the parts of speech into its n-grams. With a series of n-length phrases now available, it is simply a matter of iterating through each n-gram and checking whether it matches our topic phrase. If so the parts of speech are noted, and the pattern returned. We wrap this up within the \emph{TopicExtraction}'s \texttt{extract\-\_pattern\-(topic,pos)} method, as shown in listing \ref{topic:pattern_extract}.
+
+Thus, for every labelled status, we extract its annotated topic's part of speech pattern, building an overall set of rules which help identify topics within previously unseen statuses. We store theses patterns in our \emph{TopicExtraction}'s class level array, \texttt{patterns}.
+
+\section{Identifying patterns}
+
+With our patterns now identified, we need to define a method to identify them within any given status. This is done by making use the Ruby \emph{Array} object method, \texttt{include?\-(object)}, which returns a boolean value indicating whether an object occurs within an array. Using the maximum pattern length, we create a collection of n-grams for our status using values of n ranging from three to the said length. For each n-gram we then proceed to check whether it's part of speech tags match any pattern within our \texttt{patterns} array, using the aforementioned \texttt{include?\-(object)} method. If the n-gram does exist, its first and last elements are removed, and the remaining topic is returned. This method is wrapped up in the class level \texttt{extract\-\_topics\-(status)} method, which returns an array of topics. We have included the method code in listing \ref{topic:topic_extract}.
+
+\section{Evaluation}
+
+Our topic extraction module proved an effective way of gathering keywords and topics for statuses. Although difficult to assess quantitatively, we found that in manually examining the results our extraction engine almost always identified the core topics. In some cases it was slightly overzealous in identifying topics, and future work might look at how we can ensure it identifies a slightly more concise set of topics. Nonetheless the results were accurate, and in general did not omit any important topics when attempting to extract them. 
+
+As research into topic extraction tends to be carried out for a whole gamut of purposes, it is difficult to asses our performance in comparison to others. Overall however, we felt that our topic extraction module performed well and perfectly suited the needs of our project.

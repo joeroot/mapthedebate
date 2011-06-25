@@ -16,9 +16,14 @@ A level-1 auxiliary file: topic/topic.aux
 A level-1 auxiliary file: delivery/delivery.aux
 A level-1 auxiliary file: evaluation/evaluation.aux
 A level-1 auxiliary file: conclusion/conclusion.aux
-The style file: ieeetr.bst
+The style file: IEEEtran.bst
 A level-1 auxiliary file: appendix/tables.aux
 A level-1 auxiliary file: appendix/code.aux
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: papers.bib
 "{" immediately follows a field part---line 14 of file papers.bib
  : url = \url
@@ -245,57 +250,54 @@ I'm skipping whatever remains of this entry
  :           {http://www.paulekman.com/wp-content/uploads/2009/02/The-Repertoire-Of-Nonverbal-Behavior-Categories-Origins-.pdf},
 I'm skipping whatever remains of this entry
 Database file #2: web.bib
-Warning--entry type for "norvig" isn't style-file defined
---line 1 of file web.bib
-Warning--entry type for "popescu" isn't style-file defined
---line 10 of file web.bib
-Warning--entry type for "moore" isn't style-file defined
---line 19 of file web.bib
-Warning--entry type for "kennedy" isn't style-file defined
---line 27 of file web.bib
+-- IEEEtran.bst version 1.13 (2008/09/30) by Michael Shell.
+-- http://www.michaelshell.org/tex/ieeetran/bibtex/
+-- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
 Warning--empty journal in Pang:2004us
 Warning--empty year in Barbosa:ws
 Warning--empty journal in Yang:2007wx
 Warning--empty journal in Chang:2001ta
-You've used 30 entries,
-            1876 wiz_defined-function locations,
-            654 strings with 7828 characters,
-and the built_in function-call counts, 4903 in all, are:
-= -- 434
-> -- 170
-< -- 0
-+ -- 73
-- -- 43
-* -- 294
-:= -- 757
-add.period$ -- 30
-call.type$ -- 30
-change.case$ -- 30
-chr.to.int$ -- 0
-cite$ -- 34
-duplicate$ -- 288
-empty$ -- 577
-format.name$ -- 43
-if$ -- 1174
+
+Done.
+You've used 32 entries,
+            4039 wiz_defined-function locations,
+            1001 strings with 12157 characters,
+and the built_in function-call counts, 13585 in all, are:
+= -- 1097
+> -- 228
+< -- 38
++ -- 116
+- -- 46
+* -- 550
+:= -- 2437
+add.period$ -- 66
+call.type$ -- 32
+change.case$ -- 32
+chr.to.int$ -- 96
+cite$ -- 36
+duplicate$ -- 1172
+empty$ -- 1280
+format.name$ -- 58
+if$ -- 2972
 int.to.chr$ -- 0
-int.to.str$ -- 30
-missing$ -- 26
-newline$ -- 93
-num.names$ -- 30
-pop$ -- 136
+int.to.str$ -- 32
+missing$ -- 194
+newline$ -- 127
+num.names$ -- 32
+pop$ -- 520
 preamble$ -- 1
 purify$ -- 0
-quote$ -- 0
-skip$ -- 106
+quote$ -- 2
+skip$ -- 1063
 stack$ -- 0
-substring$ -- 128
-swap$ -- 55
-text.length$ -- 0
+substring$ -- 252
+swap$ -- 689
+text.length$ -- 6
 text.prefix$ -- 0
-top$ -- 0
-type$ -- 0
+top$ -- 5
+type$ -- 32
 warning$ -- 4
-while$ -- 42
-width$ -- 32
-write$ -- 243
+while$ -- 48
+width$ -- 34
+write$ -- 288
 (There were 56 error messages)
