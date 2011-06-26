@@ -150,7 +150,6 @@ module Status
     def patterns_with_positive_clues
       positive = self.positive_clues
       self.patterns.select do |s|
-        # s.map{|w| !w.nil? and Core::ClueFinder.is_positive_clue?(w["word"], w["tag"])}.inject(false){|m,n| m or n}
         s.map{|w| !w.nil? and positive.include?(w)}.inject(false){|m,n| m or n}
       end
     end
@@ -158,7 +157,6 @@ module Status
     def patterns_with_negative_clues
       negative = self.negative_clues
       self.patterns.select do |s|
-        # s.map{|w| !w.nil? and Core::ClueFinder.is_negative_clue? w["word"], w["tag"]}.inject(false){|m,n| m or n}
         s.map{|w| !w.nil? and negative.include?(w)}.inject(false){|m,n| m or n}
       end
     end

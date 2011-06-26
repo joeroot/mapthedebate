@@ -5,6 +5,7 @@ module WordNet
   
   class Synset < ActiveRecord::Base
 
+    has_many :words, :through => :senses
     has_many :senses
     belongs_to :category
     

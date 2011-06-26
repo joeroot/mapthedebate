@@ -5,9 +5,9 @@ module Status
     include MongoMapper::EmbeddedDocument
 
     # Keys
-    key :subjective, String, :default => 'u'  # takes values "u", "t", "f", "b"
+    key :subjectivity, String, :default => 'u'  # takes values "u", "t", "f", "b"
     key :polarity, String, :default => 'u'    # takes values "u", "+", "-", "0"
-    key :sentiment, Array, :default => []     # takes array of strings
+    key :emotion, Array, :default => []     # takes array of strings
 
   end
 end

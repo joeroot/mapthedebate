@@ -1,4 +1,5 @@
 require 'open-uri'
+require 'time'
 
 module Scraper
   class TwitterSearch
@@ -8,7 +9,7 @@ module Scraper
     def self.scrape(q, params={})
       results = self.search(q, params)
       results.map! do |t|
-        t["source"] = "twitter_search"
+        t["source"] = "twitter_stream"
         t["source_id"] = t["id"]
         t.delete("id")
         t["posted_at"] = Time.parse t["created_at"]

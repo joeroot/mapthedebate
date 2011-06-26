@@ -90,7 +90,9 @@ class TweetTagger
     :noun => /nn[sp]*/,
     :verb => /vb[dgnpz]*/,
     :adverb => /r((b[rs]*)|p)/,
-    :pronoun => /(ex)|(wp)/
+    :pronoun => /(ex)|(wp)/,
+    :grammar => /(pp[cdlrs]*)|lrb|rrb/,
+    :url => /url/
   }
   
   def self.general pos
@@ -704,9 +706,10 @@ class TweetTagger
   def classify_unknown_word(word)
     if /(?:http|https):\/\/[a-z0-9]+(?:[\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(?:(?::[0-9]{1,5})?\/[^\s]*)?/ix =~ word
       classified = "-url-"
-    elsif word[0] == "@"
+    elsif word[0] == "@" and word.length > 1
       classified = word + "_mtn"
-    elsif word[0] == "#"
+    elsif word[0] == "#" and word.length > 1
+      puts "#{word}"
       classified = word.split("#")[1] + "_hsh"
     elsif /[\(\{\[]/ =~ word  # Left brackets
       classified = "*LRB*"

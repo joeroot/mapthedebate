@@ -1,24 +1,60 @@
+body {
+	font-family: "museo-sans-1","museo-sans-2", Helvetica Neue, sans-serif;
+	background: #050505;
+	color:#FFF;
+}
+
 .header {
-	margin-top:5px;
-	padding-top:10px;
-	padding-bottom:8px;
-	background-color:#FFF;
-	border-bottom:1px solid #AAA;
+	border-bottom:5px solid #333;
+	padding:15px 30px;
+	background:#EEE;
+	color:#333;
+}
+
+.tags {
+	float:right;
+	background:#EEE;
+	color:#333;
+	margin-top:-19px;
 }
 
 h3 {
-	font-family: "museo-sans-1","museo-sans-2",sans-serif;
-	font-size:24px;
-	line-height:30px;
-	font-weight:100;
-	color:#111;
+	font-size:25px;
+	font-weight:normal;
 }
 
 
-h5 {
+h6 {
+	font-size:15px;
+	font-weight:normal;
+}
+
+h6 a {
+	text-decoration:none;
+	color:#333;
+	border-radius:5px;
+	background:#CCC;
+	padding:5px 10px;
+}
+
+h6 a.selected, h6 a:hover {
+	background:#333;
+	color:#FFF;
+}
+
+#map {
 	font-family: "museo-sans-1","museo-sans-2",sans-serif;
-	font-size:18px;
-	line-height:30px;
-	font-weight:100;
-	color:#111;
+}
+
+#tweetoverlay {
+	background:FFF;
+	color:#FFF;
+	font-size:80px;
+}
+
+#options {
+	display:block;
+	position:absolute;
+	top:200px;
+	left:200px;
 }

@@ -5,26 +5,215 @@
 		<title>Map The Debate</title>
 		<script type="text/javascript" src="http://use.typekit.com/ovv8leg.js"></script>
 		<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+		<script type="text/javascript" src="/js/processing.js"></script> 
+		<script type="text/javascript" src="/js/processing.init.js"></script>
+		<script type="text/javascript" src="/js/jquery-1.5.min.js"></script>
+		<!--		<script type="text/javascript" src="/js/raphael-min.js"></script>
+		<script type="text/javascript" src="/js/raphael.visualisation.js"></script>-->
 		<link rel="stylesheet" href="/css/reset.css" type="text/css" />
 		<link rel="stylesheet" href="/css/960.css" type="text/css" />
 		<link rel="stylesheet" href="/css/map.css" type="text/css" />
 	</head>
 	
 	<body>
-			<div class="container_12">
-				<div class="header">
-			    <div class="grid_4 suffix_4">
-						<h3>Map the Debate</h3>
-					</div>
-					<div class="grid_4" style="text-align:right">
-						<h5>About</h5>
-					</div>
-					<div class="clear">
-				</div>
+
+		<div class="header">
+			<div id="logo">
+				<h3>Map the Debate</h3>
 			</div>
+			<div class="tags">
+				<h6>
+				<a href="#">NHS</a> <a href="#">david cameron</a> <a href="#">milliband</a>
+				</h6>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<script type="application/processing">
+		/* 
+		  PROCESSINGJS.COM - BASIC EXAMPLE
+		  Delayed Mouse Tracking  
+		  MIT License - Hyper-Metrix.com/F1LT3R
+		  Native Processing compatible 
+		*/  
+
+		// Global variables
+		float radius = 8.0;
+		var tweets = [];
+		var width;
+		var height;
+		var focussed = -1;
+		var focussed_frame = 0;
+		var zoomed = -1;
+		var topics_count = {};
+		var topics = [];
+		var show_polarity = true;
+		
+		
+		// Setup the Processing Canvas
+		void setup(){
+			width = window.innerWidth;
+			height = 500;
+			size( width, height );
+			frameRate( 15 );
+			$.get('http://localhost:4567/api/results.json?rpp=600', function(json){
+			  // results = data["results"];
+				tweets = $.parseJSON(json)["results"];
+			  for (i=0; i<tweets.length; i++) {
+					tweet = tweets[i];
+					tweet.x = Math.floor(Math.random()*width)+10;
+					tweet.y = Math.floor(Math.random()*height)+10;
+					tweet.target_x = tweet.x;
+					tweet.target_y = tweet.y;
+					tweet.angle = Math.random()*2*Math.PI;
+					tweet.radius = 20;
+					tweet.velocity = 0.5;
+					tweet.grouped = false;
+					console.log(tweet.topics);
+				}
+				draw();
+			}); 
+		}
 		
 
+		// Main draw loop
+		void draw(){
+			background(#050505);
+			drawTweets();       
+			fill(255,255,255,255);
+			if (zoomed != -1) {
+				$("#tweetoverlay").html(tweets[zoomed].text);
+				$("#tweetoverlay").show(); 
+			} else {
+				$("#tweetoverlay").hide();
+			}
+		}
 		
+		function drawTweets(){
+			var alpha = 255;
+			if (zoomed != -1) {
+				alpha = 20;
+			}
+			for (i = 0; i < tweets.length; i++) {
+				drawTweet(i,alpha);
+			}
+			focussed_frame++;
+		}
+		
+		function drawTweet(i,alpha) {
+			var tweet = tweets[i];
+		  
+			
+		  // Fill canvas grey
+
+		  // Set fill-color to blue
+			tweet.radius = radius;
+			
+			if (i == focussed) {
+				fill( 200, 201, 0,alpha);
+				radius_change = 6 * (sin( focussed_frame / 4 ));
+				tweet.radius = radius*1.5 + radius_change;
+			} else if (tweet.polarity == "pos") {
+			  fill(106,155,203,alpha);
+			} else if (tweet.polarity == "neg") {
+				fill(206,56,79,alpha);
+			} else {
+				fill(73,73,73,alpha);
+			}
+			
+			if (!show_polarity) {
+				if (tweet.emotions[0] == "anger") {
+					fill(200,83,95,alpha);
+				} else if (tweet.emotions[0] == "fear") {
+				  fill(114,157,201,alpha);
+				} else if (tweet.emotions[0] == "joy") {
+					fill(241,255,134,alpha);
+				} else if (tweet.emotions[0] == "sadness") {
+					fill(255,174,198,alpha);
+				} else if (tweet.emotions[0] == "surprise") {
+				  fill(139,156,226,alpha);
+				} else if (tweet.emotions[0] == "anticipation") {
+					fill(255,168,118,alpha);
+				} else if (tweet.emotions[0] == "trust") {
+				  fill(99,192,92,alpha);
+				} else if (tweet.emotions[0] == "disgust") {
+				  fill(183,107,163,alpha);
+				}
+			}
+
+
+			if (focussed != i) {
+				// tweet.angle = tweet.angle+(Math.random()-0.5)*0.1;
+				tweet.x = tweet.x + sin(tweet.angle) * tweet.velocity
+				tweet.y = tweet.y + cos(tweet.angle) * tweet.velocity
+			} 
+			
+			if (tweet.x > (width+10)) tweet.x = tweet.x-width-20;
+			if (tweet.y > (height+10)) tweet.y = tweet.y-height-20;
+			if (tweet.x < -10) tweet.x = tweet.x+width+20;
+			if (tweet.y < -10) tweet.y = tweet.y+height+20;
+
+		  // Draw circle
+			noStroke();
+		  ellipse( tweet.x, tweet.y, tweet.radius, tweet.radius );
+		}
+
+
+		// Set circle's next destination
+		void mouseMoved(){
+			prev = focussed;
+			focussed = -1;
+			for (i = 0; i < tweets.length; i++) {
+				tx = tweets[i].x;
+				ty = tweets[i].y;  
+				r = radius/2;
+				mx = mouseX;
+				my = mouseY;
+				if (mx>=(tx-r) && mx<=(tx+r) && my>=(ty-r) && my<=(ty+r)) {
+					focussed = i;
+				}
+			}
+			if (focussed != prev) {
+				focussed_frame = 0;
+			}
+		}
+
+		void mousePressed(){
+			if (zoomed = -1) {
+			  zoomed = focussed;
+			} else {
+				zoomed = -1;
+			}
+		}
+		
+		function removeDuplicateElement(arrayName)
+	  {
+		  var newArray=new Array();
+		  label:for(var i=0; i<arrayName.length;i++ ) {  
+				for(var j=0; j<newArray.length;j++ ) {
+					if(newArray[j]==arrayName[i]) 
+						continue label;
+					}
+			newArray[newArray.length] = arrayName[i];
+			}
+			return newArray;
+	  }
+	
+		function valueOrDefault(val, def) {
+		    return val == undefined ? def : val;
+		}
+	
+		$("#polarity").click(function(){
+			$(this).toggleClass("selected");
+			show_polarity = !show_polarity;
+		});
+		
+		</script>
+		<canvas id="map"></canvas>		
+		<div id="options"><h6><a id="polarity" href="#">P</a></h6></div>
+		<div id="tweet_overlay">
+			<img class="image" src="http://a1.twimg.com/sticky/default_profile_images/default_profile_2_bigger.png" />
+		</div>
 	</body>
 
 </html>

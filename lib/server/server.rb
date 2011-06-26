@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'erb'
+require 'json'
 require "#{File.dirname(__FILE__)}/../sentiment.rb"
 
 class App
@@ -12,8 +13,27 @@ class App
     erb :map
   end
   
+  get '/api/results.json' do
+    offset = (params["page"] || 1).to_i - 1
+    rpp = (params["rpp"] || 20).to_i
+    ss = Status::Status.where(:classified_status.ne => nil, :'classified_status.subjectivity' => "t").sort(:posted_at.asc).limit(rpp).skip(offset*rpp)
+    ss = ss.map do |s| 
+      c = s.classified_status
+      j = {
+        "text" => s.text,
+        "posted_at" => s["posted_at"],
+        "user" => ["from_user"] || s["user"]["name"],
+        "profile_image" => s["profile_image_url"] || s["user"]["profile_image_url"],
+        "polarity" => c.polarity,
+        "emotions" => c.emotion,
+        "topics" => c.topics.map{|ts| ts.map{|t| t["word"].downcase}.inject(""){|m,n| "#{m} #{n}"}.strip}
+      }
+    end
+    JSON.generate({"results" => ss})
+  end
+  
   get '/admin/train' do
-    @statuses = Status::Status.where(:trained_status => nil).sort(:created_at.desc)
+    @statuses = Status::Status.where(:trained_status => nil).sort(:created_at.desc).limit(100)
     erb :"admin/train/index"
   end
   
