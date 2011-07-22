@@ -23,7 +23,16 @@
 			</div>
 			<div class="tags">
 				<h6>
-				<a href="#">NHS</a> <a href="#">david cameron</a> <a href="#">milliband</a>
+				<a href="#">1</a> 
+				<a href="#">2</a> 
+				<a href="#">3</a>
+				<a href="#">4</a> 
+				<a href="#">5</a> 
+				<!--<a href="#">6</a> 
+				<a href="#">7</a>
+				<a href="#">8</a> 
+				<a href="#">9</a> 
+				<a href="#">10</a>-->
 				</h6>
 			</div>
 			<div class="clear"></div>
@@ -35,42 +44,79 @@
 		  Delayed Mouse Tracking  
 		  MIT License - Hyper-Metrix.com/F1LT3R
 		  Native Processing compatible 
-		*/  
+		*/ 
 
 		// Global variables
 		float radius = 8.0;
-		var tweets = [];
+		var tweets=[];
 		var width;
 		var height;
 		var focussed = -1;
 		var focussed_frame = 0;
 		var zoomed = -1;
 		var topics_count = {};
-		var topics = [];
+		var topics;
 		var show_polarity = true;
+		var topic_x = 100;
+		var topic_y = 100;
+		var show_topic="none";
 		
 		
 		// Setup the Processing Canvas
 		void setup(){
 			width = window.innerWidth;
-			height = 500;
+			height = window.innerHeight-65;
 			size( width, height );
-			frameRate( 15 );
-			$.get('http://localhost:4567/api/results.json?rpp=600', function(json){
+			frameRate( 30 );
+			$.get('http://localhost:4567/api/results.json?rpp=800', function(json){
 			  // results = data["results"];
-				tweets = $.parseJSON(json)["results"];
+				json = $.parseJSON(json);
+				tweets = json["results"];
+				topics = json["topics"];
 			  for (i=0; i<tweets.length; i++) {
 					tweet = tweets[i];
-					tweet.x = Math.floor(Math.random()*width)+10;
-					tweet.y = Math.floor(Math.random()*height)+10;
-					tweet.target_x = tweet.x;
-					tweet.target_y = tweet.y;
+					tweet.x = Math.floor(Math.random()*width);
+					tweet.y = Math.floor(Math.random()*height);
+					tweet.target_x = -1;
+					tweet.target_y = -1;
+					tweet.target_angle = -1;
+					tweet.target_velocity = 4;
 					tweet.angle = Math.random()*2*Math.PI;
 					tweet.radius = 20;
 					tweet.velocity = 0.5;
 					tweet.grouped = false;
-					console.log(tweet.topics);
+					tweet.in_topic = false;
 				}
+				$(".tags a").each(function(i){
+					$(this).html(topics[i]);
+					$(this).attr("href", '#'+topics[i]);
+					$(this).show();
+					$(this).click(function(){
+						$(".tags a").removeClass("selected");
+						href = $(this).attr("href");
+						topic = href.substring(1,href.length);
+						if (show_topic != topic) {
+							show_topic = topic;
+							for (i=0;i<tweets.length;i++) {
+								tweet = tweets[i];
+								tweet.in_topic = contains(tweet.topics,topic);
+								console.log(topic);
+								console.log(tweet.topics);
+								console.log(tweet.in_topic);
+							}
+							$(this).addClass("selected");
+							show_topic = topic;
+						} else {
+							for (i=0;i<tweets.length;i++) {
+								tweet = tweets[i];
+								tweet.in_topic = false;
+							}
+							show_topic = "none";
+						}
+						return false;
+					});
+				});
+				
 				draw();
 			}); 
 		}
@@ -90,10 +136,6 @@
 		}
 		
 		function drawTweets(){
-			var alpha = 255;
-			if (zoomed != -1) {
-				alpha = 20;
-			}
 			for (i = 0; i < tweets.length; i++) {
 				drawTweet(i,alpha);
 			}
@@ -102,7 +144,19 @@
 		
 		function drawTweet(i,alpha) {
 			var tweet = tweets[i];
-		  
+			
+			if (tweet.x > (width+10)) tweet.x = tweet.x-width-18;
+			if (tweet.y > (height+10)) tweet.y = tweet.y-height-18;
+			if (tweet.x <= -10) tweet.x = tweet.x+width+18;
+			if (tweet.y <= -10) tweet.y = tweet.y+height+18;
+		
+			var alpha = 255;
+			if (show_topic != "none" && !tweet.in_topic && zoomed != i) {
+				alpha=alpha*0.2;
+			}
+			if (zoomed != -1 && zoomed != i && focussed != i) {
+				alpha = alpha=alpha*0.3;
+			}
 			
 		  // Fill canvas grey
 
@@ -110,10 +164,11 @@
 			tweet.radius = radius;
 			
 			if (i == focussed) {
-				fill( 200, 201, 0,alpha);
 				radius_change = 6 * (sin( focussed_frame / 4 ));
 				tweet.radius = radius*1.5 + radius_change;
-			} else if (tweet.polarity == "pos") {
+			}
+			
+			if (tweet.polarity == "pos") {
 			  fill(106,155,203,alpha);
 			} else if (tweet.polarity == "neg") {
 				fill(206,56,79,alpha);
@@ -123,35 +178,50 @@
 			
 			if (!show_polarity) {
 				if (tweet.emotions[0] == "anger") {
-					fill(200,83,95,alpha);
+					fill(255,41,64,alpha);
 				} else if (tweet.emotions[0] == "fear") {
-				  fill(114,157,201,alpha);
+				  fill(53,164,80,alpha);
 				} else if (tweet.emotions[0] == "joy") {
-					fill(241,255,134,alpha);
+					fill(237,197,0,alpha);
 				} else if (tweet.emotions[0] == "sadness") {
-					fill(255,174,198,alpha);
+					fill(114,157,201,alpha);
 				} else if (tweet.emotions[0] == "surprise") {
-				  fill(139,156,226,alpha);
+				  fill(63,165,192,alpha);
 				} else if (tweet.emotions[0] == "anticipation") {
-					fill(255,168,118,alpha);
+					fill(255,168,67,alpha);
 				} else if (tweet.emotions[0] == "trust") {
-				  fill(99,192,92,alpha);
+				  fill(138,225,85,alpha);
 				} else if (tweet.emotions[0] == "disgust") {
-				  fill(183,107,163,alpha);
+				  fill(123,78,163,alpha);
 				}
 			}
 
+			// if (tweet.target_x == -1 && tweet.target_y == -1) {
+				if (focussed != i) {
+					// tweet.angle = tweet.angle+(Math.random()-0.5)*0.1;
+					tweet.x = tweet.x + Math.sin(tweet.angle) * tweet.velocity
+					tweet.y = tweet.y + Math.cos(tweet.angle) * tweet.velocity
+				} 
+			// } else {
+			// 	if (((tweet.x - tweet.target_x)<5) && ((tweet.y - tweet.target_y)<5)) {
+			// 		tweet.x = tweet.target_x;
+			// 		tweet.y = tweet.target_y;
+			// 		console.log("THERE");
+			//  				} else {
+			// 		o =  tweet.x - tweet.target_x;
+			// 		a = tweet.y - tweet.target_y;
+			// 		tweet.target_angle = Math.atan(o/a);
+			// 		to = Math.sin(tweet.target_angle) * tweet.target_velocity;
+			// 		ta = Math.cos(tweet.target_angle) * tweet.target_velocity;
+			// 		tweet.x = tweet.x - to
+			// 		tweet.y = tweet.y - ta;
+			// 	}
+			// 	console.log(tweet.x)
+			// 	console.log(tweet.y)
+			// 	fill(255,255,255,alpha);
+			// }
 
-			if (focussed != i) {
-				// tweet.angle = tweet.angle+(Math.random()-0.5)*0.1;
-				tweet.x = tweet.x + sin(tweet.angle) * tweet.velocity
-				tweet.y = tweet.y + cos(tweet.angle) * tweet.velocity
-			} 
 			
-			if (tweet.x > (width+10)) tweet.x = tweet.x-width-20;
-			if (tweet.y > (height+10)) tweet.y = tweet.y-height-20;
-			if (tweet.x < -10) tweet.x = tweet.x+width+20;
-			if (tweet.y < -10) tweet.y = tweet.y+height+20;
 
 		  // Draw circle
 			noStroke();
@@ -179,10 +249,28 @@
 		}
 
 		void mousePressed(){
-			if (zoomed = -1) {
+			if (focussed != -1) {
 			  zoomed = focussed;
+				if (zoomed != -1) {
+					tweet = tweets[zoomed];
+					$(".info .screen").html(tweet.user);
+					if (tweet.emotions.length > 0) {
+						$(".info .emotion").html(tweet.emotions[0]);
+					} else {
+						if (tweet.polarity=="pos") $(".info .emotion").html("positive");
+						if (tweet.polarity=="neg") $(".info .emotion").html("negative");
+					}
+					$(".tweet h3").html(tweet.text);
+					$(".image").attr("src", tweet.profile_image);
+					$("#tweet_overlay").show();
+				}
 			} else {
 				zoomed = -1;
+				$("#tweet_overlay").hide();
+				$(".info .screen").html("");
+				$(".info .emotion").html("");
+				$(".tweet h3").html("");
+				$(".image").attr("src", "");
 			}
 		}
 		
@@ -203,17 +291,35 @@
 		    return val == undefined ? def : val;
 		}
 	
+		function contains(array,val) {
+			for (i=0; i<array.length; i++) {
+				if (array[i] == val) {
+					return true
+				}
+			}			
+			return false;
+		}
+	
 		$("#polarity").click(function(){
 			$(this).toggleClass("selected");
 			show_polarity = !show_polarity;
 		});
 		
 		</script>
-		<canvas id="map"></canvas>		
-		<div id="options"><h6><a id="polarity" href="#">P</a></h6></div>
+		<canvas id="map"></canvas>
+			
 		<div id="tweet_overlay">
 			<img class="image" src="http://a1.twimg.com/sticky/default_profile_images/default_profile_2_bigger.png" />
+			<div class="info">
+				<h5 class="screen">@joeroot</h5>
+				<h6 class="emotion">sadness, happiness, annoyance</h6>
+			</div>
+			<div class="tweet">
+				<h3>this is reallt lonf hasjd waboe hjdc ah wiu qweui hikjnad jkh sjk sakjd i dadnkj a ask djhsjkdhsu hui wi diuas dkjs dsdhas hjsakdh wqjhqw</h3>
+			</div>
+			<div class="clear"></div>	
 		</div>
+		<div id="options"><h6><a class="button" id="polarity" href="#">P</a></h6></div>
 	</body>
 
 </html>

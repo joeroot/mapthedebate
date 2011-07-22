@@ -25,10 +25,13 @@ class TwitterStream
           item["posted_at"] = Time.parse item["created_at"]
           item.delete("created_at")
           s = Status::Status.create item
+          puts "Started pre-processing"
           s.parts_of_speech
-          puts "Added Tweet"
+          puts "Saved status, now classifying"
           CoreClassifier.classify s
-          puts "Classified Tweet"
+          puts "Subjective?: #{s.classified_status.subjectivity}"
+          puts "Polarity?: #{s.classified_status.polarity}"
+          puts "Emotion?: #{s.classified_status.emotion}"
         end
       end
 

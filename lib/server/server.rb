@@ -16,21 +16,35 @@ class App
   get '/api/results.json' do
     offset = (params["page"] || 1).to_i - 1
     rpp = (params["rpp"] || 20).to_i
-    ss = Status::Status.where(:classified_status.ne => nil, :'classified_status.subjectivity' => "t").sort(:posted_at.asc).limit(rpp).skip(offset*rpp)
+    ss = Status::Status.where(:classified_status.ne => nil, :'classified_status.subjectivity' => "t").sort(:posted_at.desc).limit(rpp).skip(offset*rpp)
+    tcs = {}
+    ts = ss.map{|s| s.classified_status.topics.map{|ts| ts.map{|t| t["word"].downcase}}}.sum.sum
+    ts.each{|t| tcs[t] = (tcs[t]||0)+1}
+    tcs.sort{|a,b| b[0] <=> a[0]}
+    ts = tcs.sort{|a,b| b[1] <=> a[1] }.map{|a| a[0]}.reject do |t|
+      t.length < 2 or
+      ["david", "ed", "rt","#dinnerwithbarack"].include?(t)
+    end[0..9]
+    
+    puts "#{ts}"
+        
     ss = ss.map do |s| 
       c = s.classified_status
+      topics = c.topics.sum.map{|pos| pos["word"]}
       j = {
         "text" => s.text,
         "posted_at" => s["posted_at"],
-        "user" => ["from_user"] || s["user"]["name"],
+        "user" => s["from_user"] || s["user"]["name"],
         "profile_image" => s["profile_image_url"] || s["user"]["profile_image_url"],
         "polarity" => c.polarity,
         "emotions" => c.emotion,
-        "topics" => c.topics.map{|ts| ts.map{|t| t["word"].downcase}.inject(""){|m,n| "#{m} #{n}"}.strip}
+        "topics" => topics.select{|s| ts.include? s}
       }
     end
-    JSON.generate({"results" => ss})
+    JSON.generate({"results" => ss, "topics" => ts})
   end
+  
+  
   
   get '/admin/train' do
     @statuses = Status::Status.where(:trained_status => nil).sort(:created_at.desc).limit(100)

@@ -5,10 +5,10 @@ body {
 }
 
 .header {
-	border-bottom:5px solid #333;
-	padding:15px 30px;
+	padding:15px 3%;
 	background:#EEE;
 	color:#333;
+	border-bottom:5px solid #333;
 }
 
 .tags {
@@ -29,6 +29,10 @@ h6 {
 	font-weight:normal;
 }
 
+.tags a {
+	display:none;
+}
+
 h6 a {
 	text-decoration:none;
 	color:#333;
@@ -42,19 +46,65 @@ h6 a.selected, h6 a:hover {
 	color:#FFF;
 }
 
+a.button {
+	background:#FFF;
+}
+
 #map {
 	font-family: "museo-sans-1","museo-sans-2",sans-serif;
 }
 
-#tweetoverlay {
-	background:FFF;
-	color:#FFF;
-	font-size:80px;
+#tweet_overlay {
+	background:#FFF;
+	color:#333;
+	position:absolute;
+	bottom:20px;
+	display:none;
+	margin: 0px 1.5%;
+	padding:15px 1.5%;
+	width:94%;
+	border-radius:5px;
 }
+
+#tweet_overlay .image {
+	float:left;
+	display:block;
+	height:55px;
+	margin-right:10px;
+}
+
+#tweet_overlay .info {
+	float:left;
+	display:block;
+	width:180px;
+	margin-right:10px;
+/*	padding-right:10px;
+	border-right:1px solid #AAA;*/
+}
+
+#tweet_overlay .tweet {
+}
+
+#tweet_overlay h3 {
+	margin-top:3px;
+	font-size:20px;
+	line-height:24px;
+}
+
+#tweet_overlay h5 {
+	font-size:16px;
+	line-height:16px;
+	font-weight:normal;
+}
+#tweet_overlay h6 {
+	font-size:14px;
+	line-height:16px;
+}
+
 
 #options {
 	display:block;
 	position:absolute;
-	top:200px;
-	left:200px;
+	top:100px;
+	left:3%;
 }

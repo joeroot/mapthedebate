@@ -16,7 +16,6 @@ $tag_path  = File.join($lexpath, "pos_tags.hash")
 $additional_tags = ["twitter_tags.yml"]
 $additional_words = ["acronyms.yml"]
 
-# for memoization (code snipet from http://eigenclass.org/hiki/bounded-space-memoization) 
 class Module
   def memoize(method)
     # alias_method is faster than define_method + old.bind(self).call
@@ -30,14 +29,8 @@ class Module
   end
 end
 
-# English part-of-speech tagger class
 class TweetTagger
-
-  #################
-  # Class methods #
-  #################
   
-  # Return a class variable that holds probability data
   def self.hmm
     return @@hmm
   end
@@ -709,7 +702,7 @@ class TweetTagger
     elsif word[0] == "@" and word.length > 1
       classified = word + "_mtn"
     elsif word[0] == "#" and word.length > 1
-      puts "#{word}"
+      # puts "#{word}"
       classified = word.split("#")[1] + "_hsh"
     elsif /[\(\{\[]/ =~ word  # Left brackets
       classified = "*LRB*"
